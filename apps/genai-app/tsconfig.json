@@ -1,6 +1,14 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "isolatedModules": true
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "importHelpers": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -17,6 +25,5 @@
     {
       "path": "./tsconfig.spec.json"
     }
-  ],
-  "extends": "./tsconfig.base.json"
+  ]
 }

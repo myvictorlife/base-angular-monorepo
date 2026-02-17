@@ -1,0 +1,20 @@
+<lib-header></lib-header>
+<div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+  <div class="bg-white rounded-xl shadow-lg p-10 max-w-2xl w-full flex flex-col items-center">
+    <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" alt="Nx Logo" class="w-24 h-24 mb-6" />
+    <h1 class="text-4xl font-extrabold text-indigo-700 mb-4 text-center">
+      Welcome to your Angular Nx Monorepo!
+    </h1>
+    <p class="text-lg text-gray-700 text-center mb-6">
+      A scalable Nx monorepo boilerplate for Angular applications, featuring a clean modular architecture, shared UI components, feature libraries, environment management, TailwindCSS integration, and best practices for enterprise-grade frontend development.
+    </p>
+    <div class="mt-4 text-sm text-gray-500">
+      <span class="font-semibold">User Entity:</span>
+      <span class="px-2 py-1 rounded bg-indigo-50 text-indigo-700">{{ userInfo().name }}</span>
+    </div>
+    <div class="mt-4 text-sm text-gray-500">
+      <span class="font-semibold">Environment:</span>
+      <span class="px-2 py-1 rounded bg-indigo-50 text-indigo-700">{{ environmentName() }}</span>
+    </div>
+  </div>
+</div>

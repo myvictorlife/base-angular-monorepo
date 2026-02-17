@@ -1,27 +1,26 @@
 {
-  "name": "genai-context-orchestrator-app",
-  "$schema": "node_modules/nx/schemas/project-schema.json",
-  "includedScripts": [],
+  "name": "genai-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "./src",
+  "sourceRoot": "apps/genai-app/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/genai-context-orchestrator-app",
-        "browser": "./src/main.ts",
-        "tsConfig": "tsconfig.app.json",
+        "outputPath": "dist/apps/genai-app",
+        "browser": "apps/genai-app/src/main.ts",
+        "tsConfig": "apps/genai-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "public"
+            "input": "apps/genai-app/public"
           }
         ],
-        "styles": ["./src/styles.scss"]
+        "styles": ["apps/genai-app/src/styles.scss"]
       },
       "configurations": {
         "production": {
@@ -42,7 +41,13 @@
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "libs/environment/src/lib/environment.ts",
+              "with": "libs/environment/src/lib/environment.development.ts"
+            }
+          ]
         }
       },
       "defaultConfiguration": "production"
@@ -52,19 +57,16 @@
       "executor": "@angular/build:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "genai-context-orchestrator-app:build:production"
+          "buildTarget": "genai-app:build:production"
         },
         "development": {
-          "buildTarget": "genai-context-orchestrator-app:build:development"
+          "buildTarget": "genai-app:build:development"
         }
       },
       "defaultConfiguration": "development"
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": ["./src"]
-      }
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@angular/build:unit-test",
@@ -74,8 +76,8 @@
       "continuous": true,
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "genai-context-orchestrator-app:build",
-        "staticFilePath": "dist/genai-context-orchestrator-app/browser",
+        "buildTarget": "genai-app:build",
+        "staticFilePath": "dist/apps/genai-app/browser",
         "spa": true
       }
     }

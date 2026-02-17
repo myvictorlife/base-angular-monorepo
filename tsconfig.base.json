@@ -1,0 +1,22 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "emitDecoratorMetadata": false,
+    "target": "es2022",
+    "module": "preserve",
+    "lib": ["es2020", "dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@genai-context-orchestrator-app/environment": [
+        "libs/environment/src/index.ts"
+      ],
+      "@genai/environment": ["libs/environment/src/index.ts"],
+      "@genai-context-orchestrator-app/entity": [
+        "libs/shared/entity/src/index.ts"
+      ],
+      "@genai-context-orchestrator-app/ui": ["libs/shared/ui/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
