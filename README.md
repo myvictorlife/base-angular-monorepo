@@ -101,7 +101,14 @@ base-angular-monorepo/
 │
 ├── docs/                                   # Project documentation
 │   ├── best-practices.md                   # Angular coding standards and patterns
-│   └── workspace-generators.md             # Nx generator commands reference
+│   ├── workspace-generators.md             # Nx generator commands reference
+│   └── skills/                             # Development guides for Claude Code
+│       ├── feature-lib.md                  # How to create a feature library end-to-end
+│       ├── lazy-loading.md                 # Lazy loading rules and common mistakes
+│       ├── ngrx-state.md                   # NgRx state slice pattern
+│       ├── angular-component.md            # Modern Angular component patterns
+│       ├── unit-testing.md                 # Jest + Spectator testing patterns
+│       └── module-boundaries.md            # Nx tags, ESLint boundary rules, registration steps
 │
 ├── .github/
 │   └── workflows/

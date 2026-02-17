@@ -39,7 +39,7 @@ export default [
                 'scope:environment-lib'
               ],
             },{
-              sourceTag: 'scope:scope:profile',
+              sourceTag: 'scope:profile',
               onlyDependOnLibsWithTags: [
                 'scope:entity-lib',
                 'scope:environment-lib'
@@ -51,7 +51,7 @@ export default [
                 'scope:ui-lib',
                 'scope:shared-store',
                 'scope:environment-lib',
-                'scope:scope:profile'
+                'scope:profile'
               ],
             },{
               sourceTag: 'scope:ui-lib',
