@@ -30,6 +30,7 @@ All configurations are ready for scalable and testable Angular development.
 
 - `apps/` - Application entry points
 - `libs/` - Shared libraries and features
+- `docs/` - Documentation, including **Skills for Claude code**
 
 ---
 Ready to build your Angular application!
