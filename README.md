@@ -1,4 +1,4 @@
-# Base NX Monorepo, Angular, NGRX App
+# Base NX Monorepo Angular + NgRx
 
 This is a base project for developing Angular applications with:
 
@@ -7,13 +7,13 @@ This is a base project for developing Angular applications with:
 - **Spectator** (Angular testing utilities)
 - **Jest** (unit testing)
 
-Everything you need to start building scalable and testable Angular apps is already configured.
+All configurations are ready for scalable and testable Angular development.
 
 ## Getting Started
 
 - **Run the app:**  
   ```sh
-  npx nx serve genai-context-orchestrator-app
+  npx nx serve genai-app
   ```
 
 - **Run tests:**  
@@ -26,11 +26,10 @@ Everything you need to start building scalable and testable Angular apps is alre
   npx nx run-many --target=lint --all
   ```
 
-## Project Structure
+## Structure
 
 - `apps/` - Application entry points
 - `libs/` - Shared libraries and features
 
 ---
-
-Ready to build your Angular application with best practices out of the box!
+Ready to build your Angular application!
