@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
-import { environment } from '@genai/environment';
-import { User } from '@genai-context-orchestrator-app/entity';
-import { HeaderComponent } from '@genai-context-orchestrator-app/ui';
+import { Component, inject, signal } from '@angular/core';
+import { environment } from '@libs/environment';
+import { User } from '@libs/entity';
+import { HeaderComponent } from '@libs/ui';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -15,11 +16,17 @@ import { HeaderComponent } from '@genai-context-orchestrator-app/ui';
 })
 export class HomePage {
 
+  private readonly router = inject(Router);
+
   environmentName = signal(environment.environmentName);
 
   userInfo = signal<User>({
     id: '123',
     name: 'John Doe'
   });
+
+  viewProfile() {
+    this.router.navigate(['/profile']);
+  }
 
 }

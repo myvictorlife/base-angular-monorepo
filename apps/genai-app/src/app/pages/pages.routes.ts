@@ -5,5 +5,8 @@ export const genaiPagesRoutes: Routes = [
   {
     path: '',
     component: HomePage
+  }, {
+    path: 'profile',
+    loadChildren: () => import('@libs/profile').then(m => m.profileRoutes)
   }
 ];

@@ -27,6 +27,10 @@ To generate a new Angular library, run:
 npx nx g @nx/angular:library libs/shared/ui --tags=ui --style=scss
 
 npx nx g @nx/angular:library libs/shared/entity --tags=entity --style=scss
+
+npx nx g @nx/angular:library libs/profile --tags=entity --style=scss
+
+npx nx g @nx/angular:library libs/shared/store --tags=shared-store
 ```
 
 - Replace the path and tags as needed for your use case.

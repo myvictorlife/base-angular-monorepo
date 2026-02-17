@@ -17,8 +17,57 @@ export default [
       '**/*.cjs',
       '**/*.mjs',
     ],
-    // Override or add rules here
-    rules: {},
+    rules: {
+      '@nx/enforce-module-boundaries': [
+        'error',
+        {
+          enforceBuildableLibDependency: true,
+          allowCircularSelfDependency: true,
+          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
+          depConstraints: [
+            {
+              sourceTag: 'scope:environment-lib',
+              onlyDependOnLibsWithTags: [],
+            },{
+              sourceTag: 'scope:entity-lib',
+              onlyDependOnLibsWithTags: [],
+            },
+            {
+              sourceTag: 'scope:shared-store',
+              onlyDependOnLibsWithTags: [
+                'scope:entity-lib',
+                'scope:environment-lib'
+              ],
+            },{
+              sourceTag: 'scope:scope:profile',
+              onlyDependOnLibsWithTags: [
+                'scope:entity-lib',
+                'scope:environment-lib'
+              ],
+            },{
+              sourceTag: 'scope:genai-app',
+              onlyDependOnLibsWithTags: [
+                'scope:entity-lib',
+                'scope:ui-lib',
+                'scope:shared-store',
+                'scope:environment-lib',
+                'scope:scope:profile'
+              ],
+            },{
+              sourceTag: 'scope:ui-lib',
+              onlyDependOnLibsWithTags: [
+                'scope:entity-lib',
+                'scope:shared-store',
+                'scope:standalone-lib',
+                'scope:auth-lib',
+                'scope:shared-service-lib',
+                'scope:environment-lib'
+              ],
+            }
+          ],
+        },
+      ],
+    },
   },
   ...nx.configs['flat/angular'],
   ...nx.configs['flat/angular-template'],

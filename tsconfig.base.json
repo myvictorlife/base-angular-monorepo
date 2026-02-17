@@ -8,14 +8,18 @@
     "lib": ["es2020", "dom"],
     "baseUrl": ".",
     "paths": {
-      "@genai-context-orchestrator-app/environment": [
+      "@libs/package": ["./package.json"],
+      "@libs/environment": [
         "libs/environment/src/index.ts"
       ],
-      "@genai/environment": ["libs/environment/src/index.ts"],
-      "@genai-context-orchestrator-app/entity": [
+      "@libs/entity": [
         "libs/shared/entity/src/index.ts"
       ],
-      "@genai-context-orchestrator-app/ui": ["libs/shared/ui/src/index.ts"]
+      "@libs/ui": ["libs/shared/ui/src/index.ts"],
+      "@libs/profile": ["libs/profile/src/index.ts"],
+      "@libs/store": [
+        "libs/shared/store/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

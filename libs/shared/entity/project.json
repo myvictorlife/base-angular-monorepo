@@ -4,7 +4,7 @@
   "sourceRoot": "libs/shared/entity/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["entity"],
+  "tags": ["scope:entity-lib"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"

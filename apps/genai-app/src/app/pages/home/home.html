@@ -12,6 +12,13 @@
       <span class="font-semibold">User Entity:</span>
       <span class="px-2 py-1 rounded bg-indigo-50 text-indigo-700">{{ userInfo().name }}</span>
     </div>
+    <button
+      class="mt-2 mb-2 px-5 py-2 bg-indigo-600 text-white rounded-lg font-semibold shadow hover:bg-indigo-700 transition"
+      type="button"
+      (click)="viewProfile()"
+    >
+      View Profile
+    </button>
     <div class="mt-4 text-sm text-gray-500">
       <span class="font-semibold">Environment:</span>
       <span class="px-2 py-1 rounded bg-indigo-50 text-indigo-700">{{ environmentName() }}</span>

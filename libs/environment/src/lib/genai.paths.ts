@@ -1,6 +1,6 @@
 
 export const commonPaths = {
   profile: {
-    fetchAll: '/api/profiles'
+    fetchProfile: '/api/profiles'
   }
 }
