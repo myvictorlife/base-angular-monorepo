@@ -1,4 +1,4 @@
-# GenaiContextOrchestratorApp
+# Base NX Monorepo, Angular, NGRX App
 
 This is a base project for developing Angular applications with:
 
