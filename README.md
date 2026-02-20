@@ -187,6 +187,9 @@ npx nx g @nx/angular:library libs/<feature-name> --tags=feature --style=scss
 
 # Shared NgRx store
 npx nx g @nx/angular:library libs/shared/store --tags=shared-store
+
+# Translations
+npx nx g @nx/angular:library libs/shared/translation --tags=translation
 ```
 
 > After creating a library, register it in `eslint.base.config.mjs` under `depConstraints` to enforce dependency boundaries.

@@ -18,6 +18,16 @@
           {
             "glob": "**/*",
             "input": "apps/genai-app/public"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/genai-app/src/assets",
+            "output": "assets"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/genai-app/src/assets/i18n",
+            "output": "assets/i18n"
           }
         ],
         "styles": ["apps/genai-app/src/styles.scss"]

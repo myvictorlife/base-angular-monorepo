@@ -9,16 +9,13 @@
     "baseUrl": ".",
     "paths": {
       "@libs/package": ["./package.json"],
-      "@libs/environment": [
-        "libs/environment/src/index.ts"
-      ],
-      "@libs/entity": [
-        "libs/shared/entity/src/index.ts"
-      ],
+      "@libs/environment": ["libs/environment/src/index.ts"],
+      "@libs/entity": ["libs/shared/entity/src/index.ts"],
       "@libs/ui": ["libs/shared/ui/src/index.ts"],
       "@libs/profile": ["libs/profile/src/index.ts"],
-      "@libs/store": [
-        "libs/shared/store/src/index.ts"
+      "@libs/store": ["libs/shared/store/src/index.ts"],
+      "@libs/translation": [
+        "libs/shared/translation/src/index.ts"
       ]
     }
   },

@@ -1,0 +1,35 @@
+
+.img-translator {
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+
+  /* language-select.page.scss */
+ion-content {
+    background-color: #f4f4f4;
+  }
+  
+  ion-list {
+    background-color: #fff;
+    border-radius: 8px;
+  }
+  
+  ion-item {
+    --inner-padding-start: 8px;
+    --inner-padding-end: 8px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+  }
+  
+  ion-button {
+    margin-top: 16px;
+    --border-radius: 8px;
+  }
+
+  .toolbar-footer {
+    --background: white !important; 
+    --border-width: 0px !important;
+
+    padding-left: 10px;
+    padding-right: 10px;
+  }

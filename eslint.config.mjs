@@ -45,6 +45,12 @@ export default [
                 'scope:environment-lib'
               ],
             },{
+              sourceTag: 'scope:translate',
+              onlyDependOnLibsWithTags: [
+                'scope:entity-lib',
+                'scope:environment-lib'
+              ],
+            },{
               sourceTag: 'scope:genai-app',
               onlyDependOnLibsWithTags: [
                 'scope:entity-lib',
@@ -61,7 +67,8 @@ export default [
                 'scope:standalone-lib',
                 'scope:auth-lib',
                 'scope:shared-service-lib',
-                'scope:environment-lib'
+                'scope:environment-lib',
+                'scope:translate'
               ],
             }
           ],
