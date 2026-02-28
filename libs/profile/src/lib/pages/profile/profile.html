@@ -8,9 +8,9 @@
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
       </svg>
-      Back to Home
+      {{ 'PROFILE.BACK_HOME' | translate }}
     </button>
-    <h1 class="text-3xl font-bold text-indigo-700 mb-6">Profile</h1>
+    <h1 class="text-3xl font-bold text-indigo-700 mb-6">{{ 'PROFILE.TITLE' | translate }}</h1>
     @if(profile(); as profileData) {
       <lib-user-info [user]="profileData"></lib-user-info>
     }

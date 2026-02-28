@@ -1,18 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { environment } from '@libs/environment';
 import { User } from '@libs/entity';
 import { HeaderComponent } from '@libs/ui';
-import { Router } from '@angular/router';
+import { TranslationLibModule } from '@libs/translation';
 
 @Component({
   selector: 'app-home',
-  imports: [
-    CommonModule,
-    HeaderComponent
-  ],
+  imports: [CommonModule, RouterLink, HeaderComponent, TranslationLibModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePage {
 

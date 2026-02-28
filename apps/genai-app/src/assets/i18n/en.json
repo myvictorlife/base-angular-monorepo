@@ -1,3 +1,67 @@
 {
-    "DEFAULT_LANGUAGE": "ENGLISH"
+  "DEFAULT_LANGUAGE": "English",
+  "BACK": "Back",
+  "HEADER": {
+    "HOME": "Home",
+    "START": "Get started",
+    "LANGUAGE": "Language",
+    "LANGUAGE_ARIA": "Change language"
+  },
+  "LANGUAGE": {
+    "EN": "English",
+    "NL": "Dutch",
+    "FR": "French"
+  },
+  "UPDATE_LANGUAGE": {
+    "TITLE": "Language preferences",
+    "UPDATE": "Update language"
+  },
+  "HOME": {
+    "HERO_TITLE": "Your product, with professional standards.",
+    "HERO_SUBTITLE": "A modern template for building scalable web applications. Clean architecture, reusable components and best practices in one place.",
+    "CTA_START": "Get started now",
+    "CTA_HOW": "See how it works",
+    "ENV_LABEL": "Environment",
+    "HELLO": "Hello",
+    "VALUE_TITLE": "Everything you need to scale",
+    "VALUE_SUBTITLE": "Nx monorepo, Angular, NgRx, Tailwind and documentation to keep the team aligned.",
+    "VALUE_1_TITLE": "Modular architecture",
+    "VALUE_1_DESC": "Feature-based libs, clear boundaries and lazy loading so you only load what you need.",
+    "VALUE_2_TITLE": "State and routing",
+    "VALUE_2_DESC": "NgRx for global state and router store to keep the UI in sync with the URL.",
+    "VALUE_3_TITLE": "Consistent UI",
+    "VALUE_3_DESC": "Shared components, Atomic Design and Tailwind for a solid design system.",
+    "HOW_TITLE": "How it works",
+    "HOW_SUBTITLE": "From clone to deploy in a few steps.",
+    "HOW_1_TITLE": "Clone and install",
+    "HOW_1_DESC": "Use the repo as a base, install dependencies and run the app locally.",
+    "HOW_2_TITLE": "Customize",
+    "HOW_2_DESC": "Change branding, routes and features. The structure already follows best practices.",
+    "HOW_3_TITLE": "Deploy",
+    "HOW_3_DESC": "Production build and deploy to Firebase Hosting or the infrastructure of your choice.",
+    "CTA_FINAL_TITLE": "Ready to get started?",
+    "CTA_FINAL_SUBTITLE": "Open the sample profile or read the documentation in the README.",
+    "CTA_VIEW_PROFILE": "View profile",
+    "CTA_DOCS": "Nx documentation",
+    "STACK_TITLE": "Built with",
+    "STACK_ATOMIC": "Atomic Design",
+    "STACK_ANGULAR": "Angular",
+    "STACK_FIREBASE": "Firebase",
+    "STACK_ANALYTICS": "Firebase Analytics",
+    "STACK_NGRX": "NgRx",
+    "STACK_NX": "Nx",
+    "STACK_TAILWIND": "Tailwind CSS",
+    "DOCS_TITLE": "Documentation",
+    "DOCS_INTRO": "Guides and references in the docs/ folder:",
+    "DOCS_BEST_PRACTICES": "Best practices — Angular and project standards",
+    "DOCS_GENERATORS": "Workspace generators — Nx commands for apps and libs",
+    "DOCS_SKILLS": "Development skills — Feature libs, lazy loading, NgRx, testing"
+  },
+  "PROFILE": {
+    "TITLE": "Profile",
+    "BACK_HOME": "Back to Home"
+  },
+  "USER_INFO": {
+    "USER_ID": "User ID"
   }
+}

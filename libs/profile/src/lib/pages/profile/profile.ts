@@ -1,14 +1,15 @@
 import { Component, inject } from '@angular/core';
-import { UserInfoComponent } from '../../molecules/user-info/user-info';
-import { ProfileStateModule } from '../../+state/profile/profile.module';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslationLibModule } from '@libs/translation';
 import { fetchProfile } from '../../+state/profile/profile.actions';
 import { selectProfile } from '../../+state/profile/profile.selectors';
-import { Router } from '@angular/router';
+import { ProfileStateModule } from '../../+state/profile/profile.module';
+import { UserInfoComponent } from '../../molecules/user-info/user-info';
 
 @Component({
   selector: 'lib-profile',
-  imports: [UserInfoComponent, ProfileStateModule],
+  imports: [UserInfoComponent, ProfileStateModule, TranslationLibModule],
   templateUrl: './profile.html',
   styleUrls: ['./profile.scss'],
 })

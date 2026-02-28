@@ -1,2 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
-@use "tailwindcss"
+/* Global styles and theme for the template */
+@use "tailwindcss";
+
+/* Optional: custom theme extension for Tailwind v4 */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+/* Base typography and smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply antialiased text-neutral-800 bg-white;
+}

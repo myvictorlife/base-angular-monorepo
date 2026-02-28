@@ -4,6 +4,6 @@
             {{ user()?.name?.charAt(0) || '?' }}
         </div>
         <h2 class="text-xl font-semibold text-gray-800">{{ user()?.name }}</h2>
-        <div class="text-gray-500 text-sm">User ID: <span class="font-mono">{{ user()?.id }}</span></div>
+        <div class="text-gray-500 text-sm">{{ 'USER_INFO.USER_ID' | translate }}: <span class="font-mono">{{ user()?.id }}</span></div>
     </div>
 </div>
