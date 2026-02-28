@@ -6,10 +6,14 @@
     "start": "nx serve genai-app",
     "lint:all": "npx nx run-many --target=lint --all",
     "test": "nx test",
-    "test:all": "npx nx run-many --target=test --all"
+    "test:all": "npx nx run-many --target=test --all",
+    "utils:copy:dist": "cp -r ./dist ./hosting/",
+    "deploy:firebase": "cd ./hosting && firebase deploy --only hosting --force",
+    "build:deploy:firebase": "npx nx build genai-app --configuration=production && npm run utils:copy:dist && npm run deploy:firebase"
   },
   "private": true,
   "dependencies": {
+    "firebase": "^12.10.0",
     "@angular/common": "~21.1.0",
     "@angular/compiler": "~21.1.0",
     "@angular/core": "~21.1.0",

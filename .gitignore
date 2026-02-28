@@ -44,3 +44,7 @@ Thumbs.db
 .angular
 
 __screenshots__/
+
+# Firebase
+.firebase/
+hosting/dist/
