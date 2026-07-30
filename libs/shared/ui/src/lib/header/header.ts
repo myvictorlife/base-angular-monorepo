@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
+import { UpperCasePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Language } from '@libs/entity';
-import { TranslationLibModule, UpdateLanguageService } from '@libs/translation';
-import { TranslateService } from '@ngx-translate/core';
+import { UpdateLanguageService } from '@libs/translation';
+import { TranslatePipe } from '@ngx-translate/core';
 
 /** Map each Language enum value to its i18n key so the header always shows all available languages. */
 const LANGUAGE_LABEL_KEYS: Record<string, string> = {
@@ -14,29 +14,22 @@ const LANGUAGE_LABEL_KEYS: Record<string, string> = {
 
 @Component({
   selector: 'lib-header',
-  imports: [CommonModule, RouterLink, TranslationLibModule],
+  imports: [UpperCasePipe, RouterLink, TranslatePipe],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  private readonly translate = inject(TranslateService);
   private readonly updateLanguage = inject(UpdateLanguageService);
 
-  readonly currentLang = signal(this.translate.currentLang || Language.English);
+  /** ngx-translate owns the active language; read it, never mirror it. */
+  readonly currentLang = computed(() => this.updateLanguage.currentLanguage() ?? Language.English);
   readonly languageDropdownOpen = signal(false);
 
   /** All languages from the enum so the header always shows every available language. */
-  readonly languages: { code: string; labelKey: string }[] = (Object.values(Language) as string[]).map(
+  readonly languages: { code: Language; labelKey: string }[] = (Object.values(Language) as Language[]).map(
     code => ({ code, labelKey: LANGUAGE_LABEL_KEYS[code] ?? `LANGUAGE.${code.toUpperCase()}` })
   );
-
-  constructor() {
-    effect(onCleanup => {
-      const sub = this.translate.onLangChange.subscribe(ev => this.currentLang.set(ev.lang));
-      onCleanup(() => sub.unsubscribe());
-    });
-  }
 
   toggleLanguageDropdown(): void {
     this.languageDropdownOpen.update(open => !open);
@@ -46,9 +39,8 @@ export class HeaderComponent {
     this.languageDropdownOpen.set(false);
   }
 
-  onLanguageChange(code: string): void {
+  onLanguageChange(code: Language): void {
     this.updateLanguage.changeLanguage(code);
-    this.currentLang.set(code);
     this.closeLanguageDropdown();
   }
 }

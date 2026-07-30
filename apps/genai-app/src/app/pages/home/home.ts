@@ -1,14 +1,13 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '@libs/environment';
 import { User } from '@libs/entity';
 import { HeaderComponent } from '@libs/ui';
-import { TranslationLibModule } from '@libs/translation';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, RouterLink, HeaderComponent, TranslationLibModule],
+  imports: [RouterLink, HeaderComponent, TranslatePipe],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

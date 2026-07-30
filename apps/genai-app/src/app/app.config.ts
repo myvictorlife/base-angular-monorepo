@@ -18,6 +18,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideHttpClient } from '@angular/common/http';
 import { AnalyticsService } from '@libs/ui';
 import { SharedDataStateModule } from '@libs/store';
+import { provideTranslation } from '@libs/translation';
 import { metaReducers, reducers } from './core/+state';
 import { CustomSerializer } from './core/services/router/router-serializer';
 import { filter } from 'rxjs';
@@ -38,6 +39,9 @@ export const appConfig: ApplicationConfig = {
 
     provideHttpClient(),
     provideRouterStore(),
+
+    // Must come after provideHttpClient(): the i18n loader fetches assets/i18n.
+    provideTranslation(),
 
     provideStoreDevtools({
       maxAge: 25,

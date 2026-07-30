@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslationLibModule } from '@libs/translation';
+import { TranslatePipe } from '@ngx-translate/core';
 import { fetchProfile } from '../../+state/profile/profile.actions';
 import { selectProfile } from '../../+state/profile/profile.selectors';
 import { ProfileStateModule } from '../../+state/profile/profile.module';
@@ -9,7 +9,7 @@ import { UserInfoComponent } from '../../molecules/user-info/user-info';
 
 @Component({
   selector: 'lib-profile',
-  imports: [UserInfoComponent, ProfileStateModule, TranslationLibModule],
+  imports: [UserInfoComponent, ProfileStateModule, TranslatePipe],
   templateUrl: './profile.html',
   styleUrls: ['./profile.scss'],
 })

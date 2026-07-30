@@ -1,10 +1,10 @@
 import { Component, input } from '@angular/core';
 import { User } from '@libs/entity';
-import { TranslationLibModule } from '@libs/translation';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lib-user-info',
-  imports: [TranslationLibModule],
+  imports: [TranslatePipe],
   templateUrl: './user-info.html',
   styleUrls: ['./user-info.scss'],
 })

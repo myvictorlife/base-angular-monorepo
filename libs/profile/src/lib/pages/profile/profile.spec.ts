@@ -3,6 +3,18 @@ import { Profile } from './profile';
 import { Router } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { TranslateLoader, TranslationObject, provideTranslateService } from '@ngx-translate/core';
+import { Observable, of } from 'rxjs';
+
+/** Serves the strings the template needs without touching HTTP. */
+class StubTranslateLoader implements TranslateLoader {
+  getTranslation(): Observable<TranslationObject> {
+    return of({
+      PROFILE: { TITLE: 'Profile', BACK_HOME: 'Back to Home' },
+      USER_INFO: { USER_ID: 'User ID' },
+    });
+  }
+}
 
 describe('Profile', () => {
   let spectator: Spectator<Profile>;
@@ -18,12 +30,18 @@ describe('Profile', () => {
         provide: Router,
         useValue: { navigate: jest.fn() },
       },
+      provideTranslateService({
+        loader: [{ provide: TranslateLoader, useClass: StubTranslateLoader }],
+        lang: 'en',
+        fallbackLang: 'en',
+      }),
     ],
   });
 
   beforeEach(() => {
     spectator = createComponent();
     router = spectator.inject(Router);
+    spectator.detectChanges();
   });
 
   it('should create', () => {
