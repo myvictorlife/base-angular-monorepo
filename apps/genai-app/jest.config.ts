@@ -1,10 +1,7 @@
 export default {
   displayName: 'genai-app',
   preset: '../../jest.preset.js',
-  setupFilesAfterEnv: [
-    '<rootDir>/src/test-setup.ts',
-    '../../jest-global-mocks.ts'
-  ],
+  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../coverage/apps/genai-app',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomePage } from './home/home';
+import { NotFoundPage } from './not-found/not-found';
 
 export const genaiPagesRoutes: Routes = [
   {
@@ -8,5 +9,8 @@ export const genaiPagesRoutes: Routes = [
   }, {
     path: 'profile',
     loadChildren: () => import('@libs/profile').then(m => m.profileRoutes)
+  }, {
+    path: '**',
+    component: NotFoundPage
   }
 ];

@@ -63,5 +63,10 @@
   },
   "USER_INFO": {
     "USER_ID": "ID utilisateur"
+  },
+  "NOT_FOUND": {
+    "TITLE": "Page introuvable",
+    "DESCRIPTION": "La page que vous cherchez n'existe pas ou a été déplacée.",
+    "BACK_HOME": "Retour à l'accueil"
   }
 }

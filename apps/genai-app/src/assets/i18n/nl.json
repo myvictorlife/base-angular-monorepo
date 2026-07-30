@@ -63,5 +63,10 @@
   },
   "USER_INFO": {
     "USER_ID": "Gebruikers-ID"
+  },
+  "NOT_FOUND": {
+    "TITLE": "Pagina niet gevonden",
+    "DESCRIPTION": "De pagina die je zoekt bestaat niet of is verplaatst.",
+    "BACK_HOME": "Terug naar home"
   }
 }

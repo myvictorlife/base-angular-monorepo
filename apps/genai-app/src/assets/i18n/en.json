@@ -63,5 +63,10 @@
   },
   "USER_INFO": {
     "USER_ID": "User ID"
+  },
+  "NOT_FOUND": {
+    "TITLE": "Page not found",
+    "DESCRIPTION": "The page you are looking for does not exist or has been moved.",
+    "BACK_HOME": "Back to home"
   }
 }

@@ -1,10 +1,12 @@
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { Profile } from './profile';
 import { Router } from '@angular/router';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
+import { provideHttpClient } from '@angular/common/http';
+import { provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
 import { TranslateLoader, TranslationObject, provideTranslateService } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
+import { provideProfileState } from '../../+state/profile/profile.providers';
 
 /** Serves the strings the template needs without touching HTTP. */
 class StubTranslateLoader implements TranslateLoader {
@@ -21,15 +23,17 @@ describe('Profile', () => {
   let router: Router;
   const createComponent = createComponentFactory({
     component: Profile,
-    imports: [
-        StoreModule.forRoot({}),
-        EffectsModule.forRoot([])
-    ],
     providers: [
       {
         provide: Router,
         useValue: { navigate: jest.fn() },
       },
+      provideHttpClient(),
+      provideStore({}),
+      provideEffects(),
+      // The feature slice now lives on the profile route, so a component-level
+      // test has to register it explicitly.
+      provideProfileState(),
       provideTranslateService({
         loader: [{ provide: TranslateLoader, useClass: StubTranslateLoader }],
         lang: 'en',
