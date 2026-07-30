@@ -2,7 +2,7 @@
 
 ## Project Context
 
-- This project is a **mobile-first** application built with **Angular 20** and organized as an **Nx monorepo**.
+- This project is a **mobile-first** application built with **Angular 21** and organized as an **Nx monorepo**.
 - Focus on modern, responsive design and excellent user experience.
 - Code must be clean, modular, scalable, and follow best practices for modern Angular architecture.
 
@@ -33,11 +33,11 @@
 
 ## Code Guidelines
 
-### 1. **Angular 20**
+### 1. **Angular 21**
 - **DO NOT** use outdated or "anti-pattern" features such as:
   - `*ngIf`, `*ngFor`, `@Input`, `@Output`, `ngOnInit`, `ngOnDestroy`, `ngAfterViewInit`, etc.
   - Avoid any decorator-based direct component communication.
-- **Always use Angular 20's new control flows:**
+- **Always use Angular's built-in control flow:**
   - Use `@if` instead of `*ngIf` and `@for` instead of `*ngFor`.
   - Example:
     ```html
@@ -100,3 +100,41 @@ export class MyComponent {
 <div *ngIf="condition">...</div>
 <li *ngFor="let item of items">...</li>
 ```
+
+---
+
+## Providers over NgModules
+
+This workspace is standalone-only. **Do not introduce `NgModule`s** — not even the
+`forRoot()`/`forChild()` wrappers that state and i18n libraries used to ship.
+
+Each library exposes a provider function instead:
+
+| Concern | Use |
+|---|---|
+| i18n setup | `provideTranslation()` — `@libs/translation` |
+| Shared state slice | `provideSharedDataState()` — `@libs/store` |
+| Profile feature state | `provideProfileState()` — `@libs/profile`, attached to the route |
+| Root store / effects | `provideStore()`, `provideEffects()` |
+| Router state | `provideRouterStore({ serializer: CustomSerializer })` |
+
+Two rules learned the hard way:
+
+1. **Never register the same concern twice.** `StoreRouterConnectingModule.forRoot({serializer})`
+   *and* `provideRouterStore()` both provide `RouterStateSerializer`; the second silently
+   won and the custom serializer never ran.
+2. **Feature state belongs on the route, not in a component's `imports`.** Route-level
+   `providers: [provideProfileState()]` creates the slice when the feature is entered
+   and keeps the component testable.
+
+## Templates
+
+Import only what the template uses — `TranslatePipe`, `RouterLink`, `UpperCasePipe` —
+rather than `CommonModule` or a barrel module. It keeps the component's dependencies
+honest and helps the bundler.
+
+## Module boundaries
+
+Dependency rules live in `eslint.base.config.mjs` (the file every project extends),
+**not** in the root `eslint.config.mjs`. Adding a library means adding its `scope:` tag
+to `project.json` and a matching entry to `depConstraints`.

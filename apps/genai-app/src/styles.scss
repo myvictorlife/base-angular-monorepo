@@ -1,6 +1,10 @@
 /* Global styles and theme for the template */
 @use "tailwindcss";
 
+/* Self-hosted Inter (latin + latin-ext). Generated from the Google Fonts CSS;
+   the .woff2 files live in public/fonts. */
+@import "./fonts.css";
+
 /* Optional: custom theme extension for Tailwind v4 */
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
