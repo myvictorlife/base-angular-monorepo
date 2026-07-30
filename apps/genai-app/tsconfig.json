@@ -8,7 +8,8 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
-    "importHelpers": true
+    "importHelpers": true,
+    "noUncheckedIndexedAccess": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

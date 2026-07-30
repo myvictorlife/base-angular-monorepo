@@ -4,11 +4,15 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/genai-app/src",
-  "tags": ["scope:genai-app"],
+  "tags": [
+    "scope:genai-app"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/genai-app",
         "browser": "apps/genai-app/src/main.ts",
@@ -30,7 +34,9 @@
             "output": "assets/i18n"
           }
         ],
-        "styles": ["apps/genai-app/src/styles.scss"]
+        "styles": [
+          "apps/genai-app/src/styles.scss"
+        ]
       },
       "configurations": {
         "production": {
@@ -58,6 +64,17 @@
               "with": "libs/environment/src/lib/environment.development.ts"
             }
           ]
+        },
+        "local": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "libs/environment/src/lib/environment.ts",
+              "with": "libs/environment/src/lib/environment.local.ts"
+            }
+          ]
         }
       },
       "defaultConfiguration": "production"
@@ -71,6 +88,9 @@
         },
         "development": {
           "buildTarget": "genai-app:build:development"
+        },
+        "local": {
+          "buildTarget": "genai-app:build:local"
         }
       },
       "defaultConfiguration": "development"
@@ -80,7 +100,9 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/genai-app/jest.config.ts"
       }

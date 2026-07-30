@@ -55,7 +55,8 @@
     "DOCS_INTRO": "Handleidingen en referenties in de map docs/:",
     "DOCS_BEST_PRACTICES": "Best practices — Angular en projectstandaarden",
     "DOCS_GENERATORS": "Workspace generators — Nx-opdrachten voor apps en libs",
-    "DOCS_SKILLS": "Development skills — Feature libs, lazy loading, NgRx, testing"
+    "DOCS_SKILLS": "Development skills — Feature libs, lazy loading, NgRx, testing",
+    "TITLE": "Home"
   },
   "PROFILE": {
     "TITLE": "Profiel",

@@ -10,5 +10,6 @@ export const appRoutes: Route[] = [{
     // page, so it is always in the initial bundle. Lazy-loading it here only looked
     // like a split; keeping the import static makes the real cost visible.
     path: 'translate',
+    title: 'UPDATE_LANGUAGE.TITLE',
     children: updateLanguageRoutes,
 }];

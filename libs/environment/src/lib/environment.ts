@@ -1,4 +1,6 @@
-export const environment = {
+import { Environment } from './environment.model';
+
+export const environment: Environment = {
   production: true,
   environmentName: 'Production',
   baseUrl: 'http://localhost:8080',

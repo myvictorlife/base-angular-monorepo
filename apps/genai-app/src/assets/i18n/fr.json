@@ -55,7 +55,8 @@
     "DOCS_INTRO": "Guides et références dans le dossier docs/ :",
     "DOCS_BEST_PRACTICES": "Bonnes pratiques — Standards Angular et projet",
     "DOCS_GENERATORS": "Workspace generators — Commandes Nx pour apps et libs",
-    "DOCS_SKILLS": "Development skills — Feature libs, lazy loading, NgRx, tests"
+    "DOCS_SKILLS": "Development skills — Feature libs, lazy loading, NgRx, tests",
+    "TITLE": "Accueil"
   },
   "PROFILE": {
     "TITLE": "Profil",

@@ -1,8 +1,11 @@
-import { Provider } from '@angular/core';
+import { EnvironmentProviders, Provider } from '@angular/core';
+import { TitleStrategy } from '@angular/router';
 import { Language } from '@libs/entity';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideDocumentLanguage } from './document-language';
 import { readStoredLanguage } from './language-storage';
+import { TranslatedTitleStrategy } from './translated-title.strategy';
 
 /**
  * Root translation setup. Add once in the application config, alongside
@@ -12,7 +15,7 @@ import { readStoredLanguage } from './language-storage';
  * provided its own TranslateService bound to a non-overridable loader, which made
  * every translating component untestable.
  */
-export function provideTranslation(): Provider[] {
+export function provideTranslation(): (Provider | EnvironmentProviders)[] {
   return [
     provideTranslateService({
       loader: provideTranslateHttpLoader({
@@ -25,5 +28,7 @@ export function provideTranslation(): Provider[] {
       fallbackLang: Language.English,
       lang: readStoredLanguage(),
     }),
+    provideDocumentLanguage(),
+    { provide: TitleStrategy, useExisting: TranslatedTitleStrategy },
   ];
 }

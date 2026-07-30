@@ -1,10 +1,20 @@
 import {
   ApplicationConfig,
+  ErrorHandler,
   inject,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
+  provideZonelessChangeDetection,
 } from '@angular/core';
-import { NavigationEnd, Router, provideRouter, withComponentInputBinding } from '@angular/router';
+import {
+  NavigationEnd,
+  PreloadAllModules,
+  Router,
+  provideRouter,
+  withComponentInputBinding,
+  withPreloading,
+} from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import { appRoutes } from './app.routes';
 
 import { environment } from '@libs/environment';
@@ -14,8 +24,8 @@ import { provideRouterStore } from '@ngrx/router-store';
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
-import { provideHttpClient } from '@angular/common/http';
-import { AnalyticsService } from '@libs/ui';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { AnalyticsService, GlobalErrorHandler, httpErrorInterceptor } from '@libs/ui';
 import { provideSharedDataState } from '@libs/store';
 import { provideTranslation } from '@libs/translation';
 import { metaReducers, reducers } from './core/+state';
@@ -25,9 +35,19 @@ import { filter } from 'rxjs';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(appRoutes, withComponentInputBinding()),
+    // The app is signals + OnPush throughout, so zone.js has nothing to observe.
+    provideZonelessChangeDetection(),
+    provideRouter(
+      appRoutes,
+      withComponentInputBinding(),
+      // Lazy chunks are small; fetch them in the background so navigation is instant.
+      withPreloading(PreloadAllModules),
+    ),
 
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([httpErrorInterceptor])),
+
+    // Uncaught errors reach analytics instead of only the console.
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
 
     provideStore(reducers, { metaReducers }),
     provideEffects(),
@@ -50,13 +70,16 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(async () => {
       const analytics = inject(AnalyticsService);
       const router = inject(Router);
+      const title = inject(Title);
 
       await analytics.initialize();
 
       router.events
         .pipe(filter((e) => e instanceof NavigationEnd))
         .subscribe((e) => {
-          analytics.logPageView((e as NavigationEnd).urlAfterRedirects);
+          // Read the title after TitleStrategy has run, so page_title carries the
+          // translated string the user actually sees instead of undefined.
+          analytics.logPageView((e as NavigationEnd).urlAfterRedirects, title.getTitle());
         });
     }),
   ],

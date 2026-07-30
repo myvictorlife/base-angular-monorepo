@@ -4,10 +4,21 @@
   "sourceRoot": "libs/shared/store/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["scope:shared-store"],
+  "tags": [
+    "scope:shared-store"
+  ],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "libs/shared/store/jest.config.ts"
+      }
     }
   }
 }

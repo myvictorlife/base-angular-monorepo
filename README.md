@@ -6,13 +6,18 @@ A production-ready base project for developing scalable Angular applications usi
 
 | Layer | Technology | Version |
 |---|---|---|
-| Framework | Angular | 21.x |
+| Framework | Angular (standalone, **zoneless**) | 21.2.x |
 | State Management | NgRx | 21.x |
+| i18n | ngx-translate (signal-based) | 18.x |
 | Monorepo | Nx | 22.x |
 | Testing | Jest + Spectator | 30.x / 22.x |
 | Styling | Tailwind CSS + SCSS | 4.x |
 | Language | TypeScript | 5.9.x |
 | Linting | ESLint + Prettier | 9.x / 3.x |
+
+> **No NgModules and no zone.js.** Every library exposes a provider function
+> (`provideTranslation()`, `provideSharedDataState()`, `provideProfileState()`).
+> See `docs/best-practices.md`.
 
 ---
 
@@ -29,7 +34,6 @@ base-angular-monorepo/
 │       │   │   │   ├── +state/             # NgRx router state
 │       │   │   │   │   ├── index.ts
 │       │   │   │   │   └── router/
-│       │   │   │   │       └── router.selectors.ts
 │       │   │   │   └── services/
 │       │   │   │       └── router/
 │       │   │   │           └── router-serializer.ts

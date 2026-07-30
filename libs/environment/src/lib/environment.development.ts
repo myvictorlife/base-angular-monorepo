@@ -1,5 +1,7 @@
-export const environment = {
-  production: true,
+import { Environment } from './environment.model';
+
+export const environment: Environment = {
+  production: false,
   environmentName: 'Development',
   baseUrl: 'http://localhost:8080',
   firebaseEnabled: false, // auto-substituted by backend → true when Firebase is configured
