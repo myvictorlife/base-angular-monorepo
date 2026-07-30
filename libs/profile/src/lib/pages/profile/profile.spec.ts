@@ -1,6 +1,5 @@
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { Profile } from './profile';
-import { provideMockStore } from '@ngrx/store/testing';
 import { Router } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
