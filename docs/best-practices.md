@@ -2,7 +2,7 @@
 
 ## Project Context
 
-- This project is a **mobile-first** application built with **Angular 21** and organized as an **Nx monorepo**.
+- This project is a **mobile-first** application built with **Angular 22** and organized as an **Nx monorepo**.
 - Focus on modern, responsive design and excellent user experience.
 - Code must be clean, modular, scalable, and follow best practices for modern Angular architecture.
 
@@ -33,7 +33,7 @@
 
 ## Code Guidelines
 
-### 1. **Angular 21**
+### 1. **Angular 22**
 - **DO NOT** use outdated or "anti-pattern" features such as:
   - `*ngIf`, `*ngFor`, `@Input`, `@Output`, `ngOnInit`, `ngOnDestroy`, `ngAfterViewInit`, etc.
   - Avoid any decorator-based direct component communication.
@@ -112,7 +112,7 @@ Each library exposes a provider function instead:
 
 | Concern | Use |
 |---|---|
-| i18n setup | `provideTranslation()` — `@libs/translation` |
+| i18n setup | `provideTranslation()` — `@libs/translation` (also wires `<html lang>` and translated route titles) |
 | Profile feature state | `ProfileStore` — `@libs/profile`, listed in the route's `providers` |
 | Root store | `provideStore()` — router state only |
 | Router state | `provideRouterStore({ serializer: CustomSerializer })` |

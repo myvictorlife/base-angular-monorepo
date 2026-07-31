@@ -61,12 +61,31 @@
       <button
         type="button"
         class="header__menu-btn"
-        aria-label="Menu"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="mobileMenuOpen()"
+        [attr.aria-controls]="'header-mobile-menu'"
+        [attr.aria-label]="'HEADER.MENU_ARIA' | translate"
       >
         <svg class="header__menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          @if (mobileMenuOpen()) {
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/>
+          } @else {
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          }
         </svg>
       </button>
     </nav>
   </div>
+
+  @if (mobileMenuOpen()) {
+    <div class="header__mobile-backdrop" (click)="closeMobileMenu()" aria-hidden="true"></div>
+    <div id="header-mobile-menu" class="header__mobile-menu">
+      <a routerLink="/" class="header__mobile-link" (click)="closeMobileMenu()">
+        {{ 'HEADER.HOME' | translate }}
+      </a>
+      <a routerLink="/profile" class="header__mobile-cta" (click)="closeMobileMenu()">
+        {{ 'HEADER.START' | translate }}
+      </a>
+    </div>
+  }
 </header>

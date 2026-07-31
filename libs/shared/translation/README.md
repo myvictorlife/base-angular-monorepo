@@ -1,16 +1,25 @@
-# Translation (i18n)
+# translation (i18n)
 
-Multi-language support for the project using [ngx-translate](https://github.com/ngx-translate/core) v18 (signal-based, standalone providers only — `TranslateModule` no longer exists).
+Multi-language support using [ngx-translate](https://github.com/ngx-translate/core) v18
+— signal-based, standalone providers only. `TranslateModule` no longer exists.
+
+**Tag:** `scope:translate` — may depend on `scope:entity-lib` and `scope:environment-lib`.
 
 ## Supported languages
 
-- **en** – English  
-- **nl** – Dutch  
-- **fr** – French  
+| Code | Language | Bundle |
+|---|---|---|
+| `en` | English | `apps/genai-app/src/assets/i18n/en.json` |
+| `nl` | Dutch | `nl.json` |
+| `fr` | French | `fr.json` |
+| `pt` | Portuguese | `pt.json` |
+
+The list is driven by the `Language` enum in `@libs/entity`, not by this library.
 
 ## Setup
 
-Register once in the application config, after `provideHttpClient()` (the i18n loader fetches `assets/i18n`):
+Register once in the application config, **after `provideHttpClient()`** — the loader
+fetches `assets/i18n`:
 
 ```ts
 import { provideTranslation } from '@libs/translation';
@@ -23,36 +32,55 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-`provideTranslation()` reads the stored language from `localStorage` and falls back to English.
+`provideTranslation()` bundles four things:
+
+1. **`provideTranslateService`** with the HTTP loader, restoring the language from
+   `localStorage` (falling back to English).
+2. **`failOnError: true`** on the loader — a missing bundle fails loudly instead of
+   silently serving partial translations (v18 defaults to returning `{}` on 404).
+3. **`provideDocumentLanguage()`** — keeps `<html lang>` in sync with the active
+   language. Without it screen readers apply English pronunciation to every locale and
+   crawlers index the page under the wrong one.
+4. **`TranslatedTitleStrategy`** — treats each route's `title` as an i18n key, so
+   `<title>` is translated instead of showing the raw key.
 
 ## Usage
 
-1. **In templates:** import `TranslatePipe` in the component and use the pipe:
+**In templates** — import `TranslatePipe` in the component:
 
-   ```ts
-   import { TranslatePipe } from '@ngx-translate/core';
+```ts
+import { TranslatePipe } from '@ngx-translate/core';
 
-   @Component({ imports: [TranslatePipe], /* ... */ })
-   ```
+@Component({ imports: [TranslatePipe], /* ... */ })
+```
 
-   ```html
-   {{ 'HOME.HERO_TITLE' | translate }}
-   ```
+```html
+{{ 'HOME.HERO_TITLE' | translate }}
+```
 
-2. **In components:** inject `TranslateService`. `currentLang` is a **signal** — call it:
+**In components** — `currentLang` is a **signal**, so call it:
 
-   ```ts
-   private readonly translate = inject(TranslateService);
-   this.translate.currentLang();          // reactive read
-   this.translate.getCurrentLang();       // non-reactive snapshot
-   this.translate.instant('PROFILE.TITLE');
-   ```
+```ts
+private readonly translate = inject(TranslateService);
 
-3. **Changing language:** use `UpdateLanguageService.changeLanguage(code)` or the header dropdown. The choice is stored in `localStorage` under `LANGUAGE_STORAGE_KEY` and reused on reload. No page reload is needed — the swap is reactive.
+this.translate.currentLang();      // reactive read
+this.translate.getCurrentLang();   // non-reactive snapshot
+this.translate.instant('PROFILE.TITLE');
+```
+
+**Route titles** — use a translation key:
+
+```ts
+{ path: 'profile', title: 'PROFILE.TITLE', loadChildren: ... }
+```
+
+**Changing language** — `UpdateLanguageService.changeLanguage(code)` or the header
+dropdown. The choice is persisted under `LANGUAGE_STORAGE_KEY` and restored on reload.
+**No page reload is needed** — the swap is reactive.
 
 ## Testing components that translate
 
-Provide your own loader; nothing is hardcoded:
+Nothing is hardcoded, so provide your own loader:
 
 ```ts
 providers: [
@@ -64,22 +92,29 @@ providers: [
 ]
 ```
 
-## Adding new keys
+> This is why the library no longer ships an NgModule. The old `TranslationLibModule`
+> called `TranslateModule.forChild({ loader })`, and `forChild` quietly provided its
+> **own `TranslateService`** bound to a non-overridable HTTP loader. In tests that
+> request never resolved, so every label rendered as an empty string and no override
+> could reach it.
 
-Edit the JSON files under **`apps/genai-app/src/assets/i18n/`** (`en.json`, `nl.json`, `fr.json`). Use the same key in all files (e.g. `"MY_SECTION.MY_KEY": "Text"`).
+## Adding a key
 
-The loader runs with `failOnError: true`, so a missing i18n file fails loudly instead of silently serving partial translations.
+Add it to **all four** bundles. `apps/genai-app/src/app/i18n-completeness.spec.ts`
+fails on a missing key, an extra key, an empty value, or a missing bundle — so drift
+is caught in CI rather than in production.
 
-## Adding a new language
+## Adding a language
 
-1. Add a new file in `apps/genai-app/src/assets/i18n/`, e.g. `de.json`, with the same structure as `en.json`.
-2. In `@libs/entity`, add the new code to the `Language` enum. `readStoredLanguage()` and the header dropdown derive from that enum automatically.
-3. In the update-language page, add the new option to the `languages` array.
+1. Add the code to the `Language` enum in `@libs/entity`.
+2. Create `apps/genai-app/src/assets/i18n/<code>.json` with the same keys as `en.json`.
+3. Add `LANGUAGE.<CODE>` to every bundle (the label each language uses for the new one).
+4. Add the option to the `languages` array in `update-language.component.ts`.
+
+The header dropdown and `readStoredLanguage()` derive from the enum, so they need no edit.
+The completeness spec will fail until steps 2 and 3 are done.
 
 ## Where translation is used
 
-- **Header** – nav labels and language switcher  
-- **Home page** – hero, value section, how it works, CTA  
-- **Profile page** – title and “Back to Home”  
-- **User info** – “User ID” label  
-- **Update language page** – title, button, back link  
+Header (nav + language switcher) · Home · Profile · User info · Update-language page ·
+404 page · every route `<title>`.

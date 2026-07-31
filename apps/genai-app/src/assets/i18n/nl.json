@@ -5,7 +5,8 @@
     "HOME": "Home",
     "START": "Aan de slag",
     "LANGUAGE": "Taal",
-    "LANGUAGE_ARIA": "Taal wijzigen"
+    "LANGUAGE_ARIA": "Taal wijzigen",
+    "MENU_ARIA": "Menu openen"
   },
   "LANGUAGE": {
     "EN": "Engels",

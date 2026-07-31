@@ -15,7 +15,10 @@
       "@libs/profile": ["libs/profile/src/index.ts"],
       "@libs/translation": ["libs/shared/translation/src/index.ts"]
     },
-    "strict": false,
+    // Every project already turns strict on in its own tsconfig.json. Keeping the
+    // base non-strict only meant a newly generated lib would silently start loose
+    // until someone noticed.
+    "strict": true,
     "noUncheckedSideEffectImports": false,
     "types": ["*"],
     "esModuleInterop": false,

@@ -1,3 +1,60 @@
+// The bar and the mobile panel render the same two affordances at two sizes.
+// Sharing the declarations keeps the component under its 4 kB style budget
+// instead of shipping each rule twice.
+%header-focus-ring {
+  &:focus-visible {
+    outline: 2px solid #a3a3a3;
+    outline-offset: 2px;
+  }
+}
+
+%header-nav-link {
+  @extend %header-focus-ring;
+  color: #525252;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: color 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    color: #171717;
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+// Click-catcher behind an open overlay: transparent, but above the page.
+%header-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: transparent;
+}
+
+%header-overlay-panel {
+  z-index: 50;
+  background: #fff;
+  box-shadow: 0 10px 40px -12px rgba(0, 0, 0, 0.15);
+}
+
+%header-cta {
+  padding: 0.5rem 1rem;
+  background: #171717;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #262626;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #171717;
+    outline-offset: 2px;
+  }
+}
+
 .header {
   position: sticky;
   top: 0;
@@ -21,6 +78,7 @@
 }
 
 .header__brand {
+  @extend %header-focus-ring;
   display: inline-flex;
   align-items: center;
   gap: 0.625rem;
@@ -35,11 +93,6 @@
 
   &:hover {
     color: #0a0a0a;
-  }
-
-  &:focus-visible {
-    outline: 2px solid #a3a3a3;
-    outline-offset: 2px;
   }
 }
 
@@ -60,24 +113,10 @@
 }
 
 .header__link {
+  @extend %header-nav-link;
   display: none;
   padding: 0.5rem 0.75rem;
-  color: #525252;
   font-size: 0.875rem;
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: 0.5rem;
-  transition: color 0.15s ease, background 0.15s ease;
-
-  &:hover {
-    color: #171717;
-    background: rgba(0, 0, 0, 0.04);
-  }
-
-  &:focus-visible {
-    outline: 2px solid #a3a3a3;
-    outline-offset: 2px;
-  }
 
   @media (min-width: 640px) {
     display: inline-flex;
@@ -141,25 +180,20 @@
 }
 
 .header__lang-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  background: transparent;
+  @extend %header-backdrop;
 }
 
 .header__lang-list {
+  @extend %header-overlay-panel;
   position: absolute;
   top: calc(100% + 0.25rem);
   right: 0;
-  z-index: 50;
   min-width: 10rem;
   padding: 0.25rem;
   margin: 0;
   list-style: none;
-  background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 0.5rem;
-  box-shadow: 0 10px 40px -12px rgba(0, 0, 0, 0.15);
 }
 
 .header__lang-option {
@@ -193,29 +227,21 @@
 }
 
 .header__cta {
-  display: inline-flex;
+  @extend %header-cta;
+  // Below the breakpoint this lives inside the mobile menu instead, so the bar
+  // does not have to fit a link, a language picker and a CTA at once.
+  display: none;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1rem;
-  background: #171717;
-  color: #fff;
   font-size: 0.875rem;
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: 0.5rem;
-  transition: background 0.15s ease;
 
-  &:hover {
-    background: #262626;
-  }
-
-  &:focus-visible {
-    outline: 2px solid #171717;
-    outline-offset: 2px;
+  @media (min-width: 640px) {
+    display: inline-flex;
   }
 }
 
 .header__menu-btn {
+  @extend %header-focus-ring;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -234,11 +260,6 @@
     background: rgba(0, 0, 0, 0.05);
   }
 
-  &:focus-visible {
-    outline: 2px solid #a3a3a3;
-    outline-offset: 2px;
-  }
-
   @media (min-width: 640px) {
     display: none;
   }
@@ -247,4 +268,41 @@
 .header__menu-icon {
   width: 1.5rem;
   height: 1.5rem;
+}
+
+.header__mobile-backdrop {
+  @extend %header-backdrop;
+
+  @media (min-width: 640px) {
+    display: none;
+  }
+}
+
+.header__mobile-menu {
+  @extend %header-overlay-panel;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 1.5rem 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+  // The trigger is hidden from this width up, so the panel must never outlive it —
+  // otherwise resizing while open would strand an unclosable menu on screen.
+  @media (min-width: 640px) {
+    display: none;
+  }
+}
+
+.header__mobile-link {
+  @extend %header-nav-link;
+  padding: 0.75rem;
+  font-size: 0.9375rem;
+}
+
+.header__mobile-cta {
+  @extend %header-cta;
+  padding: 0.75rem;
+  font-size: 0.9375rem;
+  text-align: center;
 }

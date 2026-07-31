@@ -1,4 +1,4 @@
-# Base NX Monorepo — Angular + NgRx
+# Base NX Monorepo — Angular + NgRx Signals
 
 A production-ready base project for developing scalable Angular applications using modern standards. Use this as a starting point for your own project.
 
@@ -6,18 +6,23 @@ A production-ready base project for developing scalable Angular applications usi
 
 | Layer | Technology | Version |
 |---|---|---|
-| Framework | Angular (standalone, **zoneless**) | 21.2.x |
-| State Management | NgRx | 21.x |
+| Framework | Angular (standalone, **zoneless**) | 22.0.x |
+| Feature state | NgRx **SignalStore** (`@ngrx/signals`) | 22.x |
+| Global state | NgRx Store — router state only | 22.x |
 | i18n | ngx-translate (signal-based) | 18.x |
-| Monorepo | Nx | 22.x |
+| Monorepo | Nx | 23.x |
 | Testing | Jest + Spectator | 30.x / 22.x |
 | Styling | Tailwind CSS + SCSS | 4.x |
-| Language | TypeScript | 5.9.x |
+| Language | TypeScript | 6.0.x |
 | Linting | ESLint + Prettier | 9.x / 3.x |
 
 > **No NgModules and no zone.js.** Every library exposes a provider function
 > (`provideTranslation()`) or, for feature state, a `signalStore` class listed in the
-> route's `providers` (`ProfileStore`). See `docs/best-practices.md`.
+> route's `providers` (`ProfileStore`). See [`docs/best-practices.md`](docs/best-practices.md).
+
+> ⚠️ **`@ngrx/*` is currently on `22.0.0-beta.0`.** NgRx 22 has no stable release yet and
+> Angular 22 requires it (NgRx 21 peers on `@angular/core@^21`). Move to the stable
+> release when it ships — no source changes are expected.
 
 ---
 
@@ -32,25 +37,22 @@ base-angular-monorepo/
 │       │   ├── app/
 │       │   │   ├── core/                   # Core services and global state
 │       │   │   │   ├── +state/             # NgRx router state
-│       │   │   │   │   ├── index.ts
-│       │   │   │   │   └── router/
-│       │   │   │   └── services/
-│       │   │   │       └── router/
-│       │   │   │           └── router-serializer.ts
+│       │   │   │   │   └── index.ts
+│       │   │   │   └── services/router/
+│       │   │   │       └── router-serializer.ts
 │       │   │   ├── pages/                  # Route-level page components
 │       │   │   │   ├── home/
-│       │   │   │   │   ├── home.ts
-│       │   │   │   │   ├── home.html
-│       │   │   │   │   └── home.scss
+│       │   │   │   ├── not-found/
 │       │   │   │   └── pages.routes.ts
 │       │   │   ├── app.config.ts           # Application providers setup
 │       │   │   ├── app.routes.ts           # Root routing configuration
-│       │   │   ├── app.ts                  # Root component
-│       │   │   ├── app.html
-│       │   │   └── app.scss
+│       │   │   └── app.ts                  # Root component
+│       │   ├── assets/i18n/                # en · nl · fr · pt translation bundles
 │       │   ├── main.ts                     # Bootstrap entry point
+│       │   ├── fonts.css                   # Self-hosted Inter @font-face rules
 │       │   ├── index.html
 │       │   └── styles.scss                 # Global styles
+│       ├── public/                         # Copied verbatim (favicon, fonts/)
 │       ├── project.json                    # Nx project configuration
 │       ├── jest.config.ts
 │       └── eslint.config.mjs
@@ -59,70 +61,61 @@ base-angular-monorepo/
 │   │
 │   ├── environment/                        # Environment configuration
 │   │   └── src/lib/
-│   │       ├── environment.ts              # Base environment interface
+│   │       ├── environment.model.ts        # Environment interface (prevents drift)
+│   │       ├── environment.ts              # Production config
 │   │       ├── environment.development.ts  # Development config
 │   │       ├── environment.local.ts        # Local config
-│   │       └── genai.paths.ts              # Application route paths
+│   │       └── genai.paths.ts              # API path constants
 │   │
 │   ├── profile/                            # Profile feature library
 │   │   └── src/lib/
-│   │       ├── +state/                     # NgRx SignalStore
-│   │       │   ├── profile.store.ts
-│   │       │   └── profile.store.spec.ts
+│   │       ├── +state/
+│   │       │   └── profile.store.ts        # signalStore — state, computed, methods
 │   │       ├── molecules/                  # Compound components (Atomic Design)
 │   │       │   └── user-info/
-│   │       ├── pages/                      # Profile page and routing
+│   │       ├── pages/
 │   │       │   ├── profile/
-│   │       │   └── user.routes.ts
-│   │       └── services/profile/           # Profile business logic
+│   │       │   └── user.routes.ts          # Provides ProfileStore on the route
+│   │       └── services/profile/
 │   │           └── profile.service.ts
 │   │
 │   └── shared/                             # Cross-cutting shared libraries
 │       │
 │       ├── entity/                         # Data models and interfaces
 │       │   └── src/lib/entity/
-│       │       ├── error/
-│       │       │   └── error.model.ts
-│       │       ├── router-state/
-│       │       │   └── router-state-url.model.ts
-│       │       └── user/
-│       │           └── user.model.ts
+│       │       ├── error/error.model.ts
+│       │       ├── language/language.enum.ts
+│       │       ├── router-state/router-state-url.model.ts
+│       │       └── user/user.model.ts
 │       │
-│       ├── store/                          # Shared NgRx state (cross-feature)
-│       │   └── src/lib/+state/shared-data/
-│       │       ├── shared-data.actions.ts
-│       │       ├── shared-data.reducer.ts
-│       │       └── shared-data.selectors.ts
+│       ├── translation/                    # i18n setup and language switching
+│       │   └── src/lib/
+│       │       ├── core/
+│       │       │   ├── translation.providers.ts    # provideTranslation()
+│       │       │   ├── language-storage.ts         # localStorage persistence
+│       │       │   ├── document-language.ts        # keeps <html lang> in sync
+│       │       │   ├── translated-title.strategy.ts # translated <title> per route
+│       │       │   └── update-language.service.ts
+│       │       └── pages/update-language/
 │       │
-│       └── ui/                             # Reusable UI components (Atomic Design)
+│       └── ui/                             # Reusable UI + app-wide cross-cutting
 │           └── src/lib/
-│               └── header/
-│                   ├── header.ts
-│                   ├── header.html
-│                   └── header.scss
+│               ├── core/
+│               │   ├── global-error-handler.ts     # reports to Analytics
+│               │   └── http-error.interceptor.ts
+│               ├── header/
+│               └── services/analytics/
 │
 ├── docs/                                   # Project documentation
 │   ├── best-practices.md                   # Angular coding standards and patterns
 │   ├── workspace-generators.md             # Nx generator commands reference
 │   └── skills/                             # Development guides for Claude Code
-│       ├── feature-lib.md                  # How to create a feature library end-to-end
-│       ├── lazy-loading.md                 # Lazy loading rules and common mistakes
-│       ├── ngrx-state.md                   # NgRx state slice pattern
-│       ├── angular-component.md            # Modern Angular component patterns
-│       ├── unit-testing.md                 # Jest + Spectator testing patterns
-│       └── module-boundaries.md            # Nx tags, ESLint boundary rules, registration steps
 │
-├── .github/
-│   └── workflows/
-│       └── ci.yml                          # CI/CD pipeline
-│
-├── .vscode/
-│   └── extensions.json                     # Recommended VS Code extensions
-│
+├── hosting/                                # Firebase Hosting config
+├── .github/workflows/ci.yml                # CI/CD pipeline
 ├── nx.json                                 # Nx workspace configuration
 ├── tsconfig.base.json                      # Shared TypeScript paths and config
-├── eslint.base.config.mjs                  # Shared ESLint rules
-├── jest.config.ts                          # Root Jest configuration
+├── eslint.base.config.mjs                  # Shared ESLint rules + depConstraints
 ├── jest.preset.js                          # Shared Jest preset
 ├── package.json
 └── README.md
@@ -134,7 +127,7 @@ base-angular-monorepo/
 
 ### Prerequisites
 
-- Node.js >= 20
+- **Node.js `^22.22.3` or `^24.15.0` or `>=26`** — required by Angular 22
 - npm >= 10
 
 ### Install dependencies
@@ -146,17 +139,15 @@ npm install
 ### Run the application
 
 ```sh
-npx nx serve genai-app
+npx nx serve genai-app                        # development
+npx nx serve genai-app --configuration=local  # local environment
 ```
 
 ### Run tests
 
 ```sh
-# Single project
-npx nx test genai-app
-
-# All projects
-npx nx run-many --target=test --all
+npx nx test genai-app                  # single project
+npx nx run-many --target=test --all    # all projects
 ```
 
 ### Lint
@@ -164,6 +155,15 @@ npx nx run-many --target=test --all
 ```sh
 npx nx run-many --target=lint --all
 ```
+
+### Build
+
+```sh
+npx nx build genai-app --configuration=production
+```
+
+Three configurations exist — `production`, `development` and `local` — each swapping
+`libs/environment/src/lib/environment.ts` for its variant.
 
 ---
 
@@ -177,21 +177,26 @@ npx nx g @nx/angular:app apps/<app-name>
 
 ### New library
 
+Tags **must** use the `scope:` prefix — `eslint.base.config.mjs` matches on it, and a
+library tagged otherwise silently escapes every dependency rule.
+
 ```sh
 # Shared UI components
-npx nx g @nx/angular:library libs/shared/ui --tags=ui --style=scss
+npx nx g @nx/angular:library libs/shared/ui --tags=scope:ui-lib --style=scss
 
 # Shared data models
-npx nx g @nx/angular:library libs/shared/entity --tags=entity --style=scss
+npx nx g @nx/angular:library libs/shared/entity --tags=scope:entity-lib --style=scss
 
 # Feature library
-npx nx g @nx/angular:library libs/<feature-name> --tags=feature --style=scss
+npx nx g @nx/angular:library libs/<feature-name> --tags=scope:<feature-name> --style=scss
 
 # Translations
-npx nx g @nx/angular:library libs/shared/translation --tags=translation
+npx nx g @nx/angular:library libs/shared/translation --tags=scope:translate
 ```
 
-> After creating a library, register it in `eslint.base.config.mjs` under `depConstraints` to enforce dependency boundaries.
+> After creating a library, add its tag to `depConstraints` in `eslint.base.config.mjs`.
+> A tag with no entry there is **unconstrained**. See
+> [`docs/skills/module-boundaries.md`](docs/skills/module-boundaries.md).
 
 ---
 
@@ -199,12 +204,18 @@ npx nx g @nx/angular:library libs/shared/translation --tags=translation
 
 ### Library Tags and Dependency Rules
 
-| Tag | Purpose |
-|---|---|
-| `ui` | Presentational components only, no business logic |
-| `entity` | Data models and interfaces |
-| `feature` | Feature-specific pages, state, and services |
-| `translate` | i18n setup, language switching |
+Defined in `eslint.base.config.mjs` — the file every project's `eslint.config.mjs`
+extends. (The root `eslint.config.mjs` applies to workspace-level files only; rules
+placed there would never run for a project.)
+
+| Tag | May depend on | Purpose |
+|---|---|---|
+| `scope:entity-lib` | *nothing* | Data models and interfaces |
+| `scope:environment-lib` | *nothing* | Environment configuration |
+| `scope:translate` | entity, environment | i18n setup, language switching |
+| `scope:profile` | entity, environment | Profile feature |
+| `scope:ui-lib` | entity, environment, translate | Presentational + cross-cutting UI |
+| `scope:genai-app` | all of the above | The application composes everything |
 
 ### Atomic Design (component organization)
 
@@ -215,18 +226,30 @@ organisms/   → Complete structures (header, sidebar)
 pages/       → Route-level components
 ```
 
-### NgRx State Pattern
+### State Pattern
 
-Each feature library manages its own state slice under `+state/<feature>/`:
+**Feature state is a `signalStore`**, provided on its route:
 
 ```
-+state/
-└── <feature>/
-    ├── <feature>.actions.ts
-    ├── <feature>.effects.ts
-    ├── <feature>.reducer.ts
-    └── <feature>.selectors.ts
+libs/<feature>/src/lib/
+├── +state/
+│   └── <feature>.store.ts     # withState · withComputed · withMethods
+└── pages/
+    └── <feature>.routes.ts    # providers: [<Feature>Store, <Feature>Service]
 ```
+
+The global NgRx Store carries **router state and nothing else**. Features do not add
+slices to it. See [`docs/skills/ngrx-state.md`](docs/skills/ngrx-state.md).
+
+### Internationalisation
+
+Four bundles live in `apps/genai-app/src/assets/i18n/` — `en`, `nl`, `fr`, `pt`.
+`provideTranslation()` wires the loader, restores the language from `localStorage`,
+keeps `<html lang>` in sync and translates each route's `<title>`.
+
+Adding a language means adding it to the `Language` enum and dropping in the JSON
+bundle — `i18n-completeness.spec.ts` fails until every key is present in every
+language, so bundles cannot drift.
 
 ---
 
@@ -238,8 +261,10 @@ Key rules:
 
 - Use `@if` / `@for` — never `*ngIf` / `*ngFor`
 - Use `input()` / `output()` functions — never `@Input` / `@Output` decorators
-- Use standalone components — no NgModules unless required by NgRx
-- Use signals and reactive patterns over imperative code
+- Standalone components only — **no NgModules**, use provider functions
+- `ChangeDetectionStrategy.OnPush` on every component (enforced by lint)
+- Import only what a template uses (`TranslatePipe`, `RouterLink`) — not `CommonModule`
+- Prefer signals over RxJS subscriptions in components
 
 ---
 
@@ -251,6 +276,7 @@ Key rules:
 | `npm test` | Run tests |
 | `npm run test:all` | Run all project tests |
 | `npm run lint:all` | Lint all projects |
+| `npm run build:deploy:firebase` | Production build + deploy to Firebase Hosting |
 
 ---
 
@@ -267,6 +293,9 @@ Step-by-step guides for developing correctly in this project:
 |---|---|
 | [`docs/skills/feature-lib.md`](docs/skills/feature-lib.md) | Creating a complete feature library (uses `libs/profile` as reference) |
 | [`docs/skills/lazy-loading.md`](docs/skills/lazy-loading.md) | Lazy loading rules — what to export, how to wire routes, common mistakes |
-| [`docs/skills/ngrx-state.md`](docs/skills/ngrx-state.md) | NgRx state slice pattern — actions, reducer, selectors, effects, module |
+| [`docs/skills/ngrx-state.md`](docs/skills/ngrx-state.md) | SignalStore pattern — state, computed, methods, and migrating off the classic store |
 | [`docs/skills/angular-component.md`](docs/skills/angular-component.md) | Modern Angular component patterns — signals, input/output, control flow |
-| [`docs/skills/unit-testing.md`](docs/skills/unit-testing.md) | Unit testing with Jest and Spectator — components, services, effects, reducers |
+| [`docs/skills/unit-testing.md`](docs/skills/unit-testing.md) | Unit testing with Jest and Spectator |
+| [`docs/skills/module-boundaries.md`](docs/skills/module-boundaries.md) | Nx tags, ESLint boundary rules, registration steps |
+| [`docs/skills/firebase-analytics.md`](docs/skills/firebase-analytics.md) | Analytics setup and event logging |
+| [`docs/skills/firebase-deploy.md`](docs/skills/firebase-deploy.md) | Build and deploy to Firebase Hosting |

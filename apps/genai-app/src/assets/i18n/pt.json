@@ -5,7 +5,8 @@
     "HOME": "Início",
     "START": "Começar",
     "LANGUAGE": "Idioma",
-    "LANGUAGE_ARIA": "Alterar idioma"
+    "LANGUAGE_ARIA": "Alterar idioma",
+    "MENU_ARIA": "Abrir menu"
   },
   "LANGUAGE": {
     "EN": "Inglês",

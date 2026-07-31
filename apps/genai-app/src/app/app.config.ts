@@ -64,13 +64,17 @@ export const appConfig: ApplicationConfig = {
       ? []
       : [provideStoreDevtools({ maxAge: 25 })]),
 
-    // Initialize Firebase Analytics and track route changes
-    provideAppInitializer(async () => {
+    // Initialize Firebase Analytics and track route changes.
+    provideAppInitializer(() => {
       const analytics = inject(AnalyticsService);
       const router = inject(Router);
       const title = inject(Title);
 
-      await analytics.initialize();
+      // Deliberately not awaited: the initializer gates first paint, and analytics
+      // now dynamically imports the Firebase SDK. Awaiting it would put a network
+      // fetch in front of the user's first render for a purely observational
+      // concern. Events fired before init resolves are dropped by design.
+      void analytics.initialize();
 
       router.events
         .pipe(filter((e) => e instanceof NavigationEnd))
