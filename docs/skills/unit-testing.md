@@ -86,62 +86,66 @@ spectator.setInput('user', { id: '1', name: 'Jane' });
 
 ---
 
-## Testing a Component with NgRx Store
+## Testing a Component backed by a SignalStore
 
-Use `provideMockStore` from `@ngrx/store/testing`.
+Provide the real store and stub the **service** it injects. Mocking the store itself
+would test the mock; stubbing the service exercises the real state transitions and
+still keeps the test off the network.
 
 ```typescript
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { Subject, of } from 'rxjs';
+import { ProfileStore } from '../../+state/profile.store';
+import { ProfileService } from '../../services/profile/profile.service';
 import { ProfilePage } from './profile';
-import { selectProfile } from '../../+state/profile/profile.selectors';
-import { fetchProfile } from '../../+state/profile/profile.actions';
-import { ProfileStateModule } from '../../+state/profile/profile.module';
 
 describe('ProfilePage', () => {
   let spectator: Spectator<ProfilePage>;
-  let store: MockStore;
 
   const mockUser = { id: '1', name: 'John Doe' };
+  // Shared so a test can decide what the service answers *before* the component is
+  // created — the page fetches in its constructor.
+  const profileService = { fetchProfile: jest.fn() };
 
   const createComponent = createComponentFactory({
     component: ProfilePage,
-    imports: [ProfileStateModule],
     providers: [
-      provideMockStore({
-        selectors: [
-          { selector: selectProfile, value: mockUser },
-        ],
-      }),
+      ProfileStore,
+      { provide: ProfileService, useValue: profileService },
     ],
   });
 
-  beforeEach(() => {
+  /** Create the component only after the stub is configured. */
+  const render = () => {
     spectator = createComponent();
-    store = spectator.inject(MockStore);
+    spectator.detectChanges();
+    return spectator;
+  };
+
+  beforeEach(() => {
+    profileService.fetchProfile.mockReset();
+    profileService.fetchProfile.mockReturnValue(of(mockUser));
   });
 
-  it('should dispatch fetchProfile on init', () => {
-    const dispatchSpy = jest.spyOn(store, 'dispatch');
+  it('fetches on creation and displays the user name', () => {
+    render();
 
-    spectator.component.loadProfile();
-
-    expect(dispatchSpy).toHaveBeenCalledWith(fetchProfile());
-  });
-
-  it('should display the user name from the store', () => {
+    expect(profileService.fetchProfile).toHaveBeenCalledTimes(1);
     expect(spectator.query('[data-testid="user-name"]')).toHaveText('John Doe');
   });
 
-  it('should update view when store emits new value', () => {
-    store.overrideSelector(selectProfile, { id: '2', name: 'Jane' });
-    store.refreshState();
-    spectator.detectChanges();
+  it('shows the loading state while the request is in flight', () => {
+    profileService.fetchProfile.mockReturnValue(new Subject());
 
-    expect(spectator.query('[data-testid="user-name"]')).toHaveText('Jane');
+    render();
+
+    expect(spectator.query('[role="status"]')).toExist();
   });
 });
 ```
+
+**Do not** create the component in a shared `beforeEach` when some tests need a
+different service response — by then the constructor has already fetched.
 
 ---
 
@@ -188,99 +192,76 @@ describe('ProfileService', () => {
 
 ---
 
-## Testing NgRx Effects
+## Testing a SignalStore
 
-Use `provideMockActions` and `provideMockStore`.
+A store test is plain `TestBed` with the store and a stubbed service. No root store,
+no effects runner, no marble diagrams — read the signals and assert on their values.
+The reference is `libs/profile/src/lib/+state/profile.store.spec.ts`.
 
 ```typescript
 import { TestBed } from '@angular/core/testing';
-import { provideMockActions } from '@ngrx/effects/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { Observable, of, throwError } from 'rxjs';
-import { Action } from '@ngrx/store';
-import { ProfileEffects } from './profile.effects';
-import { ProfileService } from '../../services/profile/profile.service';
-import * as fromActions from './profile.actions';
+import { Subject, of, throwError } from 'rxjs';
+import { ProfileService } from '../services/profile/profile.service';
+import { ProfileStore } from './profile.store';
 
-describe('ProfileEffects', () => {
-  let effects: ProfileEffects;
-  let actions$: Observable<Action>;
-  let profileService: jest.Mocked<ProfileService>;
+const user = { id: '1', name: 'John' };
+const error = { message: 'Not found', code: 'E_404', status: 404 };
 
-  beforeEach(() => {
+describe('ProfileStore', () => {
+  let profileService: { fetchProfile: jest.Mock };
+
+  const setup = () => {
+    profileService = { fetchProfile: jest.fn().mockReturnValue(of(user)) };
     TestBed.configureTestingModule({
-      providers: [
-        ProfileEffects,
-        provideMockActions(() => actions$),
-        provideMockStore(),
-        {
-          provide: ProfileService,
-          useValue: { fetchProfile: jest.fn() },
-        },
-      ],
+      providers: [ProfileStore, { provide: ProfileService, useValue: profileService }],
     });
+    return TestBed.inject(ProfileStore);
+  };
 
-    effects = TestBed.inject(ProfileEffects);
-    profileService = TestBed.inject(ProfileService) as jest.Mocked<ProfileService>;
+  it('stores the profile on a successful fetch', () => {
+    const store = setup();
+
+    store.fetchProfile();
+
+    expect(store.profile()).toEqual(user);
+    expect(store.loading()).toBe(false);
   });
 
-  it('should dispatch fetchProfileSuccess on success', (done) => {
-    const mockUser = { id: '1', name: 'John' };
-    profileService.fetchProfile.mockReturnValue(of(mockUser));
+  it('flags loading while the request is in flight', () => {
+    const store = setup();
+    const response = new Subject<typeof user>();
+    profileService.fetchProfile.mockReturnValue(response);
 
-    actions$ = of(fromActions.fetchProfile());
+    store.fetchProfile();
+    expect(store.loading()).toBe(true);
 
-    effects.fetchProfile$.subscribe((action) => {
-      expect(action).toEqual(fromActions.fetchProfileSuccess({ response: mockUser }));
-      done();
-    });
+    response.next(user);
+    expect(store.loading()).toBe(false);
   });
 
-  it('should dispatch fetchProfileFailed on error', (done) => {
-    const mockError = { message: 'Not found' };
-    profileService.fetchProfile.mockReturnValue(throwError(() => mockError));
+  it('stays usable after a failure so a retry can succeed', () => {
+    const store = setup();
+    profileService.fetchProfile.mockReturnValueOnce(throwError(() => error));
 
-    actions$ = of(fromActions.fetchProfile());
+    store.fetchProfile();
+    store.fetchProfile();
 
-    effects.fetchProfile$.subscribe((action) => {
-      expect(action).toEqual(fromActions.fetchProfileFailed({ error: mockError }));
-      done();
-    });
+    expect(store.profile()).toEqual(user);
+    expect(store.error()).toBeNull();
   });
 });
 ```
 
----
+**Cover at minimum:** initial state, success, failure, `loading` while in flight
+(return a `Subject` instead of `of()`), and that a retry works after a failure — that
+last one is what catches a missing `tapResponse`.
 
-## Testing NgRx Reducer
-
-Reducers are pure functions — test them directly without any Angular setup.
+To write state directly — only for a scenario you cannot reach through a method —
+import `unprotected` from `@ngrx/signals/testing`:
 
 ```typescript
-import { reducer, initialState } from './profile.reducer';
-import * as fromActions from './profile.actions';
-
-describe('Profile Reducer', () => {
-  it('should set loading to true when fetchProfile is dispatched', () => {
-    const state = reducer(initialState, fromActions.fetchProfile());
-    expect(state.loading).toBe(true);
-    expect(state.error).toBeNull();
-  });
-
-  it('should add the user on fetchProfileSuccess', () => {
-    const user = { id: '1', name: 'John' };
-    const state = reducer(initialState, fromActions.fetchProfileSuccess({ response: user }));
-    expect(state.loading).toBe(false);
-    expect(state.ids).toContain('1');
-  });
-
-  it('should set error on fetchProfileFailed', () => {
-    const error = { message: 'Error' };
-    const state = reducer(initialState, fromActions.fetchProfileFailed({ error }));
-    expect(state.loading).toBe(false);
-    expect(state.error).toEqual(error);
-  });
-});
+import { unprotected } from '@ngrx/signals/testing';
+patchState(unprotected(store), { loading: true });
 ```
 
 ---
@@ -333,10 +314,10 @@ spectator.click('[data-testid="back-button"]');
 
 ## Checklist
 
-- [ ] Use `createComponentFactory` or `createServiceFactory` from Spectator — avoid raw `TestBed`
-- [ ] Use `provideMockStore` for components that depend on NgRx
-- [ ] Use `provideMockActions` for effect tests
-- [ ] Test reducers as pure functions — no TestBed needed
+- [ ] Use `createComponentFactory` or `createServiceFactory` from Spectator for components and services
+- [ ] Use plain `TestBed` for SignalStore tests — the store is not a component
+- [ ] Provide the real store and stub the **service** it injects, never mock the store
+- [ ] Cover loading and error paths, not just the happy path
+- [ ] Assert that a retry works after a failure — that is what catches a missing `tapResponse`
 - [ ] Use `data-testid` for DOM queries in component tests
-- [ ] Call `store.refreshState()` + `spectator.detectChanges()` after overriding selectors
 - [ ] Verify `httpMock.verify()` after each HTTP service test

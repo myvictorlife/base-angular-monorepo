@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { fetchProfile } from '../../+state/profile/profile.actions';
-import { selectProfile } from '../../+state/profile/profile.selectors';
+import { ProfileStore } from '../../+state/profile.store';
 import { UserInfoComponent } from '../../molecules/user-info/user-info';
 
 @Component({
@@ -15,17 +13,21 @@ import { UserInfoComponent } from '../../molecules/user-info/user-info';
 })
 export class Profile {
 
-  private readonly store = inject(Store);
+  private readonly store = inject(ProfileStore);
   private readonly router = inject(Router);
 
-  readonly profile = this.store.selectSignal(selectProfile);
+  // Read straight off the store: these are already signals, so there is no
+  // selector layer and nothing to unsubscribe from.
+  readonly profile = this.store.profile;
+  readonly loading = this.store.loading;
+  readonly errorMessage = this.store.errorMessage;
 
   constructor() {
     this.loadProfile();
   }
 
   loadProfile(): void {
-    this.store.dispatch(fetchProfile());
+    this.store.fetchProfile();
   }
 
   goHome(): void {

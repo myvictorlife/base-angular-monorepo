@@ -15,10 +15,6 @@ const depConstraints = [
   { sourceTag: 'scope:environment-lib', onlyDependOnLibsWithTags: [] },
 
   {
-    sourceTag: 'scope:shared-store',
-    onlyDependOnLibsWithTags: ['scope:entity-lib', 'scope:environment-lib'],
-  },
-  {
     sourceTag: 'scope:translate',
     onlyDependOnLibsWithTags: ['scope:entity-lib', 'scope:environment-lib'],
   },
@@ -31,7 +27,6 @@ const depConstraints = [
     onlyDependOnLibsWithTags: [
       'scope:entity-lib',
       'scope:environment-lib',
-      'scope:shared-store',
       'scope:translate',
     ],
   },
@@ -43,7 +38,6 @@ const depConstraints = [
       'scope:entity-lib',
       'scope:environment-lib',
       'scope:profile',
-      'scope:shared-store',
       'scope:translate',
       'scope:ui-lib',
     ],

@@ -108,20 +108,21 @@ export class ProfilePage {
 
 ## Signals and reactive state
 
-Use `selectSignal()` to bridge NgRx store and Angular signals. Use `computed()` to derive values.
+Feature state comes from a `signalStore`, whose members are already signals — read
+them directly, there is nothing to bridge. Use `computed()` for values derived in the
+component; derive in the store instead when more than one component needs them.
 
 ```typescript
 import { Component, computed, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectProfile, selectLoading } from '../../+state/profile/profile.selectors';
+import { ProfileStore } from '../../+state/profile.store';
 
 export class ProfilePage {
-  private readonly store = inject(Store);
+  private readonly store = inject(ProfileStore);
 
-  profile = this.store.selectSignal(selectProfile);
-  loading = this.store.selectSignal(selectLoading);
+  readonly profile = this.store.profile;
+  readonly loading = this.store.loading;
 
-  displayName = computed(() => this.profile()?.name ?? 'Anonymous');
+  readonly displayName = computed(() => this.profile()?.name ?? 'Anonymous');
 }
 ```
 
@@ -188,8 +189,8 @@ export class UserInfoComponent {
 
 // page — container
 export class ProfilePage {
-  private readonly store = inject(Store);
-  profile = this.store.selectSignal(selectProfile);
+  private readonly store = inject(ProfileStore);
+  readonly profile = this.store.profile;
   // passes data down to UserInfoComponent
 }
 ```

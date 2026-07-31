@@ -27,12 +27,8 @@ libs/<feature-name>/
     ├── index.ts                          ← public API (exports ONLY the routes)
     └── lib/
         ├── +state/
-        │   └── <feature-name>/
-        │       ├── <feature-name>.actions.ts
-        │       ├── <feature-name>.effects.ts
-        │       ├── <feature-name>.module.ts   ← NgRx StoreModule + EffectsModule
-        │       ├── <feature-name>.reducer.ts
-        │       └── <feature-name>.selectors.ts
+        │   ├── <feature-name>.store.ts        ← NgRx SignalStore
+        │   └── <feature-name>.store.spec.ts
         ├── molecules/                         ← compound components
         │   └── <molecule-name>/
         │       ├── <molecule-name>.ts
@@ -70,14 +66,20 @@ See `libs/profile/src/index.ts` — it exports only `profileRoutes`.
 
 Import the page component **directly** inside the routes file. This import stays inside the library boundary and does not break lazy loading, because the routes file itself is only loaded lazily from outside.
 
+The route is also where the feature's state and services are provided, so they are
+created when the feature is entered and destroyed when the user leaves.
+
 ```typescript
 // libs/<feature-name>/src/lib/pages/<feature-name>.routes.ts
 import { Routes } from '@angular/router';
+import { FeatureStore } from '../+state/<feature-name>.store';
+import { FeatureService } from '../services/<feature-name>/<feature-name>.service';
 import { FeaturePage } from './<feature-name>/<feature-name>';
 
 export const <featureName>Routes: Routes = [
   {
     path: '',
+    providers: [FeatureStore, FeatureService],
     component: FeaturePage,
   },
 ];
@@ -85,56 +87,71 @@ export const <featureName>Routes: Routes = [
 
 ---
 
-## 5. NgRx State Module
+## 5. Feature state — SignalStore
 
-Each feature manages its own store slice via a dedicated `NgModule`.
+Each feature owns its state in a single `signalStore`. See
+[`ngrx-state.md`](./ngrx-state.md) for the full pattern, including collections,
+error handling and testing.
 
 ```typescript
-// libs/<feature-name>/src/lib/+state/<feature-name>/<feature-name>.module.ts
-import { NgModule } from '@angular/core';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { FeatureService } from '../../services/<feature-name>/<feature-name>.service';
-import * as fromReducer from './<feature-name>.reducer';
-import { FeatureEffects } from './<feature-name>.effects';
+// libs/<feature-name>/src/lib/+state/<feature-name>.store.ts
+import { inject } from '@angular/core';
+import { tapResponse } from '@ngrx/operators';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { pipe, switchMap, tap } from 'rxjs';
+import { FeatureService } from '../services/<feature-name>/<feature-name>.service';
 
-@NgModule({
-  imports: [
-    StoreModule.forFeature(fromReducer.<featureName>FeatureKey, fromReducer.reducer),
-    EffectsModule.forFeature([FeatureEffects]),
-  ],
-  providers: [FeatureService],
-})
-export class FeatureStateModule {}
+export const FeatureStore = signalStore(
+  withState({ data: null, loading: false, error: null }),
+  withMethods((store, service = inject(FeatureService)) => ({
+    fetch: rxMethod<void>(
+      pipe(
+        tap(() => patchState(store, { loading: true, error: null })),
+        switchMap(() =>
+          service.fetch().pipe(
+            tapResponse({
+              next: (data) => patchState(store, { data, loading: false }),
+              error: (error) => patchState(store, { error, loading: false }),
+            }),
+          ),
+        ),
+      ),
+    ),
+  })),
+);
 ```
+
+**Do not** add a slice to the global Redux store — that store exists for router
+state only.
 
 ---
 
 ## 6. Page component
 
-The page component imports the state module and dispatches actions in the constructor.
+The page component injects the store and reads its signals directly.
 
 ```typescript
 // libs/<feature-name>/src/lib/pages/<feature-name>/<feature-name>.ts
-import { Component, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { FeatureStateModule } from '../../+state/<feature-name>/<feature-name>.module';
-import { fetchFeature } from '../../+state/<feature-name>/<feature-name>.actions';
-import { selectFeatureData } from '../../+state/<feature-name>/<feature-name>.selectors';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FeatureStore } from '../../+state/<feature-name>.store';
 
 @Component({
   selector: 'lib-<feature-name>',
-  imports: [FeatureStateModule],
+  imports: [],
   templateUrl: './<feature-name>.html',
   styleUrls: ['./<feature-name>.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeaturePage {
-  private readonly store = inject(Store);
+  private readonly store = inject(FeatureStore);
 
-  data = this.store.selectSignal(selectFeatureData);
+  readonly data = this.store.data;
+  readonly loading = this.store.loading;
+  readonly error = this.store.error;
 
   constructor() {
-    this.store.dispatch(fetchFeature());
+    this.store.fetch();
   }
 }
 ```
@@ -163,8 +180,9 @@ Only import the routes exported from the library's `index.ts`.
 
 - [ ] `index.ts` exports only the routes, not components or services
 - [ ] Routes are registered as `loadChildren` in the app, not `component`
-- [ ] State module uses `StoreModule.forFeature` (not `forRoot`)
-- [ ] Page component imports the state module in its `imports` array
+- [ ] State is a `signalStore`, not a slice of the global Redux store
+- [ ] Store and service are listed in the route's `providers`, not in the component's
+- [ ] Service is **not** `providedIn: 'root'`, so it stays in the lazy chunk
+- [ ] The template renders loading, error and success — not just the happy path
 - [ ] `tsconfig.base.json` has the `@libs/<feature-name>` path alias
 - [ ] Library is tagged correctly in `project.json`
-- [ ] Service is provided via the state `NgModule`, not `providedIn: 'root'`

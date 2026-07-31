@@ -10,6 +10,7 @@ const LANGUAGE_LABEL_KEYS: Record<string, string> = {
   [Language.English]: 'LANGUAGE.EN',
   [Language.Dutch]: 'LANGUAGE.NL',
   [Language.French]: 'LANGUAGE.FR',
+  [Language.Portuguese]: 'LANGUAGE.PT',
 };
 
 @Component({

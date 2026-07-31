@@ -10,7 +10,8 @@
   "LANGUAGE": {
     "EN": "Anglais",
     "NL": "Néerlandais",
-    "FR": "Français"
+    "FR": "Français",
+    "PT": "Portugais"
   },
   "UPDATE_LANGUAGE": {
     "TITLE": "Préférences de langue",
@@ -60,7 +61,10 @@
   },
   "PROFILE": {
     "TITLE": "Profil",
-    "BACK_HOME": "Retour à l'accueil"
+    "BACK_HOME": "Retour à l'accueil",
+    "LOADING": "Chargement du profil...",
+    "ERROR": "Impossible de charger le profil",
+    "RETRY": "Réessayer"
   },
   "USER_INFO": {
     "USER_ID": "ID utilisateur"

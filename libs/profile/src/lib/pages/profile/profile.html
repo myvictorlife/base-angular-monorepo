@@ -11,7 +11,24 @@
       {{ 'PROFILE.BACK_HOME' | translate }}
     </button>
     <h1 class="text-3xl font-bold text-indigo-700 mb-6">{{ 'PROFILE.TITLE' | translate }}</h1>
-    @if(profile(); as profileData) {
+
+    @if (loading()) {
+      <p class="text-gray-500 py-6" role="status" aria-live="polite">
+        {{ 'PROFILE.LOADING' | translate }}
+      </p>
+    } @else if (errorMessage(); as message) {
+      <div class="w-full flex flex-col items-center gap-3 py-6" role="alert">
+        <p class="text-red-600 font-medium">{{ 'PROFILE.ERROR' | translate }}</p>
+        <p class="text-gray-500 text-sm">{{ message }}</p>
+        <button
+          class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition"
+          type="button"
+          (click)="loadProfile()"
+        >
+          {{ 'PROFILE.RETRY' | translate }}
+        </button>
+      </div>
+    } @else if (profile(); as profileData) {
       <lib-user-info [user]="profileData"></lib-user-info>
     }
   </div>

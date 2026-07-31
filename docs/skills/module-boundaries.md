@@ -1,14 +1,14 @@
 # Skill: Module Boundaries — ESLint + Nx Tags
 
 This project enforces dependency rules between libraries using `@nx/enforce-module-boundaries`.
-Every time you create a new library or application, you **must** register it in both `project.json` and `eslint.config.mjs`.
+Every time you create a new library or application, you **must** register it in both `project.json` and `eslint.base.config.mjs`.
 
 ---
 
 ## How it works — the full chain
 
 ```
-project.json          eslint.config.mjs
+project.json          eslint.base.config.mjs
 ────────────          ─────────────────
 "tags": [             sourceTag: 'scope:profile'
   "scope:profile"  ──►  onlyDependOnLibsWithTags: [...]
@@ -26,7 +26,6 @@ Nx reads the `tags` array from each `project.json` and uses them to resolve the 
 | Application | `scope:<app-name>` | `scope:genai-app` |
 | Feature library | `scope:<feature-name>` | `scope:profile` |
 | Shared utility library | `scope:<name>-lib` | `scope:entity-lib`, `scope:ui-lib` |
-| Shared store | `scope:shared-store` | `scope:shared-store` |
 | Environment | `scope:environment-lib` | `scope:environment-lib` |
 
 The `scope:` prefix is mandatory. It is what connects the `project.json` tag to the `sourceTag` in the ESLint config.
@@ -37,11 +36,11 @@ The `scope:` prefix is mandatory. It is what connects the `project.json` tag to 
 
 | Project | Path | `project.json` tag | Can depend on |
 |---|---|---|---|
-| genai-app | `apps/genai-app` | `scope:genai-app` | entity-lib, ui-lib, shared-store, environment-lib, profile |
+| genai-app | `apps/genai-app` | `scope:genai-app` | entity-lib, ui-lib, translate, environment-lib, profile |
 | environment | `libs/environment` | `scope:environment-lib` | _(nothing)_ |
 | entity | `libs/shared/entity` | `scope:entity-lib` | _(nothing)_ |
-| store | `libs/shared/store` | `scope:shared-store` | entity-lib, environment-lib |
-| ui | `libs/shared/ui` | `scope:ui-lib` | entity-lib, shared-store, environment-lib |
+| translation | `libs/shared/translation` | `scope:translate` | entity-lib, environment-lib |
+| ui | `libs/shared/ui` | `scope:ui-lib` | entity-lib, translate, environment-lib |
 | profile | `libs/profile` | `scope:profile` | entity-lib, environment-lib |
 
 ---
@@ -52,7 +51,7 @@ The `scope:` prefix is mandatory. It is what connects the `project.json` tag to 
 genai-app
 ├── @libs/entity          (scope:entity-lib)
 ├── @libs/ui              (scope:ui-lib)
-├── @libs/store           (scope:shared-store)
+├── @libs/translation     (scope:translate)
 ├── @libs/environment     (scope:environment-lib)
 └── @libs/profile         (scope:profile)
 
@@ -60,13 +59,13 @@ profile
 ├── @libs/entity          (scope:entity-lib)
 └── @libs/environment     (scope:environment-lib)
 
-shared/store
+shared/translation
 ├── @libs/entity          (scope:entity-lib)
 └── @libs/environment     (scope:environment-lib)
 
 shared/ui
 ├── @libs/entity          (scope:entity-lib)
-├── @libs/store           (scope:shared-store)
+├── @libs/translation     (scope:translate)
 └── @libs/environment     (scope:environment-lib)
 
 shared/entity  →  (no dependencies)
@@ -74,9 +73,13 @@ environment    →  (no dependencies)
 ```
 
 **Imports NOT allowed (ESLint will error):**
-- `profile` importing from `@libs/ui` or `@libs/store`
+- `profile` importing from `@libs/ui` or `@libs/translation`
 - `shared/entity` importing from anything
-- `shared/store` importing from `@libs/profile`
+- `shared/translation` importing from `@libs/profile`
+
+There is deliberately **no shared state library**. Feature state lives in a
+`signalStore` inside its own feature lib (see [`ngrx-state.md`](./ngrx-state.md)),
+so a cross-cutting `@libs/store` would only invite duplicated sources of truth.
 
 ---
 
@@ -93,10 +96,10 @@ environment    →  (no dependencies)
 }
 ```
 
-### 2. Add the `sourceTag` entry in `eslint.config.mjs`
+### 2. Add the `sourceTag` entry in `eslint.base.config.mjs`
 
 ```js
-// eslint.config.mjs — inside depConstraints array
+// eslint.base.config.mjs — inside depConstraints array
 {
   sourceTag: 'scope:<feature-name>',
   onlyDependOnLibsWithTags: [
@@ -117,7 +120,6 @@ If `genai-app` needs to import your new library, add `scope:<feature-name>` to i
   onlyDependOnLibsWithTags: [
     'scope:entity-lib',
     'scope:ui-lib',
-    'scope:shared-store',
     'scope:environment-lib',
     'scope:profile',
     'scope:<feature-name>',  // ← add here
@@ -145,7 +147,7 @@ If `genai-app` needs to import your new library, add `scope:<feature-name>` to i
 "@libs/orders": ["libs/orders/src/index.ts"]
 ```
 
-**Step 3 — `eslint.config.mjs`:**
+**Step 3 — `eslint.base.config.mjs`:**
 
 ```js
 depConstraints: [
@@ -162,7 +164,6 @@ depConstraints: [
     onlyDependOnLibsWithTags: [
       'scope:entity-lib',
       'scope:ui-lib',
-      'scope:shared-store',
       'scope:environment-lib',
       'scope:profile',
       'scope:orders',   // ← added
@@ -193,7 +194,7 @@ A project tagged with "scope:profile" can only depend on libs tagged with
 ## Checklist when creating a new library
 
 - [ ] `project.json` has `"tags": ["scope:<name>"]`
-- [ ] `eslint.config.mjs` has a `sourceTag: 'scope:<name>'` entry with its allowed dependencies
+- [ ] `eslint.base.config.mjs` has a `sourceTag: 'scope:<name>'` entry with its allowed dependencies
 - [ ] Any project that needs to import the new lib has `'scope:<name>'` in its `onlyDependOnLibsWithTags`
 - [ ] `tsconfig.base.json` has the `@libs/<name>` path alias
 - [ ] `npx nx run-many --target=lint --all` passes with no errors

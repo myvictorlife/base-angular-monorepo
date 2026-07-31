@@ -10,7 +10,8 @@
   "LANGUAGE": {
     "EN": "Engels",
     "NL": "Nederlands",
-    "FR": "Frans"
+    "FR": "Frans",
+    "PT": "Portugees"
   },
   "UPDATE_LANGUAGE": {
     "TITLE": "Taalvoorkeuren",
@@ -60,7 +61,10 @@
   },
   "PROFILE": {
     "TITLE": "Profiel",
-    "BACK_HOME": "Terug naar Home"
+    "BACK_HOME": "Terug naar Home",
+    "LOADING": "Profiel laden...",
+    "ERROR": "Kan het profiel niet laden",
+    "RETRY": "Opnieuw proberen"
   },
   "USER_INFO": {
     "USER_ID": "Gebruikers-ID"

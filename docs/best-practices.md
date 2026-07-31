@@ -60,8 +60,8 @@
     }
     ```
   - **Never use `@Input` or `@Output` decorators.**
-- Prefer **Component Store**, **Signals**, **Standalone Components**, **modern RxJS**, and **dependency injection via providers**.
-- Use **reactive architecture** and advanced state management (e.g., NgRx, Component Store, Signals).
+- Prefer **Signals**, **Standalone Components**, **modern RxJS**, and **dependency injection via providers**.
+- Use **reactive architecture** and state management with **NgRx SignalStore** (`@ngrx/signals`).
 
 ### 2. **Nx Monorepo**
 - Organize code into **libs** and **apps** following Nx best practices.
@@ -113,9 +113,8 @@ Each library exposes a provider function instead:
 | Concern | Use |
 |---|---|
 | i18n setup | `provideTranslation()` — `@libs/translation` |
-| Shared state slice | `provideSharedDataState()` — `@libs/store` |
-| Profile feature state | `provideProfileState()` — `@libs/profile`, attached to the route |
-| Root store / effects | `provideStore()`, `provideEffects()` |
+| Profile feature state | `ProfileStore` — `@libs/profile`, listed in the route's `providers` |
+| Root store | `provideStore()` — router state only |
 | Router state | `provideRouterStore({ serializer: CustomSerializer })` |
 
 Two rules learned the hard way:
@@ -124,8 +123,11 @@ Two rules learned the hard way:
    *and* `provideRouterStore()` both provide `RouterStateSerializer`; the second silently
    won and the custom serializer never ran.
 2. **Feature state belongs on the route, not in a component's `imports`.** Route-level
-   `providers: [provideProfileState()]` creates the slice when the feature is entered
-   and keeps the component testable.
+   `providers: [ProfileStore, ProfileService]` creates the store when the feature is
+   entered and keeps the component testable.
+3. **Feature state is a `signalStore`, not a slice of the global store.** The global
+   NgRx store carries router state and nothing else. See
+   [`docs/skills/ngrx-state.md`](./skills/ngrx-state.md) for the pattern.
 
 ## Templates
 

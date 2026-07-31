@@ -27,10 +27,14 @@ export * from './lib/pages/user.routes';
 // WRONG — exporting a component breaks lazy loading
 export * from './lib/pages/profile/profile';
 export * from './lib/services/profile/profile.service';
-export * from './lib/+state/profile/profile.module';
 ```
 
-If the app imports `Profile` component or `ProfileStateModule` statically at the top of a file, Angular's bundler sees the dependency and includes it in the initial chunk.
+If the app imports the `Profile` component statically at the top of a file, Angular's bundler sees the dependency and includes it in the initial chunk.
+
+`libs/profile/src/index.ts` also exports `ProfileStore`. That is safe: the store is
+only ever referenced from inside the lazy chunk (the route's `providers`), so
+exporting it does not pull anything into the initial bundle. Exporting it keeps the
+store reachable from tests without deep-importing library internals.
 
 ---
 
@@ -69,7 +73,7 @@ Inside the feature lib, components can import each other freely. These imports s
 // libs/profile/src/lib/pages/profile/profile.ts — CORRECT
 // This import is internal to the lib; it stays in the lazy chunk
 import { UserInfoComponent } from '../../molecules/user-info/user-info';
-import { ProfileStateModule } from '../../+state/profile/profile.module';
+import { ProfileStore } from '../../+state/profile.store';
 ```
 
 The rule only applies to imports **from outside the lib boundary** (i.e., from the app or other libs).
@@ -78,7 +82,7 @@ The rule only applies to imports **from outside the lib boundary** (i.e., from t
 
 ## Shared libs are always eager
 
-`libs/shared/*` (entity, ui, store, environment) are shared across the app and are part of the main bundle. They do not need lazy loading. Importing from them anywhere is fine:
+`libs/shared/*` (entity, ui, translation) and `libs/environment` are shared across the app and are part of the main bundle. They do not need lazy loading. Importing from them anywhere is fine:
 
 ```typescript
 import { User } from '@libs/entity';    // always eager — correct

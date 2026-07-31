@@ -19,14 +19,12 @@ import { appRoutes } from './app.routes';
 
 import { environment } from '@libs/environment';
 
-import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 import { AnalyticsService, GlobalErrorHandler, httpErrorInterceptor } from '@libs/ui';
-import { provideSharedDataState } from '@libs/store';
 import { provideTranslation } from '@libs/translation';
 import { metaReducers, reducers } from './core/+state';
 import { CustomSerializer } from './core/services/router/router-serializer';
@@ -49,13 +47,13 @@ export const appConfig: ApplicationConfig = {
     // Uncaught errors reach analytics instead of only the console.
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
 
+    // The global store exists for router state only. Feature state lives in a
+    // SignalStore inside its own lib and is provided on the route that needs it.
     provideStore(reducers, { metaReducers }),
-    provideEffects(),
     // The serializer belongs here. Registering StoreRouterConnectingModule.forRoot()
     // as well would re-provide RouterStateSerializer and silently win, dropping
     // CustomSerializer for the default MinimalRouterStateSerializer.
     provideRouterStore({ serializer: CustomSerializer }),
-    provideSharedDataState(),
 
     // Must come after provideHttpClient(): the i18n loader fetches assets/i18n.
     provideTranslation(),

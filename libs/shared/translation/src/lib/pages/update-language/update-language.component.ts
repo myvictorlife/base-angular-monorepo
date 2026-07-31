@@ -24,7 +24,8 @@ export class UpdateLanguageComponent {
   readonly languages = [
     { code: Language.English, text: 'English' },
     { code: Language.Dutch, text: 'Dutch' },
-    { code: Language.French, text: 'French' }
+    { code: Language.French, text: 'French' },
+    { code: Language.Portuguese, text: 'Português' }
   ];
 
   readonly languageForm: FormGroup = this.formBuilder.group({

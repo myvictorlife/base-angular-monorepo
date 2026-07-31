@@ -16,8 +16,8 @@ A production-ready base project for developing scalable Angular applications usi
 | Linting | ESLint + Prettier | 9.x / 3.x |
 
 > **No NgModules and no zone.js.** Every library exposes a provider function
-> (`provideTranslation()`, `provideSharedDataState()`, `provideProfileState()`).
-> See `docs/best-practices.md`.
+> (`provideTranslation()`) or, for feature state, a `signalStore` class listed in the
+> route's `providers` (`ProfileStore`). See `docs/best-practices.md`.
 
 ---
 
@@ -66,11 +66,9 @@ base-angular-monorepo/
 │   │
 │   ├── profile/                            # Profile feature library
 │   │   └── src/lib/
-│   │       ├── +state/profile/             # NgRx state slice
-│   │       │   ├── profile.actions.ts
-│   │       │   ├── profile.effects.ts
-│   │       │   ├── profile.reducer.ts
-│   │       │   └── profile.selectors.ts
+│   │       ├── +state/                     # NgRx SignalStore
+│   │       │   ├── profile.store.ts
+│   │       │   └── profile.store.spec.ts
 │   │       ├── molecules/                  # Compound components (Atomic Design)
 │   │       │   └── user-info/
 │   │       ├── pages/                      # Profile page and routing
@@ -189,9 +187,6 @@ npx nx g @nx/angular:library libs/shared/entity --tags=entity --style=scss
 # Feature library
 npx nx g @nx/angular:library libs/<feature-name> --tags=feature --style=scss
 
-# Shared NgRx store
-npx nx g @nx/angular:library libs/shared/store --tags=shared-store
-
 # Translations
 npx nx g @nx/angular:library libs/shared/translation --tags=translation
 ```
@@ -209,7 +204,7 @@ npx nx g @nx/angular:library libs/shared/translation --tags=translation
 | `ui` | Presentational components only, no business logic |
 | `entity` | Data models and interfaces |
 | `feature` | Feature-specific pages, state, and services |
-| `shared-store` | Global NgRx state shared across features |
+| `translate` | i18n setup, language switching |
 
 ### Atomic Design (component organization)
 

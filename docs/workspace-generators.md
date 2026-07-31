@@ -30,8 +30,11 @@ npx nx g @nx/angular:library libs/shared/entity --tags=entity --style=scss
 
 npx nx g @nx/angular:library libs/profile --tags=entity --style=scss
 
-npx nx g @nx/angular:library libs/shared/store --tags=shared-store
+npx nx g @nx/angular:library libs/shared/translation --tags=translate --style=scss
 ```
+
+There is no shared state library: feature state lives in a `signalStore` inside its
+own feature lib. See [`skills/ngrx-state.md`](./skills/ngrx-state.md).
 
 - Replace the path and tags as needed for your use case.
 - The `--tags` flag helps organize and enforce dependency constraints.
@@ -42,7 +45,7 @@ npx nx g @nx/angular:library libs/shared/store --tags=shared-store
 ## Best Practices
 
 - Always use Nx generators to ensure consistency and best practices.
-- Register new libraries in `.eslintrc.base.json` under `depConstraints` to maintain proper dependency boundaries.
+- Register new libraries in `eslint.base.config.mjs` under `depConstraints` to maintain proper dependency boundaries.
 - Use meaningful tags to categorize your libraries (e.g., `ui`, `entity`, `feature`, `util`).
 
 For more details, see the [Nx documentation](https://nx.dev/angular).

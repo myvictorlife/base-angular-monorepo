@@ -10,7 +10,8 @@
   "LANGUAGE": {
     "EN": "English",
     "NL": "Dutch",
-    "FR": "French"
+    "FR": "French",
+    "PT": "Portuguese"
   },
   "UPDATE_LANGUAGE": {
     "TITLE": "Language preferences",
@@ -60,7 +61,10 @@
   },
   "PROFILE": {
     "TITLE": "Profile",
-    "BACK_HOME": "Back to Home"
+    "BACK_HOME": "Back to Home",
+    "LOADING": "Loading profile...",
+    "ERROR": "Could not load the profile",
+    "RETRY": "Try again"
   },
   "USER_INFO": {
     "USER_ID": "User ID"
