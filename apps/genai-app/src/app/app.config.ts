@@ -24,7 +24,7 @@ import { provideRouterStore } from '@ngrx/router-store';
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 import { AnalyticsService, GlobalErrorHandler, httpErrorInterceptor } from '@libs/ui';
 import { provideSharedDataState } from '@libs/store';
 import { provideTranslation } from '@libs/translation';
@@ -44,7 +44,7 @@ export const appConfig: ApplicationConfig = {
       withPreloading(PreloadAllModules),
     ),
 
-    provideHttpClient(withInterceptors([httpErrorInterceptor])),
+    provideHttpClient(withXhr(), withInterceptors([httpErrorInterceptor])),
 
     // Uncaught errors reach analytics instead of only the console.
     { provide: ErrorHandler, useClass: GlobalErrorHandler },

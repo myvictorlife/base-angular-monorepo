@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { User } from '@libs/entity';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -6,6 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'lib-user-info',
   imports: [TranslatePipe],
   templateUrl: './user-info.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./user-info.scss'],
 })
 export class UserInfoComponent {

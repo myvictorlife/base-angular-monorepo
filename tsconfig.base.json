@@ -14,10 +14,13 @@
       "@libs/ui": ["libs/shared/ui/src/index.ts"],
       "@libs/profile": ["libs/profile/src/index.ts"],
       "@libs/store": ["libs/shared/store/src/index.ts"],
-      "@libs/translation": [
-        "libs/shared/translation/src/index.ts"
-      ]
-    }
+      "@libs/translation": ["libs/shared/translation/src/index.ts"]
+    },
+    "strict": false,
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
+    "esModuleInterop": false,
+    "ignoreDeprecations": "6.0"
   },
   "exclude": ["node_modules", "tmp"]
 }

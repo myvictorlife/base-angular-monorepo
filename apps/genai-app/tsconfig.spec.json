@@ -5,7 +5,11 @@
     "types": [
       "jest",
       "node"
-    ]
+    ],
+    "rootDir": "../..",
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true
   },
   "include": [
     "src/**/*.ts",
