@@ -2,7 +2,7 @@
 
 Profile feature library. **This is the reference implementation** for a feature lib —
 copy its shape when adding a new one. See
-[`docs/skills/feature-lib.md`](../../docs/skills/feature-lib.md).
+[`.claude/skills/feature-lib/SKILL.md`](../../.claude/skills/feature-lib/SKILL.md).
 
 **Tag:** `scope:profile` — may depend on `scope:entity-lib` and `scope:environment-lib`.
 
@@ -34,13 +34,13 @@ src/lib/
 
 A `signalStore` from `@ngrx/signals`. No actions, no reducers, no effects, no selectors.
 
-| Member | Kind | |
-|---|---|---|
-| `profile` | state | `User \| null` |
-| `loading` | state | `boolean` |
-| `error` | state | `IGenericError \| null` |
-| `hasProfile` | computed | `profile() !== null` |
-| `errorMessage` | computed | `error()?.message ?? null` |
+| Member           | Kind     |                                            |
+| ---------------- | -------- | ------------------------------------------ |
+| `profile`        | state    | `User \| null`                             |
+| `loading`        | state    | `boolean`                                  |
+| `error`          | state    | `IGenericError \| null`                    |
+| `hasProfile`     | computed | `profile() !== null`                       |
+| `errorMessage`   | computed | `error()?.message ?? null`                 |
 | `fetchProfile()` | rxMethod | loads the profile; safe to call repeatedly |
 
 Everything is a signal, so components read it directly — no `select`, no `async` pipe,
@@ -66,6 +66,7 @@ in a component's `imports` array (the old NgModule habit) couples the component 
 own state registration and makes it untestable in isolation.
 
 **`fetchProfile` uses `switchMap` + `tapResponse`:**
+
 - `switchMap` cancels an in-flight request when a newer one starts, so a slow response
   can never overwrite a fresher one.
 - `tapResponse` keeps the stream alive after a failure. Without it the first error

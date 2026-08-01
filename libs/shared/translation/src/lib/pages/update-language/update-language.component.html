@@ -1,34 +1,39 @@
-<div class="bg-white shadow p-4 flex items-center justify-between">
-  <button class="text-blue-600 font-semibold" (click)="goBack()">
-    {{ 'BACK' | translate }}
-  </button>
-  <h1 class="text-xl font-bold">{{ 'UPDATE_LANGUAGE.TITLE' | translate }}</h1>
-</div>
-
-<div class="p-6">
-  <div class="flex justify-center mb-6">
-    <img class="w-24 h-24" alt="Translator" src="assets/icon/colors/translator.svg" />
+<main class="update-language">
+  <div class="update-language__head">
+    <button class="update-language__back" type="button" (click)="goBack()">
+      {{ 'BACK' | translate }}
+    </button>
+    <h1 class="update-language__title">
+      {{ 'UPDATE_LANGUAGE.TITLE' | translate }}
+    </h1>
   </div>
-  <form [formGroup]="languageForm" (ngSubmit)="confirmLanguageSelection()">
-    <div class="space-y-4">
+
+  <form
+    class="update-language__form"
+    [formGroup]="languageForm"
+    (ngSubmit)="confirmLanguageSelection()"
+  >
+    <fieldset class="update-language__fieldset">
+      <legend class="update-language__legend">
+        {{ 'UPDATE_LANGUAGE.TITLE' | translate }}
+      </legend>
+
       @for (lang of languages; track lang.code) {
-        <div class="flex items-center">
+        <label class="update-language__option" [for]="'lang-' + lang.code">
           <input
+            class="update-language__radio"
             type="radio"
             [value]="lang.code"
             formControlName="language"
-            id="lang-{{lang.code}}"
-            class="mr-2"
+            [id]="'lang-' + lang.code"
           />
-          <label for="lang-{{lang.code}}" class="text-lg">{{ lang.text }}</label>
-        </div>
+          <span>{{ lang.text }}</span>
+        </label>
       }
-    </div>
-    <button
-      type="submit"
-      class="mt-8 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-    >
+    </fieldset>
+
+    <button class="update-language__submit" type="submit">
       {{ 'UPDATE_LANGUAGE.UPDATE' | translate }}
     </button>
   </form>
-</div>
+</main>

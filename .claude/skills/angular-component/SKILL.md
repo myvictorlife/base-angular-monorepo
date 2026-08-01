@@ -1,3 +1,8 @@
+---
+name: angular-component
+description: Modern Angular component patterns used throughout this workspace — signals, input()/output() functions, @if/@for control flow, OnPush, and standalone imports. Use when creating or editing any component, directive, pipe or template, and when a lint rule rejects @Input, *ngIf or CommonModule.
+---
+
 # Skill: Modern Angular Component Patterns
 
 All components in this project follow Angular 20+ standards. These rules are non-negotiable.
@@ -11,7 +16,7 @@ All components are **standalone**. Never use `NgModule` to declare components.
 ```typescript
 @Component({
   selector: 'lib-user-info',
-  imports: [],            // ← declare dependencies here, not in a module
+  imports: [], // ← declare dependencies here, not in a module
   templateUrl: './user-info.html',
   styleUrls: ['./user-info.scss'],
 })
@@ -62,20 +67,14 @@ Use Angular's built-in control flow. Never use structural directives.
 ```html
 <!-- CORRECT -->
 @if (user()) {
-  <div>Welcome, {{ user()!.name }}</div>
-}
-
-@for (item of items(); track item.id) {
-  <li>{{ item.name }}</li>
+<div>Welcome, {{ user()!.name }}</div>
+} @for (item of items(); track item.id) {
+<li>{{ item.name }}</li>
 } @empty {
-  <li>No items found.</li>
-}
-
-@switch (status()) {
-  @case ('active') { <span class="green">Active</span> }
-  @case ('inactive') { <span class="red">Inactive</span> }
-  @default { <span>Unknown</span> }
-}
+<li>No items found.</li>
+} @switch (status()) { @case ('active') { <span class="green">Active</span> }
+@case ('inactive') { <span class="red">Inactive</span> } @default {
+<span>Unknown</span> } }
 ```
 
 ```html
@@ -100,7 +99,10 @@ export class ProfilePage {
 
 // WRONG
 export class ProfilePage {
-  constructor(private store: Store, private router: Router) {}
+  constructor(
+    private store: Store,
+    private router: Router,
+  ) {}
 }
 ```
 
@@ -168,22 +170,23 @@ export class ProfilePage {
 
 ## Atomic Design — component classification
 
-| Level | Description | Location |
-|---|---|---|
-| Atom | Single-purpose UI element (button, badge, avatar) | `atoms/` |
-| Molecule | Combination of atoms with a specific function | `molecules/` |
+| Level    | Description                                          | Location     |
+| -------- | ---------------------------------------------------- | ------------ |
+| Atom     | Single-purpose UI element (button, badge, avatar)    | `atoms/`     |
+| Molecule | Combination of atoms with a specific function        | `molecules/` |
 | Organism | Full section composed of molecules (form, card list) | `organisms/` |
-| Page | Route-level component, orchestrates organisms | `pages/` |
+| Page     | Route-level component, orchestrates organisms        | `pages/`     |
 
 **Rules:**
+
 - Atoms and Molecules are **presentational** — they receive data via `input()` and emit events via `output()`. They do not inject the Store.
 - Pages are **container** components — they inject the Store, dispatch actions, and pass data down to molecules/atoms.
 
 ```typescript
 // molecule — presentational only
 export class UserInfoComponent {
-  user = input<User>();           // data comes in
-  editClicked = output<void>();   // events go out
+  user = input<User>(); // data comes in
+  editClicked = output<void>(); // events go out
   // NO store injection here
 }
 
@@ -202,8 +205,8 @@ export class ProfilePage {
 All component selectors in libs use the `lib-` prefix (configured in `project.json`).
 
 ```typescript
-selector: 'lib-user-info'    // ← inside libs/
-selector: 'app-home'         // ← inside apps/
+selector: 'lib-user-info'; // ← inside libs/
+selector: 'app-home'; // ← inside apps/
 ```
 
 ---

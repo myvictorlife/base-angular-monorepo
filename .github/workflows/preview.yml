@@ -22,6 +22,31 @@ jobs:
     # a malicious pull request from reaching the deploy credentials.
     if: github.event.pull_request.head.repo.full_name == github.repository
     steps:
+      # See the same step in deploy.yml. An unset secret interpolates to an empty
+      # string rather than failing, so the deploy action would otherwise die with a
+      # Node stack trace after a full install and build.
+      #
+      # A common cause worth naming: creating FIREBASE_SERVICE_ACCOUNT under
+      # "Variables" instead of "Secrets". Those are different contexts — `vars.` and
+      # `secrets.` — and variables are stored in plain text, unmasked in logs, so a
+      # service account key put there must be treated as leaked and rotated.
+      - name: Check deploy credentials
+        env:
+          SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+        run: |
+          missing=0
+          if [ -z "$SERVICE_ACCOUNT" ]; then
+            echo "::error title=Missing secret::FIREBASE_SERVICE_ACCOUNT is not set. Add it under Settings -> Secrets and variables -> Actions -> Secrets (not Variables). See .claude/skills/firebase-deploy/SKILL.md section 6."
+            missing=1
+          fi
+          if [ -z "$PROJECT_ID" ]; then
+            echo "::error title=Missing secret::FIREBASE_PROJECT_ID is not set. Its value is the projectId from your config/firebase.json."
+            missing=1
+          fi
+          [ "$missing" -eq 1 ] && exit 1
+          echo "Deploy credentials present."
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4

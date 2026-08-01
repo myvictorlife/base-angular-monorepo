@@ -24,6 +24,33 @@ jobs:
       name: production
       url: https://base-angular-monorepo.web.app
     steps:
+      # First, so a missing secret costs seconds instead of a full install and
+      # build. Without this the run dies inside the deploy action with a Node stack
+      # trace reading `Input required and not supplied: firebaseServiceAccount`,
+      # which says nothing about which secret to create or where.
+      #
+      # An unset secret interpolates to an empty string rather than failing, so
+      # emptiness is the only signal available here.
+      - name: Check deploy credentials
+        env:
+          SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+        run: |
+          missing=0
+          if [ -z "$SERVICE_ACCOUNT" ]; then
+            echo "::error title=Missing secret::FIREBASE_SERVICE_ACCOUNT is not set. Create it under Settings -> Secrets and variables -> Actions, with the full service account JSON as its value. See .claude/skills/firebase-deploy/SKILL.md section 6."
+            missing=1
+          fi
+          if [ -z "$PROJECT_ID" ]; then
+            echo "::error title=Missing secret::FIREBASE_PROJECT_ID is not set. Its value is the projectId from your config/firebase.json."
+            missing=1
+          fi
+          if [ "$missing" -eq 1 ]; then
+            echo "::notice::Repository secrets currently visible to this job are listed at Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+          echo "Deploy credentials present."
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4

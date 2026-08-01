@@ -29,7 +29,12 @@ const depConstraints = [
   },
   {
     sourceTag: 'scope:profile',
-    onlyDependOnLibsWithTags: ['scope:entity-lib', 'scope:environment-lib'],
+    onlyDependOnLibsWithTags: [
+      'scope:entity-lib',
+      'scope:environment-lib',
+      'scope:theme-lib',
+      'scope:ui-lib',
+    ],
   },
   // A second feature lib, wider than profile on purpose: it consumes shared UI and
   // the theme/i18n services, which is what a feature reaching for cross-cutting

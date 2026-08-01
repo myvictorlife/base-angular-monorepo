@@ -62,7 +62,7 @@ These are not style preferences — the build fails on them:
 
 A new library must be tagged `scope:<something>` **and** be given an entry in
 `depConstraints`. A tag with no entry there is unconstrained, which quietly defeats
-the point. See [`docs/skills/module-boundaries.md`](docs/skills/module-boundaries.md).
+the point. See [`.claude/skills/module-boundaries/SKILL.md`](.claude/skills/module-boundaries/SKILL.md).
 
 ## Commits
 
@@ -91,7 +91,7 @@ other reasons: a fork must never report analytics into someone else's project, a
 one file beats three. Real secrets — service account JSON, private API keys —
 belong in GitHub Actions secrets and must never reach a frontend bundle. See
 [`config/README.md`](config/README.md) and
-[`docs/skills/firebase-deploy.md`](docs/skills/firebase-deploy.md).
+[`.claude/skills/firebase-deploy/SKILL.md`](.claude/skills/firebase-deploy/SKILL.md).
 
 ## Pull requests
 

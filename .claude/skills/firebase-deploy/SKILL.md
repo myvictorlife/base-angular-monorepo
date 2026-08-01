@@ -1,9 +1,14 @@
+---
+name: firebase-deploy
+description: Build and deploy the app to Firebase Hosting, locally or from CI. Use when deploying, configuring GitHub Actions secrets, restricting API keys, or debugging a failed deploy or preview channel.
+---
+
 # Skill: Firebase Hosting Deploy
 
 This project includes a ready-to-use Firebase Hosting setup for deploying the Angular app as a SPA.
 Follow this guide every time you set up or deploy to a new Firebase project.
 
-> Setting up a Firebase project for the first time? [`hosting/README.md`](../../hosting/README.md)
+> Setting up a Firebase project for the first time? [`hosting/README.md`](../../../hosting/README.md)
 > covers the console side click by click, with screenshots. This page is the reference for
 > the repo side: scripts, configuration and CI.
 
@@ -239,6 +244,25 @@ with **Firebase Hosting Admin**, add a JSON key, and paste the whole file into
 
 > Do not use `firebase login:ci` tokens. They are long-lived, carry your full user
 > permissions, and cannot be scoped.
+
+### Secrets, not Variables
+
+The same GitHub settings page offers **Secrets** and **Variables**. They are
+different contexts — `secrets.FOO` and `vars.FOO` — and a value put in the wrong
+one reads as empty in the other. That is what produces:
+
+```
+Error: Input required and not supplied: firebaseServiceAccount
+```
+
+The distinction matters beyond the workflow failing. **Variables are stored in
+plain text, are not masked in logs, and are readable in the UI by anyone with
+repository access.** A service account key placed there must be treated as leaked:
+delete the key in Google Cloud Console (Service Accounts → the account → Keys),
+then issue a new one. Removing it from GitHub does not revoke it.
+
+The `Check deploy credentials` step at the top of both workflows exists to catch
+this in seconds rather than after a full build.
 
 ---
 

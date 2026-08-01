@@ -1,35 +1,139 @@
+/* Tokens only.
+   This file previously held dead Ionic rules (`ion-content`, `ion-list`,
+   `ion-item`, `ion-button`, `.toolbar-footer`) left over from an Ionic origin —
+   none of those elements exist anywhere in this workspace.
 
-.img-translator {
-  margin-top: 10%;
-  margin-bottom: 10%;
+   Styled directly rather than with the @libs/ui atoms on purpose: @libs/ui
+   already depends on this library, so consuming it back would close a cycle. */
+
+.update-language {
+  display: block;
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: var(--space-10) var(--space-4) var(--space-16);
 }
 
-  /* language-select.page.scss */
-ion-content {
-    background-color: #f4f4f4;
-  }
-  
-  ion-list {
-    background-color: #fff;
-    border-radius: 8px;
-  }
-  
-  ion-item {
-    --inner-padding-start: 8px;
-    --inner-padding-end: 8px;
-    --padding-start: 16px;
-    --padding-end: 16px;
-  }
-  
-  ion-button {
-    margin-top: 16px;
-    --border-radius: 8px;
+.update-language__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.update-language__back {
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+
+  &:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
   }
 
-  .toolbar-footer {
-    --background: white !important; 
-    --border-width: 0px !important;
-
-    padding-left: 10px;
-    padding-right: 10px;
+  &:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
   }
+}
+
+.update-language__title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.update-language__fieldset {
+  margin: 0 0 var(--space-8);
+  padding: 0;
+  border: none;
+}
+
+/* The legend duplicates the visible h1, so it is hidden from sight but kept for
+   screen readers — a radio group without an accessible name is announced as a
+   bare list of options. */
+.update-language__legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.update-language__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+
+  & + & {
+    margin-top: var(--space-2);
+  }
+
+  &:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-bg-hover);
+  }
+
+  /* Focus lives on the input; lift the ring onto the whole row so the target
+     the user perceives is the one that appears focused. */
+  &:has(.update-language__radio:focus-visible) {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+
+  &:has(.update-language__radio:checked) {
+    border-color: var(--color-brand);
+    background: var(--color-brand-subtle);
+  }
+}
+
+.update-language__radio {
+  accent-color: var(--color-brand);
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+}
+
+.update-language__submit {
+  width: 100%;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background: var(--color-brand);
+  color: var(--color-text-on-brand);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+
+  &:hover {
+    background: var(--color-brand-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+}

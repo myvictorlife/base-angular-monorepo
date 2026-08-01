@@ -59,7 +59,11 @@ hosting/.firebaserc
 .firebase/
 hosting/dist/
 
+# Claude Code. `.claude/skills/` and `.claude/settings.json` are shared on purpose;
+# `settings.local.json` is per-machine and holds absolute paths to whatever else is
+# on that developer's disk — not something a public template should carry.
 .claude/worktrees
+.claude/settings.local.json
 .nx/polygraph
 .nx/self-healing
 .nx/migrate-runs

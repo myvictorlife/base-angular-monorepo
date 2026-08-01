@@ -41,8 +41,21 @@ jobs:
       # No secrets here on purpose. Without them the generator produces an empty
       # config and `firebaseEnabled` is false — so this job also proves that a fresh
       # clone, with no Firebase project, still lints, tests and builds.
-      - name: Lint, test with coverage, build
-        run: npx nx run-many -t lint test build --coverage --configuration=production
+      # One invocation per target on purpose: `--coverage` is a Jest flag and
+      # `--configuration=production` only exists on build. Nx forwards extra args to
+      # every target in a `run-many`, so a single combined command makes eslint fail
+      # with "Invalid option '--coverage'" and build with "'coverage' is not found in
+      # schema" — failures that look like lint errors but are only bad plumbing.
+      - name: Lint
+        run: npx nx run-many -t lint
+
+      - name: Test with coverage
+        if: always()
+        run: npx nx run-many -t test --coverage
+
+      - name: Build
+        if: always()
+        run: npx nx run-many -t build --configuration=production
 
       - name: Upload coverage
         if: always()

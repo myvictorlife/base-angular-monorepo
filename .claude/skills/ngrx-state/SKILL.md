@@ -1,3 +1,8 @@
+---
+name: ngrx-state
+description: Feature state with NgRx SignalStore — withState, withComputed, withMethods, withHooks, rxMethod, and providing the store on its route. Use when adding state to a feature, writing or changing a store, or migrating off the classic NgRx Store.
+---
+
 # Skill: Feature State with NgRx SignalStore
 
 Every feature library that needs state management follows this pattern.
@@ -7,12 +12,12 @@ The reference implementation is `libs/profile/src/lib/+state/profile.store.ts`.
 
 ## Which store do I use?
 
-| State | Tool | Where |
-|---|---|---|
+| State                                         | Tool                                | Where                                                                     |
+| --------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------- |
 | Feature state (a page's data, loading, error) | **`signalStore`** — `@ngrx/signals` | `libs/<feature>/src/lib/+state/<feature>.store.ts`, provided on the route |
-| Local UI state (a dropdown, a filter) | `signal()` in the component | the component itself |
-| Router state (URL, params, query params) | `@ngrx/router-store` | `provideRouterStore()` in `app.config.ts` |
-| Cross-feature events | `@ngrx/signals/events` | see *Cross-feature events* below |
+| Local UI state (a dropdown, a filter)         | `signal()` in the component         | the component itself                                                      |
+| Router state (URL, params, query params)      | `@ngrx/router-store`                | `provideRouterStore()` in `app.config.ts`                                 |
+| Cross-feature events                          | `@ngrx/signals/events`              | see _Cross-feature events_ below                                          |
 
 **The global Redux store exists for router state only.** Do not add feature slices
 to it. `provideStore()` in `app.config.ts` registers `routerReducer` and nothing
@@ -40,7 +45,13 @@ One file per store. There are no separate actions/reducer/selectors/effects file
 import { computed, inject } from '@angular/core';
 import { IGenericError, User } from '@libs/entity';
 import { tapResponse } from '@ngrx/operators';
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { FeatureService } from '../services/<feature>/<feature>.service';
@@ -71,7 +82,8 @@ export const FeatureStore = signalStore(
           service.fetchProfile().pipe(
             tapResponse({
               next: (profile) => patchState(store, { profile, loading: false }),
-              error: (error: IGenericError) => patchState(store, { error, loading: false }),
+              error: (error: IGenericError) =>
+                patchState(store, { error, loading: false }),
             }),
           ),
         ),
@@ -82,6 +94,7 @@ export const FeatureStore = signalStore(
 ```
 
 **Rules:**
+
 - `withState` for raw data, `withComputed` for anything derived. Never store a value
   you can derive — that is the SignalStore equivalent of a duplicated selector.
 - Always reset `loading` and `error` when a request starts.
@@ -93,12 +106,12 @@ export const FeatureStore = signalStore(
 
 **When to use each flattening operator inside `rxMethod`:**
 
-| Operator | Use case |
-|---|---|
-| `switchMap` | Data fetching — cancels the previous request so a slow response cannot overwrite a fresher one |
-| `exhaustMap` | User actions (form submit) — ignores new calls while one is in flight |
-| `concatMap` | Ordered queue — processes calls one at a time |
-| `mergeMap` | Parallel — runs all concurrently (use rarely) |
+| Operator     | Use case                                                                                       |
+| ------------ | ---------------------------------------------------------------------------------------------- |
+| `switchMap`  | Data fetching — cancels the previous request so a slow response cannot overwrite a fresher one |
+| `exhaustMap` | User actions (form submit) — ignores new calls while one is in flight                          |
+| `concatMap`  | Ordered queue — processes calls one at a time                                                  |
+| `mergeMap`   | Parallel — runs all concurrently (use rarely)                                                  |
 
 ---
 
@@ -119,7 +132,8 @@ export const OrdersStore = signalStore(
         switchMap(() =>
           service.list().pipe(
             tapResponse({
-              next: (orders) => patchState(store, setAllEntities(orders), { loading: false }),
+              next: (orders) =>
+                patchState(store, setAllEntities(orders), { loading: false }),
               error: () => patchState(store, { loading: false }),
             }),
           ),
@@ -192,15 +206,17 @@ template only renders the happy path is worse than not tracking them at all:
 
 ```html
 @if (loading()) {
-  <p role="status" aria-live="polite">{{ 'FEATURE.LOADING' | translate }}</p>
+<p role="status" aria-live="polite">{{ 'FEATURE.LOADING' | translate }}</p>
 } @else if (errorMessage(); as message) {
-  <div role="alert">
-    <p>{{ 'FEATURE.ERROR' | translate }}</p>
-    <p>{{ message }}</p>
-    <button type="button" (click)="reload()">{{ 'FEATURE.RETRY' | translate }}</button>
-  </div>
+<div role="alert">
+  <p>{{ 'FEATURE.ERROR' | translate }}</p>
+  <p>{{ message }}</p>
+  <button type="button" (click)="reload()">
+    {{ 'FEATURE.RETRY' | translate }}
+  </button>
+</div>
 } @else if (profile(); as data) {
-  <lib-user-info [user]="data" />
+<lib-user-info [user]="data" />
 }
 ```
 
@@ -266,11 +282,11 @@ If you find `createAction`/`createReducer`/`createEffect` files in a feature lib
 they predate this pattern. Replace the whole `+state/<feature>/` folder with one
 `<feature>.store.ts`:
 
-| Old | New |
-|---|---|
-| `createAction` + `props` | a method on `withMethods` (or an event, if cross-feature) |
-| `createReducer` + `on` | `patchState` inside the method |
-| `createSelector` | `withComputed` |
-| `createEffect` + `ofType` | `rxMethod` with the same RxJS pipe |
-| `createEntityAdapter` | `withEntities` from `@ngrx/signals/entities` |
-| `provideState` + `provideEffects` | the store class in the route's `providers` |
+| Old                               | New                                                       |
+| --------------------------------- | --------------------------------------------------------- |
+| `createAction` + `props`          | a method on `withMethods` (or an event, if cross-feature) |
+| `createReducer` + `on`            | `patchState` inside the method                            |
+| `createSelector`                  | `withComputed`                                            |
+| `createEffect` + `ofType`         | `rxMethod` with the same RxJS pipe                        |
+| `createEntityAdapter`             | `withEntities` from `@ngrx/signals/entities`              |
+| `provideState` + `provideEffects` | the store class in the route's `providers`                |

@@ -329,7 +329,7 @@ the project, enabling Analytics and Hosting, registering the web app, and deploy
 
 Details: [`config/README.md`](config/README.md) ·
 [`libs/environment/README.md`](libs/environment/README.md) ·
-[`docs/skills/firebase-deploy.md`](docs/skills/firebase-deploy.md)
+[`.claude/skills/firebase-deploy/SKILL.md`](.claude/skills/firebase-deploy/SKILL.md)
 
 ---
 
@@ -362,7 +362,7 @@ npx nx g @nx/angular:library libs/shared/translation --tags=scope:translate
 
 > After creating a library, add its tag to `depConstraints` in `eslint.base.config.mjs`.
 > A tag with no entry there is **unconstrained**. See
-> [`docs/skills/module-boundaries.md`](docs/skills/module-boundaries.md).
+> [`.claude/skills/module-boundaries/SKILL.md`](.claude/skills/module-boundaries/SKILL.md).
 
 ---
 
@@ -423,7 +423,7 @@ libs/<feature>/src/lib/
 ```
 
 The global NgRx Store carries **router state and nothing else**. Features do not add
-slices to it. See [`docs/skills/ngrx-state.md`](docs/skills/ngrx-state.md).
+slices to it. See [`.claude/skills/ngrx-state/SKILL.md`](.claude/skills/ngrx-state/SKILL.md).
 
 Two feature libraries ship as reference, on purpose showing different shapes:
 
@@ -535,17 +535,30 @@ rather than as conflicting individual PRs.
 - [`config/README.md`](config/README.md) — integration config: where credentials go, how to add one
 - [`hosting/README.md`](hosting/README.md) — Firebase setup and deploy, screenshot by screenshot
 
-### Development Skills (Claude Code)
+### Agent instructions
 
-Step-by-step guides for developing correctly in this project:
+[`AGENTS.md`](AGENTS.md) is the entry point for AI coding agents — architecture
+rules, the non-negotiables lint enforces, verification commands, and the known gaps
+an agent should not claim are solved. [`CLAUDE.md`](CLAUDE.md) imports it, so Claude
+Code, Codex, Cursor and Copilot all read one file rather than a copy each.
 
-| Skill                                                                    | Description                                                                                                       |
-| ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| [`docs/skills/feature-lib.md`](docs/skills/feature-lib.md)               | Creating a complete feature library (`libs/profile` for the async shape, `libs/settings` for the synchronous one) |
-| [`docs/skills/lazy-loading.md`](docs/skills/lazy-loading.md)             | Lazy loading rules — what to export, how to wire routes, common mistakes                                          |
-| [`docs/skills/ngrx-state.md`](docs/skills/ngrx-state.md)                 | SignalStore pattern — state, computed, methods, and migrating off the classic store                               |
-| [`docs/skills/angular-component.md`](docs/skills/angular-component.md)   | Modern Angular component patterns — signals, input/output, control flow                                           |
-| [`docs/skills/unit-testing.md`](docs/skills/unit-testing.md)             | Unit testing with Jest and Spectator                                                                              |
-| [`docs/skills/module-boundaries.md`](docs/skills/module-boundaries.md)   | Nx tags, ESLint boundary rules, registration steps                                                                |
-| [`docs/skills/firebase-analytics.md`](docs/skills/firebase-analytics.md) | Analytics setup and event logging                                                                                 |
-| [`docs/skills/firebase-deploy.md`](docs/skills/firebase-deploy.md)       | Build and deploy to Firebase Hosting                                                                              |
+### Skills
+
+The step-by-step guides are packaged as [Claude Code skills](https://code.claude.com/docs/en/skills)
+in `.claude/skills/<name>/SKILL.md`. Each carries `name` and `description`
+frontmatter, so an agent loads the relevant one **on demand** — writing a component
+pulls in `angular-component`, a boundary lint error pulls in `module-boundaries` —
+instead of holding all 1,700 lines in context or, more likely, never finding them.
+
+They are ordinary markdown and read fine on their own.
+
+| Skill                                                                                      | Description                                                                                                       |
+| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| [`.claude/skills/feature-lib/SKILL.md`](.claude/skills/feature-lib/SKILL.md)               | Creating a complete feature library (`libs/profile` for the async shape, `libs/settings` for the synchronous one) |
+| [`.claude/skills/lazy-loading/SKILL.md`](.claude/skills/lazy-loading/SKILL.md)             | Lazy loading rules — what to export, how to wire routes, common mistakes                                          |
+| [`.claude/skills/ngrx-state/SKILL.md`](.claude/skills/ngrx-state/SKILL.md)                 | SignalStore pattern — state, computed, methods, and migrating off the classic store                               |
+| [`.claude/skills/angular-component/SKILL.md`](.claude/skills/angular-component/SKILL.md)   | Modern Angular component patterns — signals, input/output, control flow                                           |
+| [`.claude/skills/unit-testing/SKILL.md`](.claude/skills/unit-testing/SKILL.md)             | Unit testing with Jest and Spectator                                                                              |
+| [`.claude/skills/module-boundaries/SKILL.md`](.claude/skills/module-boundaries/SKILL.md)   | Nx tags, ESLint boundary rules, registration steps                                                                |
+| [`.claude/skills/firebase-analytics/SKILL.md`](.claude/skills/firebase-analytics/SKILL.md) | Analytics setup and event logging                                                                                 |
+| [`.claude/skills/firebase-deploy/SKILL.md`](.claude/skills/firebase-deploy/SKILL.md)       | Build and deploy to Firebase Hosting                                                                              |

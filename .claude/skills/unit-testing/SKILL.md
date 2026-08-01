@@ -1,3 +1,8 @@
+---
+name: unit-testing
+description: Write unit tests with Jest and Spectator. Use when adding or fixing tests for a component, store, service or interceptor, and when a coverage threshold fails the build.
+---
+
 # Skill: Unit Testing with Jest and Spectator
 
 This project uses **Jest** as the test runner and **Spectator** as the Angular testing utility.

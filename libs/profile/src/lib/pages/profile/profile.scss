@@ -1,0 +1,38 @@
+/* Tokens only. The page previously carried a hand-rolled indigo/gray palette
+   that matched nothing else in the app and ignored the theme entirely. */
+
+.profile {
+  display: block;
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: var(--space-10) var(--space-4) var(--space-16);
+}
+
+.profile__head {
+  margin-bottom: var(--space-4);
+}
+
+.profile__title {
+  margin: 0 0 var(--space-6);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-snug);
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+/* Gives the loading state the same vertical footprint as the loaded content, so
+   the card does not jump when the request resolves. */
+.profile__state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6) 0;
+}
+
+.profile__state-text {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}

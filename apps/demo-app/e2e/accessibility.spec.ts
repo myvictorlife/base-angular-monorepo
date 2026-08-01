@@ -41,13 +41,17 @@ test.describe('accessibility', () => {
   }) => {
     await page.goto('/');
 
-    const controls = page.locator('header button, header a');
+    // The header hides controls per breakpoint, so only the visible ones are in
+    // scope. `filter({ visible: true })` does that in the locator rather than
+    // with an `if` inside the loop, which keeps the test branch-free.
+    const controls = page
+      .locator('header button, header a')
+      .filter({ visible: true });
     const count = await controls.count();
     expect(count).toBeGreaterThan(0);
 
     for (let i = 0; i < count; i++) {
       const control = controls.nth(i);
-      if (!(await control.isVisible())) continue;
 
       const name = (
         (await control.getAttribute('aria-label')) ??

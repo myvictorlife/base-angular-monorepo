@@ -248,7 +248,7 @@ Do not change its `public` path unless you also change `outputPath` in
 
 ## Adding a second app
 
-See [`../docs/skills/firebase-deploy.md`](../docs/skills/firebase-deploy.md) — it covers
+See [`../.claude/skills/firebase-deploy/SKILL.md`](../.claude/skills/firebase-deploy/SKILL.md) — it covers
 extra hosting targets, CI deploys with GitHub Actions secrets, and the scripts in
 detail. Config internals live in [`../config/README.md`](../config/README.md) and
 [`../libs/environment/README.md`](../libs/environment/README.md).

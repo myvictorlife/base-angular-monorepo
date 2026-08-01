@@ -1,3 +1,8 @@
+---
+name: feature-lib
+description: Create a complete feature library in libs/ — generator command, folder layout, tags, routes, store and barrel exports. Use when adding a new feature to the workspace, or when unsure where a new page, service or component belongs. libs/profile is the async reference, libs/settings the synchronous one.
+---
+
 # Skill: Creating a Feature Library
 
 Use this guide every time you need to create a new feature library (e.g., `libs/orders`, `libs/settings`).
@@ -90,7 +95,7 @@ export const <featureName>Routes: Routes = [
 ## 5. Feature state — SignalStore
 
 Each feature owns its state in a single `signalStore`. See
-[`ngrx-state.md`](./ngrx-state.md) for the full pattern, including collections,
+the `ngrx-state` skill for the full pattern, including collections,
 error handling and testing.
 
 ```typescript

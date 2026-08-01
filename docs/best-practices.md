@@ -19,7 +19,6 @@
   - **Templates/Pages**: Layout structures and pages.
 - **Example:** The restaurant module follows this pattern. Use it as a reference for new components and folder organization.
 
-
 ---
 
 ## Shared Module: shared
@@ -34,6 +33,7 @@
 ## Code Guidelines
 
 ### 1. **Angular 22**
+
 - **DO NOT** use outdated or "anti-pattern" features such as:
   - `*ngIf`, `*ngFor`, `@Input`, `@Output`, `ngOnInit`, `ngOnDestroy`, `ngAfterViewInit`, etc.
   - Avoid any decorator-based direct component communication.
@@ -42,15 +42,15 @@
   - Example:
     ```html
     @if (user()) {
-      <div>Welcome, {{ user().name }}</div>
-    }
-    @for (item of items(); track item.id) {
-      <li>{{ item.name }}</li>
+    <div>Welcome, {{ user().name }}</div>
+    } @for (item of items(); track item.id) {
+    <li>{{ item.name }}</li>
     }
     ```
   - **Never use `*ngIf` or `*ngFor`** — these are not part of the project standard.
 - **For component communication, use modern `input()` and `output()` functions:**
   - Example:
+
     ```typescript
     import { input, output, EventEmitter } from '@angular/core';
 
@@ -59,21 +59,26 @@
       readonly changed = output<string>();
     }
     ```
+
   - **Never use `@Input` or `@Output` decorators.**
+
 - Prefer **Signals**, **Standalone Components**, **modern RxJS**, and **dependency injection via providers**.
 - Use **reactive architecture** and state management with **NgRx SignalStore** (`@ngrx/signals`).
 
 ### 2. **Nx Monorepo**
+
 - Organize code into **libs** and **apps** following Nx best practices.
 - Prefer **code reuse** and **responsibility isolation**.
 - Use **Nx generators** and **executors** for scaffolding and automation.
 
 ### 3. **Design & UX**
+
 - Prioritize **accessibility**, **responsiveness**, and **performance**.
 - Follow modern mobile design standards (Material Design, Human Interface Guidelines, etc.).
 - Use **themes** and customization via SCSS/CSS-in-JS as needed.
 
 ### 4. **General Best Practices**
+
 - Always explain architectural and design decisions.
 - Provide **commented** and **self-explanatory** code examples.
 - Do not use legacy, deprecated code or workarounds.
@@ -110,24 +115,24 @@ This workspace is standalone-only. **Do not introduce `NgModule`s** — not even
 
 Each library exposes a provider function instead:
 
-| Concern | Use |
-|---|---|
-| i18n setup | `provideTranslation()` — `@libs/translation` (also wires `<html lang>` and translated route titles) |
-| Profile feature state | `ProfileStore` — `@libs/profile`, listed in the route's `providers` |
-| Root store | `provideStore()` — router state only |
-| Router state | `provideRouterStore({ serializer: CustomSerializer })` |
+| Concern               | Use                                                                                                 |
+| --------------------- | --------------------------------------------------------------------------------------------------- |
+| i18n setup            | `provideTranslation()` — `@libs/translation` (also wires `<html lang>` and translated route titles) |
+| Profile feature state | `ProfileStore` — `@libs/profile`, listed in the route's `providers`                                 |
+| Root store            | `provideStore()` — router state only                                                                |
+| Router state          | `provideRouterStore({ serializer: CustomSerializer })`                                              |
 
 Two rules learned the hard way:
 
 1. **Never register the same concern twice.** `StoreRouterConnectingModule.forRoot({serializer})`
-   *and* `provideRouterStore()` both provide `RouterStateSerializer`; the second silently
+   _and_ `provideRouterStore()` both provide `RouterStateSerializer`; the second silently
    won and the custom serializer never ran.
 2. **Feature state belongs on the route, not in a component's `imports`.** Route-level
    `providers: [ProfileStore, ProfileService]` creates the store when the feature is
    entered and keeps the component testable.
 3. **Feature state is a `signalStore`, not a slice of the global store.** The global
    NgRx store carries router state and nothing else. See
-   [`docs/skills/ngrx-state.md`](./skills/ngrx-state.md) for the pattern.
+   [`.claude/skills/ngrx-state/SKILL.md`](../.claude/skills/ngrx-state/SKILL.md) for the pattern.
 
 ## Templates
 

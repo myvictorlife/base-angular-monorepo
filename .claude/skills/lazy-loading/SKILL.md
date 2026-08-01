@@ -1,3 +1,8 @@
+---
+name: lazy-loading
+description: Wire a route so its feature is genuinely lazy-loaded. Use when adding a route with loadChildren or loadComponent, when deciding what a library barrel may export, or when a lazy chunk turns out to be bundled eagerly.
+---
+
 # Skill: Lazy Loading Rules
 
 Lazy loading is a critical performance pattern in this project. Violating these rules makes lazy loading ineffective — the module gets bundled eagerly, defeating the purpose entirely.

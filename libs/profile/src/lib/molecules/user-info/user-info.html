@@ -1,9 +1,10 @@
-<div class="profile-container">
-    <div class="flex flex-col items-center gap-3">
-        <div class="w-20 h-20 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-3xl font-bold shadow">
-            {{ user()?.name?.charAt(0) || '?' }}
-        </div>
-        <h2 class="text-xl font-semibold text-gray-800">{{ user()?.name }}</h2>
-        <div class="text-gray-500 text-sm">{{ 'USER_INFO.USER_ID' | translate }}: <span class="font-mono">{{ user()?.id }}</span></div>
-    </div>
+<div class="user-info">
+  <div class="user-info__avatar" aria-hidden="true">
+    {{ user()?.name?.charAt(0) || '?' }}
+  </div>
+  <h2 class="user-info__name">{{ user()?.name }}</h2>
+  <p class="user-info__meta">
+    {{ 'USER_INFO.USER_ID' | translate }}:
+    <span class="user-info__id">{{ user()?.id }}</span>
+  </p>
 </div>

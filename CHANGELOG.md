@@ -41,7 +41,20 @@ config file. Ordinary app-level additions are minor.
 - `libs/shared/ui/src/lib/organisms/` — the folder the documentation had been
   claiming existed.
 
+- `AGENTS.md` — a single entry point for AI coding agents, imported by `CLAUDE.md`
+  so every tool reads one file instead of a per-vendor copy.
+
 ### Changed
+
+- Moved `docs/skills/*.md` to `.claude/skills/<name>/SKILL.md` with `name` and
+  `description` frontmatter. They were plain markdown that nothing pointed an agent
+  at; as skills they load on demand when the task matches. All inbound links
+  updated.
+- Rewrote the analytics skill, which still documented the removed `AnalyticsService`
+  rather than the `ANALYTICS` token, and refreshed the tag graph in the
+  module-boundaries skill with the analytics and settings scopes.
+- `.claude/settings.local.json` is now git-ignored — it holds absolute paths from
+  whichever machine wrote it.
 
 - Renamed `apps/genai-app` to `apps/demo-app` and `genai.paths.ts` to
   `api.paths.ts`. The workspace contains nothing generative-AI specific; the name
