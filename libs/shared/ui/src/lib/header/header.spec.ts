@@ -42,6 +42,13 @@ describe('HeaderComponent', () => {
 
   beforeEach(() => {
     localStorage.clear();
+    // The header renders <lib-theme-toggle>, which injects ThemeService, which
+    // reads matchMedia — absent in jsdom. Stub it to a light-preferring OS.
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      configurable: true,
+      value: () => ({ matches: false, addEventListener: () => undefined }),
+    });
     spectator = createComponent();
     spectator.detectChanges();
   });

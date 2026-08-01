@@ -1,0 +1,10 @@
+/* Design system entry point — apps include this once:
+   `@use 'index';` in the global stylesheet, resolved through the
+   `libs/theme/src/styles` includePath configured in the build's
+   stylePreprocessorOptions.
+
+   Components never import this. They consume the tokens at runtime via
+   var(--…), which is what lets a single [data-theme] switch retheme the
+   whole app without recompiling anything. */
+@use './tokens';
+@use './themes';

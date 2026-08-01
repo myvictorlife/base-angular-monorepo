@@ -1,0 +1,255 @@
+<lib-header />
+
+<main class="design">
+  <header class="design__intro">
+    <h1 class="design__title">{{ 'DESIGN.TITLE' | translate }}</h1>
+    <p class="design__lead">{{ 'DESIGN.LEAD' | translate }}</p>
+  </header>
+
+
+  <!-- ═══ Components ═══ -->
+  <h2 class="design__group">{{ 'DESIGN.COMPONENTS' | translate }}</h2>
+
+  <!-- Buttons -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.BUTTONS' | translate }}</h3>
+
+    <div class="design__demo">
+      @for (variant of buttonVariants; track variant) {
+        <button libButton [variant]="variant">{{ variant }}</button>
+      }
+    </div>
+
+    <div class="design__demo">
+      @for (size of buttonSizes; track size) {
+        <button libButton variant="primary" [size]="size">{{ size }}</button>
+      }
+    </div>
+
+    <div class="design__demo">
+      <button libButton variant="primary" disabled>disabled</button>
+      <button libButton variant="primary">
+        <lib-icon name="check" size="sm" />
+        {{ 'DESIGN.WITH_ICON' | translate }}
+      </button>
+      <a libButton variant="secondary" href="#top">
+        {{ 'DESIGN.AS_LINK' | translate }}
+        <lib-icon name="external-link" size="sm" />
+      </a>
+    </div>
+
+    <div class="design__demo design__demo--stack">
+      <button libButton variant="primary" [block]="true">block</button>
+    </div>
+  </section>
+
+  <!-- Icons -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.ICONS' | translate }}</h3>
+    <ul class="design__icons" role="list">
+      @for (icon of iconNames; track icon) {
+        <li class="design__icon">
+          <lib-icon [name]="icon" size="lg" />
+          <code class="design__token">{{ icon }}</code>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- Badges -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.BADGES' | translate }}</h3>
+    @for (variant of badgeVariants; track variant) {
+      <div class="design__demo">
+        <code class="design__token design__demo-label">{{ variant }}</code>
+        @for (tone of badgeTones; track tone) {
+          <lib-badge [tone]="tone" [variant]="variant">{{ tone }}</lib-badge>
+        }
+      </div>
+    }
+    <div class="design__demo">
+      <code class="design__token design__demo-label">pill</code>
+      @for (tone of badgeTones; track tone) {
+        <lib-badge [tone]="tone" variant="soft" [pill]="true">{{ tone }}</lib-badge>
+      }
+    </div>
+  </section>
+
+  <!-- Alerts -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.ALERTS' | translate }}</h3>
+    <div class="design__demo design__demo--stack">
+      @for (tone of alertTones; track tone) {
+        <lib-alert [tone]="tone" [heading]="tone">
+          {{ 'DESIGN.SAMPLE' | translate }}
+          <button alert-actions libButton variant="ghost" size="sm">
+            {{ 'DESIGN.ACTION' | translate }}
+          </button>
+        </lib-alert>
+      }
+    </div>
+  </section>
+
+  <!-- Spinners -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.SPINNERS' | translate }}</h3>
+    <div class="design__demo">
+      @for (size of spinnerSizes; track size) {
+        <lib-spinner [size]="size" />
+      }
+    </div>
+  </section>
+
+  <!-- Cards -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.CARDS' | translate }}</h3>
+    <div class="design__cards">
+      <lib-card>
+        <span card-header>{{ 'DESIGN.CARD_HEADER' | translate }}</span>
+        {{ 'DESIGN.SAMPLE' | translate }}
+        <span card-footer>
+          <button libButton variant="primary" size="sm">{{ 'DESIGN.ACTION' | translate }}</button>
+        </span>
+      </lib-card>
+
+      <lib-card [elevated]="true">
+        {{ 'DESIGN.CARD_ELEVATED' | translate }}
+      </lib-card>
+
+      <lib-card padding="sm">
+        {{ 'DESIGN.CARD_COMPACT' | translate }}
+      </lib-card>
+    </div>
+  </section>
+
+  <!-- ═══ Tokens ═══ -->
+  <h2 class="design__group">{{ 'DESIGN.TOKENS' | translate }}</h2>
+
+  <!-- Colour -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.SURFACES' | translate }}</h3>
+    <ul class="design__swatches" role="list">
+      @for (swatch of surfaces; track swatch.token) {
+        <li class="design__swatch">
+          <div
+            class="design__swatch-chip design__swatch-chip--bordered"
+            [style.background]="'var(' + swatch.token + ')'"
+            [style.color]="'var(' + (swatch.on ?? '--color-text-primary') + ')'"
+          >Aa</div>
+          <code class="design__token">{{ swatch.token }}</code>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.BRAND' | translate }}</h3>
+    <ul class="design__swatches" role="list">
+      @for (swatch of brand; track swatch.token) {
+        <li class="design__swatch">
+          <div
+            class="design__swatch-chip"
+            [style.background]="'var(' + swatch.token + ')'"
+            [style.color]="'var(' + (swatch.on ?? '--color-text-primary') + ')'"
+          >Aa</div>
+          <code class="design__token">{{ swatch.token }}</code>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.TEXT' | translate }}</h3>
+    <ul class="design__rows" role="list">
+      @for (swatch of text; track swatch.token) {
+        <li class="design__row">
+          <span [style.color]="'var(' + swatch.token + ')'">
+            {{ 'DESIGN.SAMPLE' | translate }}
+          </span>
+          <code class="design__token">{{ swatch.token }}</code>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.BORDERS' | translate }}</h3>
+    <ul class="design__swatches" role="list">
+      @for (swatch of borders; track swatch.token) {
+        <li class="design__swatch">
+          <div class="design__swatch-chip" [style.border]="'2px solid var(' + swatch.token + ')'"></div>
+          <code class="design__token">{{ swatch.token }}</code>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.STATUS' | translate }}</h3>
+    <ul class="design__rows" role="list">
+      @for (item of status; track item.token) {
+        <li
+          class="design__status"
+          [style.background]="'var(' + item.bg + ')'"
+          [style.color]="'var(' + item.token + ')'"
+          [style.border-color]="'var(' + item.token + ')'"
+        >
+          <span>{{ 'DESIGN.SAMPLE' | translate }}</span>
+          <code class="design__token">{{ item.token }}</code>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- Typography -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.TYPOGRAPHY' | translate }}</h3>
+    <ul class="design__rows" role="list">
+      @for (size of fontSizes; track size) {
+        <li class="design__row">
+          <span [style.font-size]="'var(' + size + ')'">{{ 'DESIGN.SAMPLE' | translate }}</span>
+          <code class="design__token">{{ size }}</code>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- Spacing -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.SPACING' | translate }}</h3>
+    <ul class="design__rows" role="list">
+      @for (space of spacing; track space) {
+        <li class="design__row">
+          <span class="design__bar" [style.width]="'var(' + space + ')'"></span>
+          <code class="design__token">{{ space }}</code>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- Radius -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.RADIUS' | translate }}</h3>
+    <ul class="design__swatches" role="list">
+      @for (radius of radii; track radius) {
+        <li class="design__swatch">
+          <div class="design__swatch-chip design__swatch-chip--brand" [style.border-radius]="'var(' + radius + ')'"></div>
+          <code class="design__token">{{ radius }}</code>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- Elevation -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.ELEVATION' | translate }}</h3>
+    <ul class="design__swatches" role="list">
+      @for (shadow of shadows; track shadow) {
+        <li class="design__swatch">
+          <div class="design__swatch-chip design__swatch-chip--elevated" [style.box-shadow]="'var(' + shadow + ')'"></div>
+          <code class="design__token">{{ shadow }}</code>
+        </li>
+      }
+    </ul>
+  </section>
+</main>

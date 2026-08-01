@@ -1,0 +1,15 @@
+:host {
+  display: inline-block;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-brand);
+  border-radius: var(--radius-full);
+  animation: spinner-rotate 700ms linear infinite;
+}
+
+:host(.spinner--sm) { width: 1rem;    height: 1rem; }
+:host(.spinner--md) { width: 1.5rem;  height: 1.5rem; }
+:host(.spinner--lg) { width: 2.25rem; height: 2.25rem; border-width: 3px; }
+
+@keyframes spinner-rotate {
+  to { transform: rotate(360deg); }
+}

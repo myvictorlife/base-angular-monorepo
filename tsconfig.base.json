@@ -13,6 +13,7 @@
       "@libs/entity": ["libs/shared/entity/src/index.ts"],
       "@libs/ui": ["libs/shared/ui/src/index.ts"],
       "@libs/profile": ["libs/profile/src/index.ts"],
+      "@libs/theme": ["libs/theme/src/index.ts"],
       "@libs/translation": ["libs/shared/translation/src/index.ts"]
     },
     // Every project already turns strict on in its own tsconfig.json. Keeping the

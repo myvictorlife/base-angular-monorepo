@@ -36,7 +36,12 @@
         ],
         "styles": [
           "apps/genai-app/src/styles.scss"
-        ]
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "libs/theme/src/styles"
+          ]
+        }
       },
       "configurations": {
         "production": {

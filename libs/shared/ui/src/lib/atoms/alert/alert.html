@@ -1,0 +1,8 @@
+<lib-icon [name]="icon()" size="md" class="alert__icon" />
+<div class="alert__content">
+  @if (heading(); as text) {
+    <p class="alert__heading">{{ text }}</p>
+  }
+  <div class="alert__body"><ng-content /></div>
+</div>
+<div class="alert__actions"><ng-content select="[alert-actions]" /></div>

@@ -54,6 +54,8 @@
         }
       </div>
 
+      <lib-theme-toggle />
+
       <a routerLink="/profile" class="header__cta">
         {{ 'HEADER.START' | translate }}
       </a>
@@ -82,6 +84,9 @@
     <div id="header-mobile-menu" class="header__mobile-menu">
       <a routerLink="/" class="header__mobile-link" (click)="closeMobileMenu()">
         {{ 'HEADER.HOME' | translate }}
+      </a>
+      <a routerLink="/design" class="header__mobile-link" (click)="closeMobileMenu()">
+        {{ 'HEADER.DESIGN' | translate }}
       </a>
       <a routerLink="/profile" class="header__mobile-cta" (click)="closeMobileMenu()">
         {{ 'HEADER.START' | translate }}

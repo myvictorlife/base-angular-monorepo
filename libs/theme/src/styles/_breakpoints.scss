@@ -1,0 +1,28 @@
+// ─────────────────────────────────────────────
+// Breakpoints — mirror Tailwind's defaults so SCSS media queries and
+// utility classes never disagree.
+//
+// Usage in a component stylesheet:
+//   @use 'breakpoints' as bp;
+//   @media #{bp.$sm} { ... }
+//
+// Note the `//` comments: Sass evaluates #{} interpolation inside /* */
+// comments, so the example above would be compiled as real code there.
+// ─────────────────────────────────────────────
+
+$sm-width: 40rem;   /* 640px */
+$md-width: 48rem;   /* 768px */
+$lg-width: 64rem;   /* 1024px */
+$xl-width: 80rem;   /* 1280px */
+
+/* Min-width (mobile-first — the project default) */
+$sm: '(min-width: #{$sm-width})';
+$md: '(min-width: #{$md-width})';
+$lg: '(min-width: #{$lg-width})';
+$xl: '(min-width: #{$xl-width})';
+
+/* Max-width, for the rare "only below this size" case.
+   Uses a fractional offset so it never overlaps the min-width query. */
+$below-sm: '(max-width: #{$sm-width - 0.0625rem})';
+$below-md: '(max-width: #{$md-width - 0.0625rem})';
+$below-lg: '(max-width: #{$lg-width - 0.0625rem})';

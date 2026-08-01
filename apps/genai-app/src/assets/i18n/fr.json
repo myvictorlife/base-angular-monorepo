@@ -6,7 +6,8 @@
     "START": "Commencer",
     "LANGUAGE": "Langue",
     "LANGUAGE_ARIA": "Changer de langue",
-    "MENU_ARIA": "Ouvrir le menu"
+    "MENU_ARIA": "Ouvrir le menu",
+    "DESIGN": "Design system"
   },
   "LANGUAGE": {
     "EN": "Anglais",
@@ -58,7 +59,8 @@
     "DOCS_BEST_PRACTICES": "Bonnes pratiques — Standards Angular et projet",
     "DOCS_GENERATORS": "Workspace generators — Commandes Nx pour apps et libs",
     "DOCS_SKILLS": "Development skills — Feature libs, lazy loading, NgRx, tests",
-    "TITLE": "Accueil"
+    "TITLE": "Accueil",
+    "CTA_DESIGN": "Voir le design system"
   },
   "PROFILE": {
     "TITLE": "Profil",
@@ -74,5 +76,37 @@
     "TITLE": "Page introuvable",
     "DESCRIPTION": "La page que vous cherchez n'existe pas ou a été déplacée.",
     "BACK_HOME": "Retour à l'accueil"
+  },
+  "THEME": {
+    "SWITCH_TO_DARK": "Passer au thème sombre",
+    "SWITCH_TO_LIGHT": "Passer au thème clair"
+  },
+  "DESIGN": {
+    "TITLE": "Design system",
+    "LEAD": "Chaque token ci-dessous est rendu via var(--token), donc cette page ne peut jamais diverger du vrai design system. Utilisez le bouton dans l’en-tête pour changer de thème.",
+    "SURFACES": "Surfaces",
+    "BRAND": "Marque",
+    "TEXT": "Texte",
+    "BORDERS": "Bordures",
+    "STATUS": "Statut",
+    "TYPOGRAPHY": "Typographie",
+    "SPACING": "Espacement",
+    "RADIUS": "Rayon",
+    "ELEVATION": "Élévation",
+    "SAMPLE": "Portez ce vieux whisky",
+    "COMPONENTS": "Composants",
+    "TOKENS": "Tokens",
+    "BUTTONS": "Boutons",
+    "ICONS": "Icônes",
+    "BADGES": "Badges",
+    "ALERTS": "Alertes",
+    "SPINNERS": "Indicateurs",
+    "CARDS": "Cartes",
+    "WITH_ICON": "Avec icône",
+    "AS_LINK": "En tant que lien",
+    "ACTION": "Action",
+    "CARD_HEADER": "Carte avec en-tête et pied",
+    "CARD_ELEVATED": "Carte surélevée",
+    "CARD_COMPACT": "Marge compacte"
   }
 }

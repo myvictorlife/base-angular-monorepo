@@ -6,7 +6,8 @@
     "START": "Get started",
     "LANGUAGE": "Language",
     "LANGUAGE_ARIA": "Change language",
-    "MENU_ARIA": "Open menu"
+    "MENU_ARIA": "Open menu",
+    "DESIGN": "Design system"
   },
   "LANGUAGE": {
     "EN": "English",
@@ -58,7 +59,8 @@
     "DOCS_BEST_PRACTICES": "Best practices — Angular and project standards",
     "DOCS_GENERATORS": "Workspace generators — Nx commands for apps and libs",
     "DOCS_SKILLS": "Development skills — Feature libs, lazy loading, NgRx, testing",
-    "TITLE": "Home"
+    "TITLE": "Home",
+    "CTA_DESIGN": "View design system"
   },
   "PROFILE": {
     "TITLE": "Profile",
@@ -74,5 +76,37 @@
     "TITLE": "Page not found",
     "DESCRIPTION": "The page you are looking for does not exist or has been moved.",
     "BACK_HOME": "Back to home"
+  },
+  "THEME": {
+    "SWITCH_TO_DARK": "Switch to dark theme",
+    "SWITCH_TO_LIGHT": "Switch to light theme"
+  },
+  "DESIGN": {
+    "TITLE": "Design system",
+    "LEAD": "Every token below renders through var(--token), so this page can never drift from the real design system. Use the toggle in the header to see it retheme.",
+    "SURFACES": "Surfaces",
+    "BRAND": "Brand",
+    "TEXT": "Text",
+    "BORDERS": "Borders",
+    "STATUS": "Status",
+    "TYPOGRAPHY": "Typography",
+    "SPACING": "Spacing",
+    "RADIUS": "Radius",
+    "ELEVATION": "Elevation",
+    "SAMPLE": "The quick brown fox",
+    "COMPONENTS": "Components",
+    "TOKENS": "Tokens",
+    "BUTTONS": "Buttons",
+    "ICONS": "Icons",
+    "BADGES": "Badges",
+    "ALERTS": "Alerts",
+    "SPINNERS": "Spinners",
+    "CARDS": "Cards",
+    "WITH_ICON": "With icon",
+    "AS_LINK": "As a link",
+    "ACTION": "Action",
+    "CARD_HEADER": "Card with header and footer",
+    "CARD_ELEVATED": "Elevated card",
+    "CARD_COMPACT": "Compact padding"
   }
 }

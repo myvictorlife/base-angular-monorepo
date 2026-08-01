@@ -6,7 +6,8 @@
     "START": "Começar",
     "LANGUAGE": "Idioma",
     "LANGUAGE_ARIA": "Alterar idioma",
-    "MENU_ARIA": "Abrir menu"
+    "MENU_ARIA": "Abrir menu",
+    "DESIGN": "Design system"
   },
   "LANGUAGE": {
     "EN": "Inglês",
@@ -58,7 +59,8 @@
     "DOCS_BEST_PRACTICES": "Boas práticas — padrões de Angular e do projeto",
     "DOCS_GENERATORS": "Geradores do workspace — comandos Nx para apps e libs",
     "DOCS_SKILLS": "Skills de desenvolvimento — libs de feature, lazy loading, NgRx, testes",
-    "TITLE": "Início"
+    "TITLE": "Início",
+    "CTA_DESIGN": "Ver design system"
   },
   "PROFILE": {
     "TITLE": "Perfil",
@@ -74,5 +76,37 @@
     "TITLE": "Página não encontrada",
     "DESCRIPTION": "A página que você procura não existe ou foi movida.",
     "BACK_HOME": "Voltar ao início"
+  },
+  "THEME": {
+    "SWITCH_TO_DARK": "Mudar para o tema escuro",
+    "SWITCH_TO_LIGHT": "Mudar para o tema claro"
+  },
+  "DESIGN": {
+    "TITLE": "Design system",
+    "LEAD": "Cada token abaixo é renderizado via var(--token), então esta página nunca diverge do design system real. Use o botão no cabeçalho para trocar de tema.",
+    "SURFACES": "Superfícies",
+    "BRAND": "Marca",
+    "TEXT": "Texto",
+    "BORDERS": "Bordas",
+    "STATUS": "Status",
+    "TYPOGRAPHY": "Tipografia",
+    "SPACING": "Espaçamento",
+    "RADIUS": "Raio",
+    "ELEVATION": "Elevação",
+    "SAMPLE": "Um pequeno jabuti xereta",
+    "COMPONENTS": "Componentes",
+    "TOKENS": "Tokens",
+    "BUTTONS": "Botões",
+    "ICONS": "Ícones",
+    "BADGES": "Badges",
+    "ALERTS": "Alertas",
+    "SPINNERS": "Indicadores",
+    "CARDS": "Cards",
+    "WITH_ICON": "Com ícone",
+    "AS_LINK": "Como link",
+    "ACTION": "Ação",
+    "CARD_HEADER": "Card com cabeçalho e rodapé",
+    "CARD_ELEVATED": "Card elevado",
+    "CARD_COMPACT": "Espaçamento compacto"
   }
 }

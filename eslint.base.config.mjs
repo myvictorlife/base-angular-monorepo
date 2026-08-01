@@ -13,6 +13,8 @@ const depConstraints = [
   // Leaf libraries: no workspace dependencies at all.
   { sourceTag: 'scope:entity-lib', onlyDependOnLibsWithTags: [] },
   { sourceTag: 'scope:environment-lib', onlyDependOnLibsWithTags: [] },
+  // Design tokens + ThemeService. Consumed by everything, depends on nothing.
+  { sourceTag: 'scope:theme-lib', onlyDependOnLibsWithTags: [] },
 
   {
     sourceTag: 'scope:translate',
@@ -27,6 +29,7 @@ const depConstraints = [
     onlyDependOnLibsWithTags: [
       'scope:entity-lib',
       'scope:environment-lib',
+      'scope:theme-lib',
       'scope:translate',
     ],
   },
@@ -38,6 +41,7 @@ const depConstraints = [
       'scope:entity-lib',
       'scope:environment-lib',
       'scope:profile',
+      'scope:theme-lib',
       'scope:translate',
       'scope:ui-lib',
     ],

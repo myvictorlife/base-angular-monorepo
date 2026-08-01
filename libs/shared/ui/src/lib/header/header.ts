@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Language } from '@libs/entity';
 import { UpdateLanguageService } from '@libs/translation';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ThemeToggleComponent } from '../atoms/theme-toggle/theme-toggle';
 
 /** Map each Language enum value to its i18n key so the header always shows all available languages. */
 const LANGUAGE_LABEL_KEYS: Record<string, string> = {
@@ -15,7 +16,7 @@ const LANGUAGE_LABEL_KEYS: Record<string, string> = {
 
 @Component({
   selector: 'lib-header',
-  imports: [UpperCasePipe, RouterLink, TranslatePipe],
+  imports: [UpperCasePipe, RouterLink, TranslatePipe, ThemeToggleComponent],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

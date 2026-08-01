@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  color: var(--color-text-primary);
+}
+
+:host(.card--elevated) {
+  box-shadow: var(--shadow-card);
+}
+
+:host(.card--pad-none) { --card-pad: 0; }
+:host(.card--pad-sm)   { --card-pad: var(--space-4); }
+:host(.card--pad-md)   { --card-pad: var(--space-6); }
+:host(.card--pad-lg)   { --card-pad: var(--space-8); }
+
+.card__body { padding: var(--card-pad); }
+
+/* Slots collapse entirely when nothing is projected — :empty keeps an unused
+   header from adding padding and a stray border line. */
+.card__header,
+.card__footer {
+  padding: var(--card-pad);
+}
+
+.card__header:not(:empty) { border-bottom: 1px solid var(--color-border); }
+.card__footer:not(:empty) { border-top: 1px solid var(--color-border); }
+
+.card__header:empty,
+.card__footer:empty { display: none; }

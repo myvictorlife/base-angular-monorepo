@@ -6,7 +6,8 @@
     "START": "Aan de slag",
     "LANGUAGE": "Taal",
     "LANGUAGE_ARIA": "Taal wijzigen",
-    "MENU_ARIA": "Menu openen"
+    "MENU_ARIA": "Menu openen",
+    "DESIGN": "Designsysteem"
   },
   "LANGUAGE": {
     "EN": "Engels",
@@ -58,7 +59,8 @@
     "DOCS_BEST_PRACTICES": "Best practices — Angular en projectstandaarden",
     "DOCS_GENERATORS": "Workspace generators — Nx-opdrachten voor apps en libs",
     "DOCS_SKILLS": "Development skills — Feature libs, lazy loading, NgRx, testing",
-    "TITLE": "Home"
+    "TITLE": "Home",
+    "CTA_DESIGN": "Bekijk designsysteem"
   },
   "PROFILE": {
     "TITLE": "Profiel",
@@ -74,5 +76,37 @@
     "TITLE": "Pagina niet gevonden",
     "DESCRIPTION": "De pagina die je zoekt bestaat niet of is verplaatst.",
     "BACK_HOME": "Terug naar home"
+  },
+  "THEME": {
+    "SWITCH_TO_DARK": "Schakel naar donker thema",
+    "SWITCH_TO_LIGHT": "Schakel naar licht thema"
+  },
+  "DESIGN": {
+    "TITLE": "Designsysteem",
+    "LEAD": "Elke token hieronder wordt via var(--token) weergegeven, dus deze pagina kan nooit afwijken van het echte designsysteem. Gebruik de schakelaar in de header om van thema te wisselen.",
+    "SURFACES": "Oppervlakken",
+    "BRAND": "Merk",
+    "TEXT": "Tekst",
+    "BORDERS": "Randen",
+    "STATUS": "Status",
+    "TYPOGRAPHY": "Typografie",
+    "SPACING": "Ruimte",
+    "RADIUS": "Straal",
+    "ELEVATION": "Elevatie",
+    "SAMPLE": "Pa’s wijze lynx bezag",
+    "COMPONENTS": "Componenten",
+    "TOKENS": "Tokens",
+    "BUTTONS": "Knoppen",
+    "ICONS": "Pictogrammen",
+    "BADGES": "Badges",
+    "ALERTS": "Meldingen",
+    "SPINNERS": "Spinners",
+    "CARDS": "Kaarten",
+    "WITH_ICON": "Met pictogram",
+    "AS_LINK": "Als link",
+    "ACTION": "Actie",
+    "CARD_HEADER": "Kaart met koptekst en voettekst",
+    "CARD_ELEVATED": "Verhoogde kaart",
+    "CARD_COMPACT": "Compacte marge"
   }
 }

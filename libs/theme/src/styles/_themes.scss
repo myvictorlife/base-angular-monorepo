@@ -1,0 +1,79 @@
+/* ─────────────────────────────────────────────
+   Theme overrides — applied via [data-theme] on <html>.
+
+   `_tokens.scss` holds the light defaults (this project is light-first);
+   this file holds the dark theme. ThemeService toggles both `data-theme`
+   and the `.dark` class so Tailwind's `dark:` variant keeps working.
+   ───────────────────────────────────────────── */
+
+:root[data-theme='dark'] {
+  /* ── Surfaces — neutral-950 → 800, not pure black ── */
+  --color-bg-base:      oklch(14.5% 0 none);   /* neutral-950 */
+  --color-bg-surface:   oklch(20.5% 0 none);   /* neutral-900 */
+  --color-bg-elevated:  oklch(26.9% 0 none);   /* neutral-800 */
+  --color-bg-hover:     oklch(37.1% 0 none);   /* neutral-700 */
+  --color-bg-inverted:  oklch(98.5% 0 none);   /* neutral-50 — inverts with the theme */
+
+  /* ── Brand — flips to light-on-dark so CTAs keep their contrast ── */
+  --color-brand:         oklch(98.5% 0 none);  /* neutral-50 */
+  --color-brand-hover:   oklch(92.2% 0 none);  /* neutral-200 */
+  --color-brand-subtle:  oklch(26.9% 0 none);  /* neutral-800 */
+  --color-text-on-brand: oklch(14.5% 0 none);  /* neutral-950 */
+
+  /* ── Borders ── */
+  --color-border:          oklch(26.9% 0 none); /* neutral-800 */
+  --color-border-strong:   oklch(37.1% 0 none); /* neutral-700 */
+  --color-border-inverted: oklch(87% 0 none);   /* neutral-300 */
+
+  /* ── Text ── */
+  --color-text:           oklch(92.2% 0 none); /* neutral-200 */
+  --color-text-primary:   oklch(92.2% 0 none); /* neutral-200 */
+  --color-text-secondary: oklch(70.8% 0 none); /* neutral-400 */
+  --color-text-muted:     oklch(55.6% 0 none); /* neutral-500 */
+  --color-text-inverted:  oklch(14.5% 0 none); /* neutral-950 */
+
+  /* ── Status — the 600 step is too dark to read on a dark surface, so the
+     foreground lightens to 400 and the tint becomes a translucent wash
+     instead of a near-white 50. ── */
+  --color-danger:     oklch(70.4% 0.191 22.216);  /* red-400 */
+  --color-danger-bg:  color-mix(in srgb, oklch(63.7% 0.237 25.331) 15%, transparent);
+  --color-success:    oklch(79.2% 0.209 151.711); /* green-400 */
+  --color-success-bg: color-mix(in srgb, oklch(72.3% 0.219 149.579) 15%, transparent);
+  --color-warning:    oklch(82.8% 0.189 84.429);  /* amber-400 */
+  --color-warning-bg: color-mix(in srgb, oklch(76.9% 0.188 70.08) 15%, transparent);
+  --color-info:       oklch(70.7% 0.165 254.624); /* blue-400 */
+  --color-info-bg:    color-mix(in srgb, oklch(62.3% 0.214 259.815) 15%, transparent);
+
+  /* ── Elevation — light shadows are invisible on dark; deepen them ── */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.6);
+
+  --color-overlay: rgba(0, 0, 0, 0.7);
+}
+
+/* ─────────────────────────────────────────────
+   Reduced motion — neutralise the motion scale in one place so no component
+   has to repeat the media query. Covers `scroll-behavior: smooth` too, which
+   the global stylesheet enables.
+   ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+    --transition-base: 0ms;
+    --transition-slow: 0ms;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
