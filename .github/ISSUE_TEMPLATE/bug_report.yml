@@ -1,0 +1,69 @@
+name: Bug report
+description: Something in the template is broken or behaves unexpectedly
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing: does this reproduce on a **fresh clone** with no `config/firebase.json`?
+        If it only happens in your fork, it is probably a question rather than a bug —
+        use Discussions or a Question issue instead.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you expected, and what you got instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. git clone …
+        2. npm install
+        3. npx nx serve demo-app
+        4. Open /settings and …
+    validations:
+      required: true
+
+  - type: input
+    id: commit
+    attributes:
+      label: Commit or tag
+      description: Output of `git rev-parse --short HEAD`.
+    validations:
+      required: true
+
+  - type: input
+    id: node
+    attributes:
+      label: Node version
+      description: Output of `node -v`. Angular 22 needs ^22.22.3, ^24.15.0 or >=26.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Build / Nx
+        - Angular app (apps/demo-app)
+        - Feature libs (profile, settings)
+        - Shared libs (ui, theme, translation, entity)
+        - Analytics / Firebase
+        - CI / deploy
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant output
+      description: Error message or failing test. Redact anything from your `.env`.
+      render: shell

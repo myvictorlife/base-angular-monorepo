@@ -60,7 +60,7 @@ failure into its own `error` state). `status: 0` means the request never reached
 server — offline, CORS, or blocked.
 
 ```ts
-provideHttpClient(withInterceptors([httpErrorInterceptor]))
+provideHttpClient(withInterceptors([httpErrorInterceptor]));
 ```
 
 ## Rules
@@ -76,4 +76,4 @@ provideHttpClient(withInterceptors([httpErrorInterceptor]))
 
 The header logo is an **inline SVG**, not a remote image. Nothing in this library may
 reference a third-party domain — the app ships with zero external origins, and the
-self-hosted fonts in `apps/genai-app/public/fonts` exist for the same reason.
+self-hosted fonts in `apps/demo-app/public/fonts` exist for the same reason.

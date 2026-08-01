@@ -1,0 +1,40 @@
+name: Proposal
+description: Suggest a change to the template
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is a template, so the bar is: **does every fork benefit?**
+        A change that only your product needs is better kept in your fork.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve
+      description: Describe the situation, not the solution. What goes wrong today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+
+  - type: textarea
+    id: cost
+    attributes:
+      label: What does it cost
+      description: |
+        New dependencies, new required configuration, extra build time, or work for
+        anyone pulling this into an existing fork. "None" is a valid answer if true.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Including doing nothing.

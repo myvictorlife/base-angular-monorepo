@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
-import { AnalyticsService } from '../services/analytics/analytics.service';
+import { ANALYTICS } from '@libs/analytics';
 
 /**
  * Central reporting point for failed HTTP calls.
@@ -11,7 +11,7 @@ import { AnalyticsService } from '../services/analytics/analytics.service';
  * only guarantees no request fails unobserved.
  */
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
-  const analytics = inject(AnalyticsService);
+  const analytics = inject(ANALYTICS);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
@@ -24,6 +24,6 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
       });
 
       return throwError(() => error);
-    })
+    }),
   );
 };

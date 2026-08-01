@@ -14,7 +14,7 @@ npx nx test <project-name>
 
 # Examples
 npx nx test profile
-npx nx test genai-app
+npx nx test demo-app
 npx nx test shared-ui
 
 # Run all
@@ -155,7 +155,10 @@ Use `createServiceFactory` from Spectator.
 
 ```typescript
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { ProfileService } from './profile.service';
 
 describe('ProfileService', () => {
@@ -213,7 +216,10 @@ describe('ProfileStore', () => {
   const setup = () => {
     profileService = { fetchProfile: jest.fn().mockReturnValue(of(user)) };
     TestBed.configureTestingModule({
-      providers: [ProfileStore, { provide: ProfileService, useValue: profileService }],
+      providers: [
+        ProfileStore,
+        { provide: ProfileService, useValue: profileService },
+      ],
     });
     return TestBed.inject(ProfileStore);
   };
@@ -270,26 +276,26 @@ patchState(unprotected(store), { loading: true });
 
 ```typescript
 // Query by CSS selector
-spectator.query('.class-name')
-spectator.query('[data-testid="submit"]')
-spectator.query('button')
+spectator.query('.class-name');
+spectator.query('[data-testid="submit"]');
+spectator.query('button');
 
 // Query all matching elements
-spectator.queryAll('li')
+spectator.queryAll('li');
 
 // Type into an input
-spectator.typeInElement('some text', 'input')
+spectator.typeInElement('some text', 'input');
 
 // Click
-spectator.click('button')
-spectator.click(spectator.query('button[type="submit"]')!)
+spectator.click('button');
+spectator.click(spectator.query('button[type="submit"]')!);
 
 // Assertions (jest-dom matchers)
-expect(el).toHaveText('Expected text')
-expect(el).toBeVisible()
-expect(el).toHaveClass('active')
-expect(el).toHaveAttribute('disabled')
-expect(el).not.toExist()
+expect(el).toHaveText('Expected text');
+expect(el).toBeVisible();
+expect(el).toHaveClass('active');
+expect(el).toHaveAttribute('disabled');
+expect(el).not.toExist();
 ```
 
 ---

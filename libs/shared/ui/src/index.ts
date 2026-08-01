@@ -8,10 +8,7 @@ export * from './lib/atoms/spinner/spinner';
 export * from './lib/atoms/theme-toggle/theme-toggle';
 
 // Organisms
-export * from './lib/header/header';
-
-// Services
-export * from './lib/services/analytics/analytics.service';
+export * from './lib/organisms/header/header';
 
 // Cross-cutting
 export * from './lib/core/global-error-handler';

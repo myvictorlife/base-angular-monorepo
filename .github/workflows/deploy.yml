@@ -1,0 +1,69 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  # Kept manual as well: a rollback should not require an empty commit.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Never two deploys at once, and never cancel one mid-flight — an interrupted
+# `firebase deploy` can leave the live channel half-updated.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and deploy to Firebase Hosting
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://base-angular-monorepo.web.app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - run: npm ci
+
+      # `tools/generate-config.mjs` reads these and writes the git-ignored
+      # `libs/environment/src/lib/generated/firebase.config.ts`. They are repository
+      # secrets rather than committed values so that a fork never reports analytics
+      # into this project — not because a Firebase web config is confidential. It is
+      # not: it ships inside the client bundle, and access is governed by Security
+      # Rules, API key restrictions and App Check.
+      #
+      # The one genuine secret here is FIREBASE_SERVICE_ACCOUNT.
+      - name: Build
+        env:
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+        run: npx nx build demo-app --configuration=production
+
+      # `firebase.json` lives in `hosting/` and resolves `public` relative to itself,
+      # which is why the build output is copied in rather than deployed from `dist/`.
+      # Same step the local `build:deploy:firebase` script runs.
+      - name: Stage the build for Hosting
+        run: npm run utils:copy:dist
+
+      - name: Deploy to the live channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+          channelId: live
+          target: app
+          entryPoint: ./hosting

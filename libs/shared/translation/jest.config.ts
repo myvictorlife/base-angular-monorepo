@@ -1,4 +1,16 @@
 export default {
+  /**
+   * HONEST FLOOR, NOT A TARGET. The providers and title strategy are tested; the
+   * update-language page component is not. Raise this as that gap closes.
+   */
+  coverageThreshold: {
+    global: {
+      statements: 45,
+      branches: 45,
+      functions: 45,
+      lines: 45,
+    },
+  },
   displayName: 'translation',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],

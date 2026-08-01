@@ -1,0 +1,73 @@
+<section class="settings">
+  <header class="settings__header">
+    <h1 class="settings__title">{{ 'SETTINGS.TITLE' | translate }}</h1>
+    <p class="settings__lead">{{ 'SETTINGS.LEAD' | translate }}</p>
+  </header>
+
+  <div class="settings__panel">
+    <lib-setting-row
+      labelKey="SETTINGS.THEME"
+      descriptionKey="SETTINGS.THEME_DESC"
+    >
+      <div
+        class="settings__segmented"
+        role="radiogroup"
+        [attr.aria-label]="'SETTINGS.THEME' | translate"
+      >
+        @for (option of themeOptions; track option.value) {
+        <button
+          type="button"
+          role="radio"
+          class="settings__segment"
+          [class.settings__segment--active]="themePreference() === option.value"
+          [attr.aria-checked]="themePreference() === option.value"
+          (click)="setTheme(option.value)"
+        >
+          {{ option.labelKey | translate }}
+        </button>
+        }
+      </div>
+    </lib-setting-row>
+
+    <lib-setting-row
+      labelKey="SETTINGS.LANGUAGE"
+      descriptionKey="SETTINGS.LANGUAGE_DESC"
+    >
+      <div
+        class="settings__segmented"
+        role="radiogroup"
+        [attr.aria-label]="'SETTINGS.LANGUAGE' | translate"
+      >
+        @for (option of languageOptions; track option.value) {
+        <button
+          type="button"
+          role="radio"
+          class="settings__segment"
+          [class.settings__segment--active]="currentLanguage() === option.value"
+          [attr.aria-checked]="currentLanguage() === option.value"
+          (click)="setLanguage(option.value)"
+        >
+          {{ option.labelKey | translate }}
+        </button>
+        }
+      </div>
+    </lib-setting-row>
+
+    <lib-setting-row
+      labelKey="SETTINGS.REDUCE_MOTION"
+      descriptionKey="SETTINGS.REDUCE_MOTION_DESC"
+    >
+      <button
+        type="button"
+        role="switch"
+        class="settings__switch"
+        [class.settings__switch--on]="reduceMotion()"
+        [attr.aria-checked]="reduceMotion()"
+        [attr.aria-label]="'SETTINGS.REDUCE_MOTION' | translate"
+        (click)="toggleReduceMotion()"
+      >
+        <span class="settings__switch-knob"></span>
+      </button>
+    </lib-setting-row>
+  </div>
+</section>

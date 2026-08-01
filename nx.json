@@ -14,8 +14,30 @@
   "targetDefaults": {
     "@angular/build:application": {
       "cache": true,
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build",
+        {
+          "projects": ["environment"],
+          "target": "generate-config"
+        }
+      ],
       "inputs": ["production", "^production"]
+    },
+    "@angular/build:dev-server": {
+      "dependsOn": [
+        {
+          "projects": ["environment"],
+          "target": "generate-config"
+        }
+      ]
+    },
+    "@nx/jest:jest": {
+      "dependsOn": [
+        {
+          "projects": ["environment"],
+          "target": "generate-config"
+        }
+      ]
     },
     "@nx/eslint:lint": {
       "cache": true,
@@ -48,6 +70,26 @@
       "style": "css"
     }
   },
-  "defaultProject": "genai-app",
-  "analytics": true
+  "defaultProject": "demo-app",
+  "analytics": true,
+  "plugins": [
+    {
+      "plugin": "@nx/playwright/plugin",
+      "options": {
+        "targetName": "e2e"
+      }
+    },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    },
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
+      }
+    }
+  ]
 }

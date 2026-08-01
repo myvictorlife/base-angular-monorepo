@@ -1,0 +1,31 @@
+{
+  "name": "analytics",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/analytics/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:analytics-lib"],
+  "targets": {
+    "test": {
+      "dependsOn": [
+        {
+          "projects": ["environment"],
+          "target": "generate-config"
+        }
+      ]
+    },
+    "lint": {
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
+    }
+  }
+}

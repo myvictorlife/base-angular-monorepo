@@ -163,7 +163,7 @@ export class FeaturePage {
 In the app's pages routes file, load the feature lazily:
 
 ```typescript
-// apps/genai-app/src/app/pages/pages.routes.ts
+// apps/demo-app/src/app/pages/pages.routes.ts
 {
   path: '<feature-name>',
   loadChildren: () =>

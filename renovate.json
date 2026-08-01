@@ -1,0 +1,66 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":semanticCommits", ":dependencyDashboard"],
+  "timezone": "Europe/Brussels",
+  "schedule": ["before 6am on monday"],
+  "prConcurrentLimit": 5,
+  "labels": ["dependencies"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on monday"]
+  },
+  "packageRules": [
+    {
+      "description": "Angular ships as one versioned set. Splitting it across PRs produces peer-dependency conflicts that neither PR can resolve alone.",
+      "groupName": "angular",
+      "matchPackageNames": [
+        "@angular/**",
+        "@angular-devkit/**",
+        "@schematics/**",
+        "angular-eslint",
+        "zone.js"
+      ]
+    },
+    {
+      "description": "Same reasoning for Nx: the plugins must match the nx version exactly.",
+      "groupName": "nx",
+      "matchPackageNames": ["nx", "@nx/**"]
+    },
+    {
+      "description": "NgRx is pinned to 22.0.0-beta.0 because NgRx 21 peers on @angular/core@^21 and there is no stable NgRx 22 yet. This rule is what gets us off the beta: it accepts prereleases now, so a stable 22.x arrives as an ordinary upgrade PR the moment it is published.",
+      "groupName": "ngrx",
+      "matchPackageNames": ["@ngrx/**"],
+      "ignoreUnstable": false,
+      "respectLatest": false,
+      "addLabels": ["ngrx-beta-tracking"]
+    },
+    {
+      "description": "Type definitions and lint tooling are safe to merge without review.",
+      "matchPackageNames": [
+        "@types/**",
+        "eslint",
+        "eslint-**",
+        "prettier",
+        "typescript-eslint"
+      ],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "lint and types",
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "description": "TypeScript minors regularly break Angular's compiler. Never automerge.",
+      "matchPackageNames": ["typescript"],
+      "automerge": false
+    },
+    {
+      "description": "Node engine bumps change what CI and every contributor must install.",
+      "matchDepTypes": ["engines"],
+      "enabled": false
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "schedule": ["at any time"]
+  }
+}

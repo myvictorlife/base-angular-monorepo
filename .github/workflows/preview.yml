@@ -1,0 +1,78 @@
+name: Preview
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  # The action posts the preview URL as a comment on the pull request.
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: preview-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    name: Deploy a preview channel
+    runs-on: ubuntu-latest
+    # A fork's pull request cannot read repository secrets, so the deploy would fail
+    # with a confusing auth error rather than a skipped job. This is also what stops
+    # a malicious pull request from reaching the deploy credentials.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Build
+        env:
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          # Deliberately omitted: a preview must not pollute production analytics.
+          # Without a measurementId, `isSupported()` still resolves but nothing is
+          # reported against the live property.
+        run: npx nx build demo-app --configuration=production
+
+      - name: Stage the build for Hosting
+        run: npm run utils:copy:dist
+
+      - name: Deploy to a preview channel
+        id: preview
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+          target: app
+          entryPoint: ./hosting
+          expires: 7d
+
+      # The whole reason the preview is worth deploying: these specs now run against
+      # a real production bundle on real hosting, where SPA rewrites, hashed assets
+      # and the security headers actually exist. `nx serve` has none of them.
+      - name: Install Playwright browser
+        run: npx playwright install chromium --with-deps
+
+      - name: Run end-to-end tests against the preview
+        env:
+          BASE_URL: ${{ steps.preview.outputs.details_url }}
+        run: npx nx e2e demo-app --project=chromium
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-preview
+          path: dist/.playwright/
+          retention-days: 7

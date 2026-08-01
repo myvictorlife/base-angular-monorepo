@@ -43,7 +43,7 @@ store reachable from tests without deep-importing library internals.
 Use `loadChildren` with a dynamic `import()`:
 
 ```typescript
-// apps/genai-app/src/app/pages/pages.routes.ts  ← CORRECT
+// apps/demo-app/src/app/pages/pages.routes.ts  ← CORRECT
 {
   path: 'profile',
   loadChildren: () =>
@@ -85,8 +85,8 @@ The rule only applies to imports **from outside the lib boundary** (i.e., from t
 `libs/shared/*` (entity, ui, translation) and `libs/environment` are shared across the app and are part of the main bundle. They do not need lazy loading. Importing from them anywhere is fine:
 
 ```typescript
-import { User } from '@libs/entity';    // always eager — correct
-import { HeaderComponent } from '@libs/ui';  // always eager — correct
+import { User } from '@libs/entity'; // always eager — correct
+import { HeaderComponent } from '@libs/ui'; // always eager — correct
 ```
 
 ---
@@ -96,7 +96,7 @@ import { HeaderComponent } from '@libs/ui';  // always eager — correct
 After building the app:
 
 ```sh
-npx nx build genai-app --stats-json
+npx nx build demo-app --stats-json
 ```
 
 Inspect the output chunks. The feature lib should appear as a separate chunk file (e.g., `libs_profile_src_index_ts.js`), not merged into `main.js`.
@@ -105,11 +105,11 @@ Inspect the output chunks. The feature lib should appear as a separate chunk fil
 
 ## Summary table
 
-| Scenario | Correct? |
-|---|---|
-| `loadChildren` with dynamic `import('@libs/profile')` | Yes |
-| `index.ts` exports only routes | Yes |
-| Internal lib imports between components/state/service | Yes |
-| `component: Profile` in app routes with static import | No |
-| `index.ts` exports a component or service | No (unless the lib is intentionally eager) |
-| App file has `import { Profile } from '@libs/profile'` | No |
+| Scenario                                               | Correct?                                   |
+| ------------------------------------------------------ | ------------------------------------------ |
+| `loadChildren` with dynamic `import('@libs/profile')`  | Yes                                        |
+| `index.ts` exports only routes                         | Yes                                        |
+| Internal lib imports between components/state/service  | Yes                                        |
+| `component: Profile` in app routes with static import  | No                                         |
+| `index.ts` exports a component or service              | No (unless the lib is intentionally eager) |
+| App file has `import { Profile } from '@libs/profile'` | No                                         |

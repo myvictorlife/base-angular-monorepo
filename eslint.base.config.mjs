@@ -15,7 +15,14 @@ const depConstraints = [
   { sourceTag: 'scope:environment-lib', onlyDependOnLibsWithTags: [] },
   // Design tokens + ThemeService. Consumed by everything, depends on nothing.
   { sourceTag: 'scope:theme-lib', onlyDependOnLibsWithTags: [] },
+  // The ANALYTICS contract. A leaf so that depending on analytics never drags a
+  // vendor SDK along — only `scope:analytics-firebase-lib` may name Firebase.
+  { sourceTag: 'scope:analytics-lib', onlyDependOnLibsWithTags: [] },
 
+  {
+    sourceTag: 'scope:analytics-firebase-lib',
+    onlyDependOnLibsWithTags: ['scope:analytics-lib', 'scope:environment-lib'],
+  },
   {
     sourceTag: 'scope:translate',
     onlyDependOnLibsWithTags: ['scope:entity-lib', 'scope:environment-lib'],
@@ -24,9 +31,24 @@ const depConstraints = [
     sourceTag: 'scope:profile',
     onlyDependOnLibsWithTags: ['scope:entity-lib', 'scope:environment-lib'],
   },
+  // A second feature lib, wider than profile on purpose: it consumes shared UI and
+  // the theme/i18n services, which is what a feature reaching for cross-cutting
+  // state actually looks like. Note it still cannot see `scope:profile` — features
+  // compose through the app, never through each other.
+  {
+    sourceTag: 'scope:settings',
+    onlyDependOnLibsWithTags: [
+      'scope:entity-lib',
+      'scope:environment-lib',
+      'scope:theme-lib',
+      'scope:translate',
+      'scope:ui-lib',
+    ],
+  },
   {
     sourceTag: 'scope:ui-lib',
     onlyDependOnLibsWithTags: [
+      'scope:analytics-lib',
       'scope:entity-lib',
       'scope:environment-lib',
       'scope:theme-lib',
@@ -34,13 +56,18 @@ const depConstraints = [
     ],
   },
 
-  // The application composes everything.
+  // The application composes everything. It is also the only project allowed to
+  // reach `scope:analytics-firebase-lib` — choosing a vendor is a composition
+  // decision, so it happens once, in app.config.ts.
   {
-    sourceTag: 'scope:genai-app',
+    sourceTag: 'scope:demo-app',
     onlyDependOnLibsWithTags: [
+      'scope:analytics-lib',
+      'scope:analytics-firebase-lib',
       'scope:entity-lib',
       'scope:environment-lib',
       'scope:profile',
+      'scope:settings',
       'scope:theme-lib',
       'scope:translate',
       'scope:ui-lib',

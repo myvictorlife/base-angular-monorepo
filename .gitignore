@@ -45,6 +45,16 @@ Thumbs.db
 
 __screenshots__/
 
+# Credentials and everything generated from them. This repo is a public
+# template: only the *.example.* files are committed.
+# See config/README.md and tools/generate-config.mjs.
+config/*.json
+!config/*.example.json
+libs/environment/src/lib/generated/
+hosting/.firebaserc
+.env
+.env.local
+
 # Firebase
 .firebase/
 hosting/dist/

@@ -7,12 +7,12 @@ Multi-language support using [ngx-translate](https://github.com/ngx-translate/co
 
 ## Supported languages
 
-| Code | Language | Bundle |
-|---|---|---|
-| `en` | English | `apps/genai-app/src/assets/i18n/en.json` |
-| `nl` | Dutch | `nl.json` |
-| `fr` | French | `fr.json` |
-| `pt` | Portuguese | `pt.json` |
+| Code | Language   | Bundle                                  |
+| ---- | ---------- | --------------------------------------- |
+| `en` | English    | `apps/demo-app/src/assets/i18n/en.json` |
+| `nl` | Dutch      | `nl.json`                               |
+| `fr` | French     | `fr.json`                               |
+| `pt` | Portuguese | `pt.json`                               |
 
 The list is driven by the `Language` enum in `@libs/entity`, not by this library.
 
@@ -25,10 +25,7 @@ fetches `assets/i18n`:
 import { provideTranslation } from '@libs/translation';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideHttpClient(),
-    provideTranslation(),
-  ],
+  providers: [provideHttpClient(), provideTranslation()],
 };
 ```
 
@@ -89,7 +86,7 @@ providers: [
     lang: 'en',
     fallbackLang: 'en',
   }),
-]
+];
 ```
 
 > This is why the library no longer ships an NgModule. The old `TranslationLibModule`
@@ -100,14 +97,14 @@ providers: [
 
 ## Adding a key
 
-Add it to **all four** bundles. `apps/genai-app/src/app/i18n-completeness.spec.ts`
+Add it to **all four** bundles. `apps/demo-app/src/app/i18n-completeness.spec.ts`
 fails on a missing key, an extra key, an empty value, or a missing bundle — so drift
 is caught in CI rather than in production.
 
 ## Adding a language
 
 1. Add the code to the `Language` enum in `@libs/entity`.
-2. Create `apps/genai-app/src/assets/i18n/<code>.json` with the same keys as `en.json`.
+2. Create `apps/demo-app/src/assets/i18n/<code>.json` with the same keys as `en.json`.
 3. Add `LANGUAGE.<CODE>` to every bundle (the label each language uses for the new one).
 4. Add the option to the `languages` array in `update-language.component.ts`.
 

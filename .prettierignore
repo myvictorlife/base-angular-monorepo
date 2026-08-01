@@ -6,3 +6,7 @@
 .angular
 
 .nx/self-healing
+
+# Generated from config/*.json — see tools/generate-config.mjs
+libs/environment/src/lib/generated
+hosting/.firebaserc

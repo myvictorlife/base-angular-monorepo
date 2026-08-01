@@ -22,31 +22,42 @@
   outline-offset: 2px;
 }
 
-:host(:disabled) {
-  opacity: 0.5;
-  cursor: not-allowed;
+/* ── Sizes ── */
+:host(.btn--sm) {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+}
+:host(.btn--md) {
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--font-size-base);
+}
+:host(.btn--lg) {
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--font-size-lg);
 }
 
-/* ── Sizes ── */
-:host(.btn--sm) { padding: var(--space-2) var(--space-3); font-size: var(--font-size-sm); }
-:host(.btn--md) { padding: var(--space-3) var(--space-5); font-size: var(--font-size-base); }
-:host(.btn--lg) { padding: var(--space-4) var(--space-6); font-size: var(--font-size-lg); }
-
-:host(.btn--block) { display: flex; width: 100%; }
+:host(.btn--block) {
+  display: flex;
+  width: 100%;
+}
 
 /* ── Variants ── */
 :host(.btn--primary) {
   background: var(--color-brand);
   color: var(--color-text-on-brand);
 }
-:host(.btn--primary:hover:not(:disabled)) { background: var(--color-brand-hover); }
+:host(.btn--primary:hover:not(:disabled)) {
+  background: var(--color-brand-hover);
+}
 
 :host(.btn--secondary) {
   background: var(--color-bg-elevated);
   border-color: var(--color-border-strong);
   color: var(--color-text-primary);
 }
-:host(.btn--secondary:hover:not(:disabled)) { background: var(--color-bg-hover); }
+:host(.btn--secondary:hover:not(:disabled)) {
+  background: var(--color-bg-hover);
+}
 
 :host(.btn--ghost) {
   background: transparent;
@@ -64,4 +75,21 @@
 }
 :host(.btn--danger:hover:not(:disabled)) {
   background: color-mix(in srgb, var(--color-danger) 18%, transparent);
+}
+
+/* ── Disabled ──
+   Declared last so it wins over every variant (same specificity, later rule).
+
+   Deliberately a flat treatment rather than `opacity: 0.5` on the variant:
+   opacity breaks once the brand inverts. A half-transparent white primary on a
+   dark surface reads as a filled grey button with *more* presence than the
+   secondary variant — the opposite of "unavailable". */
+:host(:disabled),
+:host(.btn--disabled) {
+  background: var(--color-bg-hover);
+  border-color: transparent;
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  /* Also blocks click/hover on <a>, which ignores the disabled attribute. */
+  pointer-events: none;
 }

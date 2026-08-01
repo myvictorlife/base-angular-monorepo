@@ -1,0 +1,12 @@
+<div class="setting-row">
+  <div class="setting-row__text">
+    <span class="setting-row__label">{{ labelKey() | translate }}</span>
+    @if (descriptionKey(); as description) {
+    <span class="setting-row__description">{{ description | translate }}</span>
+    }
+  </div>
+
+  <div class="setting-row__control">
+    <ng-content />
+  </div>
+</div>

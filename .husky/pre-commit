@@ -1,0 +1,8 @@
+npx lint-staged
+
+# Through Nx rather than bare eslint: only Nx maps a file to its project, and the
+# component-selector prefix is configured per project. `--uncommitted` scopes the
+# run to what is actually being committed instead of the whole workspace.
+npx nx affected -t lint --uncommitted
+
+node tools/check-no-secrets.mjs

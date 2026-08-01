@@ -13,12 +13,12 @@ import { User, IGenericError, Language, RouterStateUrl } from '@libs/entity';
 
 ## Contents
 
-| Export | File | Purpose |
-|---|---|---|
-| `User` | `entity/user/user.model.ts` | User/profile shape |
-| `IGenericError` | `entity/error/error.model.ts` | `{ message, code, status }` — the error shape services and stores speak |
-| `Language` | `entity/language/language.enum.ts` | Supported locales (`en`, `nl`, `fr`, `pt`) |
-| `RouterStateUrl` | `entity/router-state/router-state-url.model.ts` | Shape produced by the router serializer |
+| Export           | File                                            | Purpose                                                                 |
+| ---------------- | ----------------------------------------------- | ----------------------------------------------------------------------- |
+| `User`           | `entity/user/user.model.ts`                     | User/profile shape                                                      |
+| `IGenericError`  | `entity/error/error.model.ts`                   | `{ message, code, status }` — the error shape services and stores speak |
+| `Language`       | `entity/language/language.enum.ts`              | Supported locales (`en`, `nl`, `fr`, `pt`)                              |
+| `RouterStateUrl` | `entity/router-state/router-state-url.model.ts` | Shape produced by the router serializer                                 |
 
 ## Rules
 
@@ -27,7 +27,7 @@ import { User, IGenericError, Language, RouterStateUrl } from '@libs/entity';
 - **`Language` is the single source of truth for locales.** The header dropdown and
   `readStoredLanguage()` both derive from `Object.values(Language)`, so adding a locale
   here propagates automatically — you only need to add the matching JSON bundle in
-  `apps/genai-app/src/assets/i18n/`.
+  `apps/demo-app/src/assets/i18n/`.
 
 ## Adding a model
 

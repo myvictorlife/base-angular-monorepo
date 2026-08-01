@@ -1,0 +1,126 @@
+{
+  "name": "demo-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/demo-app/src",
+  "tags": ["scope:demo-app"],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/demo-app",
+        "browser": "apps/demo-app/src/main.ts",
+        "tsConfig": "apps/demo-app/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/demo-app/public"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/demo-app/src/assets",
+            "output": "assets"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/demo-app/src/assets/i18n",
+            "output": "assets/i18n"
+          }
+        ],
+        "styles": ["apps/demo-app/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/theme/src/styles"]
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "6kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "libs/environment/src/lib/environment.ts",
+              "with": "libs/environment/src/lib/environment.development.ts"
+            }
+          ]
+        },
+        "local": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "libs/environment/src/lib/environment.ts",
+              "with": "libs/environment/src/lib/environment.local.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
+      "configurations": {
+        "production": {
+          "buildTarget": "demo-app:build:production"
+        },
+        "development": {
+          "buildTarget": "demo-app:build:development"
+        },
+        "local": {
+          "buildTarget": "demo-app:build:local"
+        }
+      }
+    },
+    "lint": {
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        {
+          "projects": ["environment"],
+          "target": "generate-config"
+        }
+      ]
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "demo-app:build",
+        "staticFilePath": "dist/apps/demo-app/browser",
+        "spa": true
+      }
+    }
+  }
+}

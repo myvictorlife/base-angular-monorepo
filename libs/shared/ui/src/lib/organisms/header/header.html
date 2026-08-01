@@ -1,0 +1,176 @@
+<header class="header">
+  <div class="header__inner">
+    <a
+      routerLink="/"
+      class="header__brand"
+      aria-label="{{ 'HEADER.HOME' | translate }}"
+    >
+      <svg
+        class="header__logo"
+        width="32"
+        height="32"
+        viewBox="0 0 32 32"
+        fill="none"
+        aria-hidden="true"
+      >
+        <rect width="32" height="32" rx="8" fill="currentColor" />
+        <path
+          d="M9 22V10h3.2l7.6 7.4V10H23v12h-3.2L12.2 14.6V22H9z"
+          fill="#fff"
+        />
+      </svg>
+      <span class="header__title">App</span>
+    </a>
+
+    <nav class="header__nav">
+      <a routerLink="/" class="header__link">
+        {{ 'HEADER.HOME' | translate }}
+      </a>
+
+      <a routerLink="/settings" class="header__link">
+        {{ 'HEADER.SETTINGS' | translate }}
+      </a>
+
+      <div class="header__lang-wrap">
+        <button
+          type="button"
+          class="header__lang-trigger"
+          [class.header__lang-trigger--open]="languageDropdownOpen()"
+          (click)="toggleLanguageDropdown()"
+          [attr.aria-expanded]="languageDropdownOpen()"
+          [attr.aria-haspopup]="'listbox'"
+          [attr.aria-label]="'HEADER.LANGUAGE_ARIA' | translate"
+        >
+          <svg
+            class="header__lang-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m12.89 0A18.022 18.022 0 0118 21m-3-7v3m0 0v3m0-3h3m-3 0h-3"
+            />
+          </svg>
+          <span class="header__lang-current"
+            >{{ currentLang() | uppercase }}</span
+          >
+          <svg
+            class="header__lang-chevron"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+        @if (languageDropdownOpen()) {
+        <div
+          class="header__lang-backdrop"
+          (click)="closeLanguageDropdown()"
+          aria-hidden="true"
+        ></div>
+        <ul
+          class="header__lang-list"
+          role="listbox"
+          [attr.aria-label]="'HEADER.LANGUAGE' | translate"
+        >
+          @for (lang of languages; track lang.code) {
+          <li role="option" [attr.aria-selected]="currentLang() === lang.code">
+            <button
+              type="button"
+              class="header__lang-option"
+              [class.header__lang-option--active]="currentLang() === lang.code"
+              (click)="onLanguageChange(lang.code)"
+            >
+              {{ lang.labelKey | translate }}
+            </button>
+          </li>
+          }
+        </ul>
+        }
+      </div>
+
+      <lib-theme-toggle />
+
+      <a routerLink="/profile" class="header__cta">
+        {{ 'HEADER.START' | translate }}
+      </a>
+
+      <button
+        type="button"
+        class="header__menu-btn"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="mobileMenuOpen()"
+        [attr.aria-controls]="'header-mobile-menu'"
+        [attr.aria-label]="'HEADER.MENU_ARIA' | translate"
+      >
+        <svg
+          class="header__menu-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          @if (mobileMenuOpen()) {
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 6l12 12M18 6L6 18"
+          />
+          } @else {
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+          }
+        </svg>
+      </button>
+    </nav>
+  </div>
+
+  @if (mobileMenuOpen()) {
+  <div
+    class="header__mobile-backdrop"
+    (click)="closeMobileMenu()"
+    aria-hidden="true"
+  ></div>
+  <div id="header-mobile-menu" class="header__mobile-menu">
+    <a routerLink="/" class="header__mobile-link" (click)="closeMobileMenu()">
+      {{ 'HEADER.HOME' | translate }}
+    </a>
+    <a
+      routerLink="/settings"
+      class="header__mobile-link"
+      (click)="closeMobileMenu()"
+    >
+      {{ 'HEADER.SETTINGS' | translate }}
+    </a>
+    <a
+      routerLink="/design"
+      class="header__mobile-link"
+      (click)="closeMobileMenu()"
+    >
+      {{ 'HEADER.DESIGN' | translate }}
+    </a>
+    <a
+      routerLink="/profile"
+      class="header__mobile-cta"
+      (click)="closeMobileMenu()"
+    >
+      {{ 'HEADER.START' | translate }}
+    </a>
+  </div>
+  }
+</header>
