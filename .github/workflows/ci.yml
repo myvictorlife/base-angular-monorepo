@@ -84,13 +84,18 @@ jobs:
 
       - run: npm ci
 
-      # Only chromium: the three-browser matrix belongs on a nightly schedule, not
-      # in front of every pull request.
+      # Only chromium: the firefox/webkit matrix belongs on a nightly schedule, not
+      # in front of every pull request. `mobile-chrome` costs no extra download —
+      # the Pixel 5 descriptor drives the same chromium binary — and it is the only
+      # project that exercises the header's burger-menu path.
       - name: Install Playwright browser
         run: npx playwright install chromium --with-deps
 
+      # The `--` matters. Without it Nx swallows `--project` as its own flag and
+      # never forwards it, so Playwright runs all four projects and the two whose
+      # browsers were not installed fail.
       - name: Run end-to-end tests
-        run: npx nx e2e demo-app --project=chromium
+        run: npx nx e2e demo-app -- --project=chromium --project=mobile-chrome
 
       - name: Upload Playwright report
         if: failure()
