@@ -32,20 +32,25 @@ config file. Ordinary app-level additions are minor.
 - Jest coverage thresholds, enforced in CI.
 - husky + lint-staged + commitlint, including a pre-commit guard that rejects a
   populated Firebase `apiKey`.
-- Renovate configuration, with a rule that moves `@ngrx/*` off `22.0.0-beta.0` as
-  soon as a stable release exists.
+- Renovate configuration, with a rule that moves `@ngrx/*` off the 22 prerelease
+  line as soon as a stable release exists.
 - Firebase Hosting deploy workflow on `main` and a preview-channel workflow per
   pull request.
 - Security headers (CSP, `X-Content-Type-Options`, `Referrer-Policy`,
   `Permissions-Policy`) in `hosting/firebase.json`.
 - `libs/shared/ui/src/lib/organisms/` — the folder the documentation had been
   claiming existed.
+- Unit tests for every `@libs/ui` atom (alert, badge, button, card, icon,
+  spinner, theme-toggle) and for the header organism — the coverage floor rose
+  from the high thirties to the mid eighties with them.
 
 - `AGENTS.md` — a single entry point for AI coding agents, imported by `CLAUDE.md`
   so every tool reads one file instead of a per-vendor copy.
 
 ### Changed
 
+- Bumped `@ngrx/*` from `22.0.0-beta.0` to `22.0.0-rc.0` — the last prerelease
+  step before the stable NgRx 22. No source changes were needed.
 - **Migrated unit testing from Jest to Vitest**, through Angular's official
   `@angular/build:unit-test` builder. Per-project `jest.config.*` and
   `src/test-setup.ts` are gone; each `test` target now carries its coverage
@@ -83,6 +88,12 @@ config file. Ordinary app-level additions are minor.
 
 ### Removed
 
+- `nxCloudId` from `nx.json`. The workspace was never claimed, so every Nx command
+  printed a 401 warning and the remote cache never worked — and a fork should not
+  inherit someone else's Nx Cloud identity any more than a Firebase project id.
+  Connect your own with `npx nx connect` if you want distributed caching.
+- Root-level `tsconfig.app.json` and `tsconfig.spec.json` — generator leftovers
+  covering a `src/` tree that does not exist at the workspace root.
 - `AnalyticsService` from `@libs/ui` — replaced by `ANALYTICS` +
   `@libs/analytics-firebase`.
 - `apps/demo-app/src/assets/icons/delhaize-logo.png` — an unreferenced third-party

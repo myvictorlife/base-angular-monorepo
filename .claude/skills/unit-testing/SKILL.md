@@ -212,9 +212,10 @@ import {
   createServiceFactory,
   SpectatorService,
 } from '@ngneat/spectator/vitest';
+import { provideHttpClient } from '@angular/common/http';
 import {
-  HttpClientTestingModule,
   HttpTestingController,
+  provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { ProfileService } from './profile.service';
 
@@ -224,7 +225,8 @@ describe('ProfileService', () => {
 
   const createService = createServiceFactory({
     service: ProfileService,
-    imports: [HttpClientTestingModule],
+    // Order matters: the testing provider overrides the backend from the first.
+    providers: [provideHttpClient(), provideHttpClientTesting()],
   });
 
   beforeEach(() => {

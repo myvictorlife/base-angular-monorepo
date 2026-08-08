@@ -119,10 +119,9 @@ longer exists is worse than no guide.
 
 ## Known gaps — do not present these as solved
 
-- `@libs/ui` has no tests for its atoms. Coverage is measured from the test
-  bundle, so those untested files are invisible to the report and the percentage
-  looks healthier than the suite is. The floor in its `project.json` records what
-  is measured, not how well the library is covered.
-- `@ngrx/*` is pinned to `22.0.0-beta.0` because no stable NgRx 22 exists yet.
+- Coverage is measured from the compiled test bundle: a file no spec (or route)
+  imports is invisible to the report rather than counting as 0%. A healthy
+  percentage in a thinly-tested project can therefore overstate the suite.
+- `@ngrx/*` is pinned to `22.0.0-rc.0` because no stable NgRx 22 exists yet.
 - `apps/demo-app` unit coverage is intentionally low; the app project is covered by
   the Playwright suite instead.

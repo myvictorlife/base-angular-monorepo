@@ -45,11 +45,11 @@ expensive to change once a team has built on top of it.
 | **Commits, deps, secrets** | Nothing                                 | commitlint, lint-staged, Renovate, and a pre-commit hook that rejects a committed API key.                                                                                                                               |
 | **Deploy**                 | Nothing                                 | Push to `main` deploys; every pull request gets its own preview URL, and the e2e suite runs against that real deployed bundle.                                                                                           |
 
-**Two things this template is honest about.** `@ngrx/*` sits on `22.0.0-beta.0`
+**Two things this template is honest about.** `@ngrx/*` sits on `22.0.0-rc.0`
 because no stable NgRx 22 exists yet — the Renovate rule below moves off it the day
-one ships. And unit coverage in `@libs/ui` and `apps/demo-app` is low; the floors
-in each project's `test` target record where things actually stand rather than a
-number that flatters.
+one ships. And unit coverage in `apps/demo-app` is intentionally low — the app
+shell is exercised by the Playwright suite instead; its floor records where things
+actually stand rather than a number that flatters.
 
 **Where it is the wrong choice:** if you want one small app rather than a
 workspace, if your team does not want NgRx, or if you would rather choose each
@@ -74,7 +74,7 @@ removing five things is more work than adding them.
 > (`provideTranslation()`) or, for feature state, a `signalStore` class listed in the
 > route's `providers` (`ProfileStore`). See [`docs/best-practices.md`](docs/best-practices.md).
 
-> ⚠️ **`@ngrx/*` is currently on `22.0.0-beta.0`.** NgRx 22 has no stable release yet and
+> ⚠️ **`@ngrx/*` is currently on `22.0.0-rc.0`.** NgRx 22 has no stable release yet and
 > Angular 22 requires it (NgRx 21 peers on `@angular/core@^21`). No source changes are
 > expected when it lands: the `ngrx` rule in [`renovate.json`](renovate.json) accepts
 > prereleases, so the stable 22.x arrives as an ordinary upgrade PR the day it is
@@ -146,6 +146,16 @@ base-angular-monorepo/
 │   │       └── pages/
 │   │           ├── settings/
 │   │           └── settings.routes.ts
+│   │
+│   ├── theme/                              # Design tokens + ThemeService (light/dark)
+│   │   └── src/
+│   │       ├── lib/
+│   │       │   └── theme.service.ts        # Theme signal, OS preference, persistence
+│   │       └── styles/
+│   │           ├── _tokens.scss            # Design tokens (colors, spacing, typography)
+│   │           ├── _themes.scss            # Light/dark theme definitions
+│   │           ├── _breakpoints.scss       # Responsive breakpoints
+│   │           └── _index.scss             # Public style entry point
 │   │
 │   └── shared/                             # Cross-cutting shared libraries
 │       │

@@ -27,7 +27,7 @@
       "matchPackageNames": ["nx", "@nx/**"]
     },
     {
-      "description": "NgRx is pinned to 22.0.0-beta.0 because NgRx 21 peers on @angular/core@^21 and there is no stable NgRx 22 yet. This rule is what gets us off the beta: it accepts prereleases now, so a stable 22.x arrives as an ordinary upgrade PR the moment it is published.",
+      "description": "NgRx is pinned to a 22 prerelease (currently 22.0.0-rc.0) because NgRx 21 peers on @angular/core@^21 and there is no stable NgRx 22 yet. This rule is what gets us off the prerelease: it accepts them now, so a stable 22.x arrives as an ordinary upgrade PR the moment it is published.",
       "groupName": "ngrx",
       "matchPackageNames": ["@ngrx/**"],
       "ignoreUnstable": false,
