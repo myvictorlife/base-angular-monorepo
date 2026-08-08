@@ -511,6 +511,22 @@ UI before a second consumer exists is how a shared lib becomes a junk drawer.
 
 ### State Pattern
 
+No actions, no reducers, no selector files — a feature's state is a
+`signalStore` the component talks to directly, and the async path goes through
+`rxMethod` + `tapResponse`:
+
+```mermaid
+graph LR
+  subgraph route["Provided on the feature route — created on entry, destroyed on exit"]
+    store["signalStore<br/>withState · withComputed · withMethods"]
+  end
+  component["Page component"] -- "calls a method" --> store
+  store -- "signals" --> component
+  store -- "rxMethod (async shape)" --> service["Feature service"]
+  service -- "tapResponse → patchState" --> store
+  service <--> api[(HTTP)]
+```
+
 **Feature state is a `signalStore`**, provided on its route:
 
 ```
