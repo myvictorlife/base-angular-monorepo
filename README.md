@@ -6,23 +6,71 @@
 [![Angular](https://img.shields.io/badge/Angular-22-dd0031.svg)](https://angular.dev)
 [![Nx](https://img.shields.io/badge/Nx-23-143055.svg)](https://nx.dev)
 
-A base project for building scalable Angular applications on current standards —
-architecture, boundaries, state, i18n, theming, CI and deploy already decided and
-wired together. Use it as the starting point for your own product.
+**Clone it, `npm install`, and you have a running product skeleton** — lazy-loaded
+features with SignalStore, four-language i18n, OS-synced dark mode, dependency
+boundaries that fail lint, per-project coverage floors, and a CI/CD pipeline that
+gives every pull request its own live preview URL. All of it before you create a
+single vendor account: the week of architecture decisions that follows
+`nx g @nx/angular:app`, already made, wired together and documented — including
+where each one is a trade-off.
+
+<p align="center">
+  <img src="docs/images/settings-light.png" width="49.5%" alt="Settings page — theme, language and reduced-motion preferences, light theme">
+  <img src="docs/images/design-dark.png" width="49.5%" alt="Design-token page rendering every token live, dark theme">
+</p>
 
 **Live demo:** [base-angular-monorepo.web.app](https://base-angular-monorepo.web.app)
 · [`/design`](https://base-angular-monorepo.web.app/design) renders every design
 token · [`/settings`](https://base-angular-monorepo.web.app/settings) shows a
 feature library end to end
 
+## What you get out of the box
+
+- ⚡ **Angular 22, standalone and zoneless** — no NgModules, no zone.js, OnPush everywhere, enforced by lint
+- 🧠 **NgRx SignalStore per feature, provided on its route** — state is created on entry and destroyed on exit
+- 🧱 **Module boundaries that bite** — features cannot import each other; an illegal import is a lint error, not a review comment
+- 🌍 **i18n in four languages** — with a completeness test that fails CI the moment a key is missing from any bundle
+- 🎨 **Design tokens + dark mode following the OS** — every token rendered live at [`/design`](https://base-angular-monorepo.web.app/design), so the docs cannot go stale invisibly
+- 🧪 **Vitest through Angular's official builder + Playwright e2e** — with a coverage floor per project that fails the build
+- 🚀 **Deploy wired end to end** — push to `main` goes live; every PR gets a preview URL and the e2e suite runs against that real deployed bundle
+- 🛠️ **`nx g feature-lib`** — a complete feature (store, page, tests, i18n keys, boundary registration) in one command
+- 🔐 **No credentials in git, ever** — paste a vendor config once into a git-ignored file; a pre-commit hook rejects committed API keys
+- 📊 **Vendor-neutral analytics** — an `ANALYTICS` token with a no-op default; removing Firebase is deleting one lib and one line
+
+## Quick start
+
 ```sh
 git clone <your-fork> && cd base-angular-monorepo
 npm install
-npm start
+npm start        # → http://localhost:4200
 ```
 
-That is enough to run it. Firebase is optional and stays off until you drop a config
-file in — see [Configuration](#configuration).
+That is enough to run it — no Firebase project, no accounts, no `.env` editing.
+Integrations stay off until you drop a config file in ([Configuration](#configuration)).
+
+## Who this is for
+
+- **A team starting a product** that wants the architecture arguments settled by
+  lint rules instead of meetings.
+- **A developer learning modern Angular** — zoneless, signals, SignalStore,
+  standalone — from a codebase where every pattern is enforced, tested and
+  explained in place.
+- **A tech lead evaluating patterns** — the two reference features
+  ([`@libs/profile`](libs/profile) async, [`@libs/settings`](libs/settings)
+  synchronous) exist precisely to be read.
+
+The demo app itself is intentionally small — profile, settings and a design-token
+page. **The product here is everything around it**: the boundaries, the state
+pattern, the pipeline, the guardrails.
+
+## Contents
+
+- [Why this and not `nx g @nx/angular:app`?](#why-this-and-not-nx-g-nxangularapp)
+- [Tech stack](#tech-stack) · [Project structure](#project-structure) · [Getting started](#getting-started)
+- [Configuration](#configuration) — vendor config without committing credentials
+- [Architecture](#architecture) — boundaries graph, state, analytics, testing, i18n
+- [Generating apps and libraries](#generating-new-apps-and-libraries) · [Code standards](#code-standards) · [npm scripts](#npm-scripts)
+- [Contributing and releases](#contributing-and-releases) · [Documentation](#documentation)
 
 ---
 
@@ -60,7 +108,7 @@ removing five things is more work than adding them.
 
 | Layer         | Technology                             | Version    |
 | ------------- | -------------------------------------- | ---------- |
-| Framework     | Angular (standalone, **zoneless**)     | 22.0.x     |
+| Framework     | Angular (standalone, **zoneless**)     | 22.1.x     |
 | Feature state | NgRx **SignalStore** (`@ngrx/signals`) | 22.x       |
 | Global state  | NgRx Store — router state only         | 22.x       |
 | i18n          | ngx-translate (signal-based)           | 18.x       |
@@ -83,6 +131,14 @@ removing five things is more work than adding them.
 ---
 
 ## Project Structure
+
+The short version: `apps/demo-app` composes, `libs/` holds two reference features
+(`profile`, `settings`) plus shared `ui`, `theme`, `translation`, `entity`,
+`environment` and the analytics pair, and `tools/` carries the config generator,
+the secrets guard and the `feature-lib` generator.
+
+<details>
+<summary><b>Full annotated tree</b> (click to expand)</summary>
 
 ```
 base-angular-monorepo/
@@ -203,7 +259,8 @@ base-angular-monorepo/
 │
 ├── tools/
 │   ├── generate-config.mjs                 # config/*.json → typed modules + .firebaserc
-│   └── check-no-secrets.mjs                # Pre-commit guard against committed credentials
+│   ├── check-no-secrets.mjs                # Pre-commit guard against committed credentials
+│   └── workspace-plugin/                   # nx g feature-lib — complete feature libs in one step
 │
 ├── hosting/                                # Firebase Hosting config + deploy walkthrough
 ├── .husky/                                 # pre-commit (lint-staged + secrets) · commit-msg
@@ -214,7 +271,7 @@ base-angular-monorepo/
 │   ├── workflows/preview.yml               # PR → preview channel, then e2e against it
 │   ├── ISSUE_TEMPLATE/
 │   └── PULL_REQUEST_TEMPLATE.md
-├── renovate.json                           # Grouped upgrades; tracks NgRx off its beta
+├── renovate.json                           # Grouped upgrades; tracks NgRx off its prerelease
 ├── commitlint.config.mjs                   # Conventional Commits
 ├── .lintstagedrc.mjs                       # Staged-file lint + format
 ├── nx.json                                 # Nx workspace configuration
@@ -224,6 +281,8 @@ base-angular-monorepo/
 ├── package.json
 └── README.md
 ```
+
+</details>
 
 ---
 
@@ -305,6 +364,9 @@ Firebase Console → Project settings → General → Your apps → SDK setup an
 The console shows JavaScript, not JSON — unquoted keys, single quotes, a trailing comma.
 Paste it raw anyway; the reader normalises all of it.
 
+<details>
+<summary><b>How it works under the hood, <code>.env</code> scalars, and adding more integrations</b></summary>
+
 `tools/generate-config.mjs` compiles that into **git-ignored** files, on `npm install`
 and before every Nx build, serve and test:
 
@@ -335,6 +397,8 @@ an entry in `tools/generate-config.mjs`, an example file in `config/`. Recipe in
 [`hosting/README.md`](hosting/README.md) walks through it with screenshots — creating
 the project, enabling Analytics and Hosting, registering the web app, and deploying.
 
+</details>
+
 Details: [`config/README.md`](config/README.md) ·
 [`libs/environment/README.md`](libs/environment/README.md) ·
 [`.claude/skills/firebase-deploy/SKILL.md`](.claude/skills/firebase-deploy/SKILL.md)
@@ -355,28 +419,55 @@ Tags **must** use the `scope:` prefix — `eslint.base.config.mjs` matches on it
 library tagged otherwise silently escapes every dependency rule.
 
 ```sh
-# Shared UI components
+# Feature library — the workspace generator does the whole job: files, tag in
+# depConstraints, path alias, Vitest test target and seeded i18n keys.
+npx nx g @app/workspace-plugin:feature-lib <feature-name>                 # local state
+npx nx g @app/workspace-plugin:feature-lib <feature-name> --shape=async   # HTTP + rxMethod
+
+# Non-feature libraries use the stock Nx generator:
 npx nx g @nx/angular:library libs/shared/ui --tags=scope:ui-lib --style=scss
-
-# Shared data models
 npx nx g @nx/angular:library libs/shared/entity --tags=scope:entity-lib --style=scss
-
-# Feature library
-npx nx g @nx/angular:library libs/<feature-name> --tags=scope:<feature-name> --style=scss
-
-# Translations
-npx nx g @nx/angular:library libs/shared/translation --tags=scope:translate
 ```
 
-> After creating a library, add its tag to `depConstraints` in `eslint.base.config.mjs`.
-> A tag with no entry there is **unconstrained**. See
+> After creating a library **manually**, add its tag to `depConstraints` in
+> `eslint.base.config.mjs`. A tag with no entry there is **unconstrained**. See
 > [`.claude/skills/module-boundaries/SKILL.md`](.claude/skills/module-boundaries/SKILL.md).
+> The feature-lib generator does this registration for you.
 
 ---
 
 ## Architecture
 
 ### Library Tags and Dependency Rules
+
+Every arrow below is an allowance the linter enforces; anything not allowed fails
+the build (the table underneath is the exact allow-list). The red dashed line is
+the rule that keeps the workspace deletable: features never see each other.
+
+```mermaid
+graph BT
+  subgraph leaves["Leaf libraries — depend on nothing"]
+    entity
+    environment
+    theme
+    analytics["analytics<br/><i>(contract)</i>"]
+  end
+
+  translate --> entity & environment
+  ui --> analytics & entity & environment & theme & translate
+  firebase["analytics-firebase<br/><i>(vendor)</i>"] --> analytics & environment
+
+  profile["profile<br/><i>(feature)</i>"] --> entity & environment & theme & ui
+  settings["settings<br/><i>(feature)</i>"] --> entity & environment & theme & translate & ui
+
+  app["demo-app<br/><i>(composition root)</i>"] --> profile & settings & firebase & ui & translate & theme
+
+  profile x-. never — features compose through the app .-x settings
+
+  linkStyle 24 stroke:#d33,stroke-dasharray:6 4
+  style app fill:#143055,color:#fff
+  style firebase fill:#7a3e00,color:#fff
+```
 
 Defined in `eslint.base.config.mjs` — the file every project's `eslint.config.mjs`
 extends. (The root `eslint.config.mjs` applies to workspace-level files only; rules
@@ -390,7 +481,7 @@ placed there would never run for a project.)
 | `scope:analytics-lib`          | _nothing_                                        | The `ANALYTICS` contract            |
 | `scope:analytics-firebase-lib` | analytics, environment                           | The Firebase implementation         |
 | `scope:translate`              | entity, environment                              | i18n setup, language switching      |
-| `scope:profile`                | entity, environment                              | Profile feature                     |
+| `scope:profile`                | entity, environment, theme, ui                   | Profile feature                     |
 | `scope:settings`               | entity, environment, theme, translate, ui        | Settings feature                    |
 | `scope:ui-lib`                 | analytics, entity, environment, theme, translate | Presentational + cross-cutting UI   |
 | `scope:demo-app`               | all of the above                                 | The application composes everything |
