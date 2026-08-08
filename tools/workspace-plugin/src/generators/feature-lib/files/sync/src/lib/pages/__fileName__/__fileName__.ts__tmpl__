@@ -1,0 +1,18 @@
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
+import { <%= className %>Store } from '../../+state/<%= fileName %>.store';
+
+@Component({
+  selector: 'lib-<%= fileName %>',
+  imports: [TranslatePipe],
+  templateUrl: './<%= fileName %>.html',
+  styleUrls: ['./<%= fileName %>.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class <%= className %> {
+  private readonly store = inject(<%= className %>Store);
+
+  // Read straight off the store — already signals, nothing to unsubscribe from.
+  readonly message = this.store.message;
+  readonly hasMessage = this.store.hasMessage;
+}

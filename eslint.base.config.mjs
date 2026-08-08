@@ -61,6 +61,12 @@ const depConstraints = [
     ],
   },
 
+  // Workspace tooling (generators). Depends on nothing in the workspace.
+  { sourceTag: 'scope:tooling', onlyDependOnLibsWithTags: [] },
+
+  // <feature-scopes> — the feature-lib generator inserts new feature entries
+  // above this line. Keep the marker.
+
   // The application composes everything. It is also the only project allowed to
   // reach `scope:analytics-firebase-lib` — choosing a vendor is a composition
   // decision, so it happens once, in app.config.ts.
@@ -76,6 +82,8 @@ const depConstraints = [
       'scope:theme-lib',
       'scope:translate',
       'scope:ui-lib',
+      // <demo-app-feature-scopes> — the feature-lib generator inserts new
+      // scopes above this line. Keep the marker.
     ],
   },
 ];

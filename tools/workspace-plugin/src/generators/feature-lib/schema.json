@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "FeatureLib",
+  "title": "Create a feature library",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Feature name in kebab-case, e.g. `orders`. Becomes libs/<name>, scope:<name> and @libs/<name>.",
+      "$default": { "$source": "argv", "index": 0 },
+      "x-prompt": "What is the feature called (kebab-case)?",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+    },
+    "shape": {
+      "type": "string",
+      "description": "sync: local state only (reference: libs/settings). async: HTTP service + rxMethod (reference: libs/profile).",
+      "enum": ["sync", "async"],
+      "default": "sync"
+    }
+  },
+  "required": ["name"]
+}

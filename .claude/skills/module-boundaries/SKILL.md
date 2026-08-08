@@ -118,6 +118,13 @@ cross-cutting `@libs/store` would only invite duplicated sources of truth.
 
 ## Step-by-step: registering a new library
 
+> **Feature libraries: skip this section.**
+> `npx nx g @app/workspace-plugin:feature-lib <name>` performs every step below
+> in one run, anchored on the `// <feature-scopes>` and
+> `// <demo-app-feature-scopes>` marker comments in `eslint.base.config.mjs` —
+> never delete those markers. The manual steps remain for non-feature libraries
+> (a new shared or leaf lib) and for understanding what the generator does.
+
 ### 1. Set the tag in `project.json`
 
 ```json

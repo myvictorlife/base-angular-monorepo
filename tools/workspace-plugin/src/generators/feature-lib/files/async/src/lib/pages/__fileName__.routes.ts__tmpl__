@@ -1,0 +1,14 @@
+import { Routes } from '@angular/router';
+import { <%= className %>Store } from '../+state/<%= fileName %>.store';
+import { <%= className %>Service } from '../services/<%= fileName %>/<%= fileName %>.service';
+import { <%= className %> } from './<%= fileName %>/<%= fileName %>';
+
+export const <%= propertyName %>Routes: Routes = [
+  {
+    path: '',
+    // Feature state lives on the route: the store is created when the feature is
+    // entered and torn down when it is left.
+    providers: [<%= className %>Store, <%= className %>Service],
+    component: <%= className %>,
+  },
+];

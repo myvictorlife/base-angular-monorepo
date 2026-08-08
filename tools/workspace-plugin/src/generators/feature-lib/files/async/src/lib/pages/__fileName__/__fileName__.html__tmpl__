@@ -1,0 +1,24 @@
+<section class="<%= fileName %>">
+  <header class="<%= fileName %>__header">
+    <h1 class="<%= fileName %>__title" data-testid="<%= fileName %>-title">
+      {{ '<%= constantName %>.TITLE' | translate }}
+    </h1>
+    <p class="<%= fileName %>__lead">
+      {{ '<%= constantName %>.LEAD' | translate }}
+    </p>
+  </header>
+
+  @if (loading()) {
+    <p role="status" class="<%= fileName %>__loading">
+      {{ '<%= constantName %>.LOADING' | translate }}
+    </p>
+  } @else if (errorMessage()) {
+    <p class="<%= fileName %>__error" data-testid="<%= fileName %>-error">
+      {{ '<%= constantName %>.ERROR' | translate }}
+    </p>
+  } @else {
+    <p class="<%= fileName %>__data" data-testid="<%= fileName %>-data">
+      {{ data()?.label }}
+    </p>
+  }
+</section>

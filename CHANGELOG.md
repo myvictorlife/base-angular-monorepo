@@ -46,9 +46,23 @@ config file. Ordinary app-level additions are minor.
 
 - `AGENTS.md` — a single entry point for AI coding agents, imported by `CLAUDE.md`
   so every tool reads one file instead of a per-vendor copy.
+- `tools/workspace-plugin` with a `feature-lib` generator
+  (`npx nx g @app/workspace-plugin:feature-lib <name> [--shape=async]`): creates
+  the complete feature-library shape from `.claude/skills/feature-lib` — files,
+  `scope:` tag registered in `depConstraints` (anchored on marker comments in
+  `eslint.base.config.mjs`), path alias, Vitest `test` target with the
+  95/90/90/95 floor, and i18n keys seeded in all four bundles. Only the app
+  route stays manual, because features compose through the app.
 
 ### Changed
 
+- Restructured the README for first-time readers: a concrete value pitch and
+  feature grid above the fold, app screenshots (light and dark), a Mermaid
+  diagram of the boundary graph in place of prose-only rules, a curated table of
+  contents, a "who this is for" section, and the long project tree and
+  configuration deep-dive collapsed behind `<details>`. The boundary table also
+  regained the `theme`/`ui` allowances for `scope:profile` it had drifted away
+  from.
 - Bumped Angular to 22.1 (framework `22.1.1`, CLI/build toolchain `22.1.3`), the
   Nx group to `23.1.1`, and assorted patch releases (`firebase`,
   `typescript-eslint`, `ts-node`, `@swc-node/register`, `postcss`). TypeScript

@@ -19,7 +19,8 @@
       "@libs/analytics-firebase": [
         "./libs/shared/analytics-firebase/src/index.ts"
       ],
-      "@libs/settings": ["./libs/settings/src/index.ts"]
+      "@libs/settings": ["./libs/settings/src/index.ts"],
+      "@app/workspace-plugin": ["tools/workspace-plugin/src/index.ts"]
     },
     "strict": true,
     "noUncheckedSideEffectImports": false,

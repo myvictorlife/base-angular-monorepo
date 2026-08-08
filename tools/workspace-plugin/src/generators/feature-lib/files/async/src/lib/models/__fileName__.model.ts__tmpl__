@@ -1,0 +1,6 @@
+/** Placeholder model — replace with the feature's real data shape. Models shared
+ * across features belong in `@libs/entity` instead. */
+export interface <%= className %>Data {
+  id: string;
+  label: string;
+}

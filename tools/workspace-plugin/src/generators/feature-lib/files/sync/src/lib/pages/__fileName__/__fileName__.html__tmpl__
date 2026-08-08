@@ -1,0 +1,16 @@
+<section class="<%= fileName %>">
+  <header class="<%= fileName %>__header">
+    <h1 class="<%= fileName %>__title" data-testid="<%= fileName %>-title">
+      {{ '<%= constantName %>.TITLE' | translate }}
+    </h1>
+    <p class="<%= fileName %>__lead">
+      {{ '<%= constantName %>.LEAD' | translate }}
+    </p>
+  </header>
+
+  @if (hasMessage()) {
+    <p class="<%= fileName %>__message" data-testid="<%= fileName %>-message">
+      {{ message() }}
+    </p>
+  }
+</section>

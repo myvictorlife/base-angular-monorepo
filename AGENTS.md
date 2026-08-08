@@ -68,7 +68,9 @@ These are enforced by lint or by a test — breaking one fails the build.
 - Prefer signals to RxJS subscriptions in components
 - A new library needs a `scope:` tag **and** a `depConstraints` entry in
   `eslint.base.config.mjs`. A tag with no entry is unconstrained, which silently
-  defeats the boundary rules
+  defeats the boundary rules. For feature libraries,
+  `npx nx g @app/workspace-plugin:feature-lib <name>` does both (and the alias,
+  test target and i18n keys) in one step
 - Every i18n key exists in all four bundles — `en`, `nl`, `fr`, `pt`.
   `i18n-completeness.spec.ts` fails otherwise
 

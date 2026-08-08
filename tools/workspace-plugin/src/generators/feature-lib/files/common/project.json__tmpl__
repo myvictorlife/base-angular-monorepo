@@ -1,0 +1,27 @@
+{
+  "name": "<%= fileName %>",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/<%= fileName %>/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["<%= scope %>"],
+  "targets": {
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "coverageInclude": ["libs/<%= fileName %>/src/**/*.ts"],
+        "coverageExclude": [
+          "libs/<%= fileName %>/src/**/index.ts",
+          "libs/<%= fileName %>/src/**/*.routes.ts",
+          "libs/<%= fileName %>/src/**/*.spec.ts"
+        ],
+        "coverageThresholds": {
+          "statements": 95,
+          "branches": 90,
+          "functions": 90,
+          "lines": 95
+        }
+      }
+    }
+  }
+}

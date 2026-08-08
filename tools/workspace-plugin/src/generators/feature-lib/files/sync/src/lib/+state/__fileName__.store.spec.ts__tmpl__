@@ -1,0 +1,35 @@
+import { TestBed } from '@angular/core/testing';
+import { <%= className %>Store, initial<%= className %>State } from './<%= fileName %>.store';
+
+describe('<%= className %>Store', () => {
+  const createStore = () => {
+    TestBed.configureTestingModule({ providers: [<%= className %>Store] });
+    return TestBed.inject(<%= className %>Store);
+  };
+
+  it('starts from the initial state', () => {
+    const store = createStore();
+
+    expect(store.message()).toBe(initial<%= className %>State.message);
+    expect(store.hasMessage()).toBe(false);
+  });
+
+  it('stores a message and reflects it in the computed flag', () => {
+    const store = createStore();
+
+    store.setMessage('hello');
+
+    expect(store.message()).toBe('hello');
+    expect(store.hasMessage()).toBe(true);
+  });
+
+  it('clears the message again', () => {
+    const store = createStore();
+
+    store.setMessage('hello');
+    store.setMessage(null);
+
+    expect(store.message()).toBeNull();
+    expect(store.hasMessage()).toBe(false);
+  });
+});

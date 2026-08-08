@@ -1,0 +1,67 @@
+import { TestBed } from '@angular/core/testing';
+import { IGenericError } from '@libs/entity';
+import { Subject, of, throwError } from 'rxjs';
+import type { Mock } from 'vitest';
+import { <%= className %>Data } from '../models/<%= fileName %>.model';
+import { <%= className %>Service } from '../services/<%= fileName %>/<%= fileName %>.service';
+import { <%= className %>Store, initial<%= className %>State } from './<%= fileName %>.store';
+
+const data: <%= className %>Data = { id: '1', label: '<%= className %> placeholder' };
+const error: IGenericError = { message: 'boom', code: 'E_BOOM', status: 500 };
+
+describe('<%= className %>Store', () => {
+  let service: { fetch<%= className %>: Mock };
+
+  const setup = () => {
+    service = { fetch<%= className %>: vi.fn().mockReturnValue(of(data)) };
+    TestBed.configureTestingModule({
+      providers: [
+        <%= className %>Store,
+        { provide: <%= className %>Service, useValue: service },
+      ],
+    });
+    return TestBed.inject(<%= className %>Store);
+  };
+
+  it('starts from the initial state', () => {
+    const store = setup();
+
+    expect(store.data()).toBe(initial<%= className %>State.data);
+    expect(store.hasData()).toBe(false);
+    expect(store.errorMessage()).toBeNull();
+  });
+
+  it('stores the data on a successful fetch', () => {
+    const store = setup();
+
+    store.fetch<%= className %>();
+
+    expect(store.data()).toEqual(data);
+    expect(store.hasData()).toBe(true);
+    expect(store.loading()).toBe(false);
+  });
+
+  it('flags loading while the request is in flight', () => {
+    const store = setup();
+    const response = new Subject<<%= className %>Data>();
+    service.fetch<%= className %>.mockReturnValue(response);
+
+    store.fetch<%= className %>();
+    expect(store.loading()).toBe(true);
+
+    response.next(data);
+    expect(store.loading()).toBe(false);
+  });
+
+  it('stays usable after a failure so a retry can succeed', () => {
+    const store = setup();
+    service.fetch<%= className %>.mockReturnValueOnce(throwError(() => error));
+
+    store.fetch<%= className %>();
+    expect(store.errorMessage()).toBe('boom');
+
+    store.fetch<%= className %>();
+    expect(store.data()).toEqual(data);
+    expect(store.errorMessage()).toBeNull();
+  });
+});

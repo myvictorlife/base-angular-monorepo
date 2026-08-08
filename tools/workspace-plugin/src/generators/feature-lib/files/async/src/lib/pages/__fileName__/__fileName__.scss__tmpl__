@@ -1,0 +1,27 @@
+.<%= fileName %> {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: var(--space-10) var(--space-4);
+}
+
+.<%= fileName %>__title {
+  color: var(--color-text);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.<%= fileName %>__lead {
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.<%= fileName %>__loading,
+.<%= fileName %>__data {
+  margin-top: var(--space-6);
+  color: var(--color-text);
+}
+
+.<%= fileName %>__error {
+  margin-top: var(--space-6);
+  color: var(--color-danger);
+}

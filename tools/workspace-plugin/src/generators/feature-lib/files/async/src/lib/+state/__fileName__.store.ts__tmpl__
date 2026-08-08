@@ -1,0 +1,60 @@
+import { computed, inject } from '@angular/core';
+import { IGenericError } from '@libs/entity';
+import { tapResponse } from '@ngrx/operators';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { pipe, switchMap, tap } from 'rxjs';
+import { <%= className %>Data } from '../models/<%= fileName %>.model';
+import { <%= className %>Service } from '../services/<%= fileName %>/<%= fileName %>.service';
+
+export interface <%= className %>State {
+  data: <%= className %>Data | null;
+  loading: boolean;
+  error: IGenericError | null;
+}
+
+export const initial<%= className %>State: <%= className %>State = {
+  data: null,
+  loading: false,
+  error: null,
+};
+
+/**
+ * Feature state for the <%= fileName %> page. Provided on the route, never in
+ * root: created when the feature is entered and torn down when it is left.
+ */
+export const <%= className %>Store = signalStore(
+  withState(initial<%= className %>State),
+  withComputed(({ data, error }) => ({
+    hasData: computed(() => data() !== null),
+    errorMessage: computed(() => error()?.message ?? null),
+  })),
+  withMethods((store, service = inject(<%= className %>Service)) => ({
+    /**
+     * `switchMap` cancels an in-flight request when a newer one starts, so a slow
+     * response can never overwrite a fresher one. `tapResponse` keeps the stream
+     * alive after a failure — without it the first error would kill the rxMethod
+     * and every later call would be silently ignored.
+     */
+    fetch<%= className %>: rxMethod<void>(
+      pipe(
+        tap(() => patchState(store, { loading: true, error: null })),
+        switchMap(() =>
+          service.fetch<%= className %>().pipe(
+            tapResponse({
+              next: (data) => patchState(store, { data, loading: false }),
+              error: (error: IGenericError) =>
+                patchState(store, { error, loading: false }),
+            }),
+          ),
+        ),
+      ),
+    ),
+  })),
+);

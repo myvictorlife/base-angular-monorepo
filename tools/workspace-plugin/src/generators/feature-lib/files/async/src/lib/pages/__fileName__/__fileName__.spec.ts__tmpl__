@@ -1,0 +1,87 @@
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
+import {
+  TranslateLoader,
+  TranslationObject,
+  provideTranslateService,
+} from '@ngx-translate/core';
+import { Observable, Subject, of, throwError } from 'rxjs';
+import { <%= className %>Store } from '../../+state/<%= fileName %>.store';
+import { <%= className %>Data } from '../../models/<%= fileName %>.model';
+import { <%= className %>Service } from '../../services/<%= fileName %>/<%= fileName %>.service';
+import { <%= className %> } from './<%= fileName %>';
+
+const data: <%= className %>Data = { id: '1', label: '<%= className %> placeholder' };
+
+/** Serves the strings the template needs without touching HTTP. */
+class StubTranslateLoader implements TranslateLoader {
+  getTranslation(): Observable<TranslationObject> {
+    return of({
+      <%= constantName %>: {
+        TITLE: '<%= className %>',
+        LEAD: 'Lead text',
+        LOADING: 'Loading…',
+        ERROR: 'Something went wrong.',
+      },
+    });
+  }
+}
+
+describe('<%= className %>', () => {
+  let spectator: Spectator<<%= className %>>;
+
+  // Shared so a test can decide what the service answers *before* the component
+  // is created — the page fetches in its constructor.
+  const service = { fetch<%= className %>: vi.fn() };
+
+  const createComponent = createComponentFactory({
+    component: <%= className %>,
+    providers: [
+      <%= className %>Store,
+      { provide: <%= className %>Service, useValue: service },
+      provideTranslateService({
+        loader: [{ provide: TranslateLoader, useClass: StubTranslateLoader }],
+        lang: 'en',
+        fallbackLang: 'en',
+      }),
+    ],
+  });
+
+  /** Create the component only after the stub is configured. */
+  const render = () => {
+    spectator = createComponent();
+    spectator.detectChanges();
+    return spectator;
+  };
+
+  beforeEach(() => {
+    service.fetch<%= className %>.mockReset();
+    service.fetch<%= className %>.mockReturnValue(of(data));
+  });
+
+  it('fetches on creation and renders the data', () => {
+    render();
+
+    expect(service.fetch<%= className %>).toHaveBeenCalledTimes(1);
+    expect(spectator.query('[data-testid="<%= fileName %>-data"]')).toHaveText(
+      '<%= className %> placeholder',
+    );
+  });
+
+  it('shows the loading state while the request is in flight', () => {
+    service.fetch<%= className %>.mockReturnValue(new Subject());
+
+    render();
+
+    expect(spectator.query('[role="status"]')).toExist();
+  });
+
+  it('shows the error state when the fetch fails', () => {
+    service.fetch<%= className %>.mockReturnValue(
+      throwError(() => ({ message: 'boom', code: 'E_BOOM', status: 500 })),
+    );
+
+    render();
+
+    expect(spectator.query('[data-testid="<%= fileName %>-error"]')).toExist();
+  });
+});

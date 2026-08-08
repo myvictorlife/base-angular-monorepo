@@ -1,0 +1,34 @@
+import { computed } from '@angular/core';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
+
+export interface <%= className %>State {
+  message: string | null;
+}
+
+export const initial<%= className %>State: <%= className %>State = {
+  message: null,
+};
+
+/**
+ * Placeholder state for the <%= fileName %> feature — replace `message` with the
+ * feature's real state. Provided on the route (see `<%= fileName %>.routes.ts`),
+ * never in root. For HTTP-backed state, follow `libs/profile` instead
+ * (`rxMethod` + `tapResponse`).
+ */
+export const <%= className %>Store = signalStore(
+  withState(initial<%= className %>State),
+  withComputed(({ message }) => ({
+    hasMessage: computed(() => message() !== null),
+  })),
+  withMethods((store) => ({
+    setMessage(message: string | null): void {
+      patchState(store, { message });
+    },
+  })),
+);

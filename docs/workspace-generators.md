@@ -49,9 +49,28 @@ own feature lib. See [`skills/ngrx-state.md`](./skills/ngrx-state.md).
 
 ---
 
-## After generating a library
+## Feature libraries: use the workspace generator
 
-The generator does **not** finish the job. Three steps remain:
+For a **feature** library, skip the manual steps below entirely — the local
+generator performs all of them at once and its output is verified by the same
+lint rules and coverage floors as the rest of the workspace:
+
+```sh
+npx nx g @app/workspace-plugin:feature-lib orders                 # local state (reference: libs/settings)
+npx nx g @app/workspace-plugin:feature-lib orders --shape=async  # HTTP + rxMethod (reference: libs/profile)
+```
+
+It creates the library shape from `.claude/skills/feature-lib`, registers the
+`scope:` tag in `depConstraints` (anchored on the `<feature-scopes>` markers in
+`eslint.base.config.mjs` — keep those comments), adds the path alias, the Vitest
+`test` target and the i18n keys. Only the app route remains manual.
+
+The steps below still apply when creating a **non-feature** library (a shared
+`ui`-style or leaf lib) with the stock Nx generator.
+
+## After generating a library manually
+
+The stock generator does **not** finish the job. Three steps remain:
 
 1. **Add the tag to `depConstraints`** in `eslint.base.config.mjs`, listing what the new
    library may depend on. A tag with no entry is unconstrained.

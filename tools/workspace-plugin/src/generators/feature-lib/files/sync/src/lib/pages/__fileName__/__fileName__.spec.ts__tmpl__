@@ -1,0 +1,57 @@
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
+import {
+  TranslateLoader,
+  TranslationObject,
+  provideTranslateService,
+} from '@ngx-translate/core';
+import { Observable, of } from 'rxjs';
+import { <%= className %>Store } from '../../+state/<%= fileName %>.store';
+import { <%= className %> } from './<%= fileName %>';
+
+/** Serves the strings the template needs without touching HTTP. */
+class StubTranslateLoader implements TranslateLoader {
+  getTranslation(): Observable<TranslationObject> {
+    return of({
+      <%= constantName %>: { TITLE: '<%= className %>', LEAD: 'Lead text' },
+    });
+  }
+}
+
+describe('<%= className %>', () => {
+  let spectator: Spectator<<%= className %>>;
+
+  const createComponent = createComponentFactory({
+    component: <%= className %>,
+    providers: [
+      <%= className %>Store,
+      provideTranslateService({
+        loader: [{ provide: TranslateLoader, useClass: StubTranslateLoader }],
+        lang: 'en',
+        fallbackLang: 'en',
+      }),
+    ],
+  });
+
+  beforeEach(() => {
+    spectator = createComponent();
+  });
+
+  it('renders the translated title', () => {
+    expect(spectator.query('[data-testid="<%= fileName %>-title"]')).toHaveText(
+      '<%= className %>',
+    );
+  });
+
+  it('hides the message until the store has one', () => {
+    expect(
+      spectator.query('[data-testid="<%= fileName %>-message"]'),
+    ).not.toExist();
+
+    spectator.inject(<%= className %>Store).setMessage('hello');
+    spectator.detectChanges();
+
+    expect(spectator.query('[data-testid="<%= fileName %>-message"]')).toHaveText(
+      'hello',
+    );
+  });
+});
