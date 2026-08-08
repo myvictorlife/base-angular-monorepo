@@ -49,6 +49,13 @@ config file. Ordinary app-level additions are minor.
 
 ### Changed
 
+- Bumped Angular to 22.1 (framework `22.1.1`, CLI/build toolchain `22.1.3`), the
+  Nx group to `23.1.1`, and assorted patch releases (`firebase`,
+  `typescript-eslint`, `ts-node`, `@swc-node/register`, `postcss`). TypeScript
+  stays on 6.0.x because Angular 22.1 peers on `>=6.0 <6.1`, and
+  `@angular/platform-browser-dynamic` stays installed because Spectator imports
+  `BrowserDynamicTestingModule` from it at runtime despite not declaring the
+  dependency. The lockfile was regenerated in the process.
 - Bumped `@ngrx/*` from `22.0.0-beta.0` to `22.0.0-rc.0` — the last prerelease
   step before the stable NgRx 22. No source changes were needed.
 - **Migrated unit testing from Jest to Vitest**, through Angular's official
