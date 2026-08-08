@@ -568,6 +568,12 @@ Without that provider `ANALYTICS` resolves to `NoopAnalytics`, so call sites nee
 `if (analytics)` guard and no vendor SDK is bundled. Removing Firebase entirely is
 deleting one lib, one line and one dependency.
 
+With a config file in place, page views and events land in the Firebase console:
+
+<p align="center">
+  <img src="docs/images/firebase-analytics-console.png" width="90%" alt="Firebase console overview showing active users and app-version charts fed by the analytics events">
+</p>
+
 ### Testing
 
 | Layer      | Tool               | Covers                                                             |
