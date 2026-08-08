@@ -1,7 +1,7 @@
 import { Language } from '@libs/entity';
 import { ThemeService } from '@libs/theme';
 import { UpdateLanguageService } from '@libs/translation';
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 import {
   TranslateLoader,
   TranslationObject,
@@ -37,12 +37,12 @@ describe('Settings', () => {
   let spectator: Spectator<Settings>;
 
   const themeService = {
-    setPreference: jest.fn(),
+    setPreference: vi.fn(),
     preference: () => 'system',
     isDark: () => false,
   };
   const languageService = {
-    changeLanguage: jest.fn(),
+    changeLanguage: vi.fn(),
     currentLanguage: () => Language.English,
   };
 

@@ -6,7 +6,7 @@ Instructions for AI coding agents working in this repository. Humans: start with
 ## What this repository is
 
 An Nx monorepo template — Angular 22 standalone and zoneless, NgRx SignalStore,
-ngx-translate, Tailwind 4, Jest + Spectator, Playwright.
+ngx-translate, Tailwind 4, Vitest + Spectator, Playwright.
 
 It is a **template**, which changes what a good change looks like. Prefer the
 option that stays correct for someone who forks this and builds something you will
@@ -119,8 +119,10 @@ longer exists is worse than no guide.
 
 ## Known gaps — do not present these as solved
 
-- `@libs/ui` unit coverage is low; the atoms have no tests. The floor in its
-  `jest.config.ts` records reality, it is not a target.
+- `@libs/ui` has no tests for its atoms. Coverage is measured from the test
+  bundle, so those untested files are invisible to the report and the percentage
+  looks healthier than the suite is. The floor in its `project.json` records what
+  is measured, not how well the library is covered.
 - `@ngrx/*` is pinned to `22.0.0-beta.0` because no stable NgRx 22 exists yet.
 - `apps/demo-app` unit coverage is intentionally low; the app project is covered by
   the Playwright suite instead.

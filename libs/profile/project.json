@@ -6,26 +6,22 @@
   "projectType": "library",
   "tags": ["scope:profile"],
   "targets": {
-    "lint": {
-      "inputs": [
-        "default",
-        "^default",
-        "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs",
-        "{workspaceRoot}/tools/eslint-rules/**/*",
-        {
-          "externalDependencies": ["eslint"]
-        }
-      ]
-    },
     "test": {
-      "dependsOn": [
-        {
-          "projects": ["environment"],
-          "target": "generate-config"
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "coverageInclude": ["libs/profile/src/**/*.ts"],
+        "coverageExclude": [
+          "libs/profile/src/**/index.ts",
+          "libs/profile/src/**/*.routes.ts",
+          "libs/profile/src/**/*.spec.ts"
+        ],
+        "coverageThresholds": {
+          "statements": 90,
+          "branches": 90,
+          "functions": 80,
+          "lines": 90
         }
-      ]
+      }
     }
   }
 }

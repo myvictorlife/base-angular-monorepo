@@ -6,26 +6,22 @@
   "projectType": "library",
   "tags": ["scope:ui-lib"],
   "targets": {
-    "lint": {
-      "inputs": [
-        "default",
-        "^default",
-        "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs",
-        "{workspaceRoot}/tools/eslint-rules/**/*",
-        {
-          "externalDependencies": ["eslint"]
-        }
-      ]
-    },
     "test": {
-      "dependsOn": [
-        {
-          "projects": ["environment"],
-          "target": "generate-config"
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "coverageInclude": ["libs/shared/ui/src/**/*.ts"],
+        "coverageExclude": [
+          "libs/shared/ui/src/**/index.ts",
+          "libs/shared/ui/src/**/*.routes.ts",
+          "libs/shared/ui/src/**/*.spec.ts"
+        ],
+        "coverageThresholds": {
+          "statements": 85,
+          "branches": 90,
+          "functions": 85,
+          "lines": 80
         }
-      ]
+      }
     }
   }
 }

@@ -168,6 +168,15 @@ npm run deploy:firebase
 
 Do not change the `public` path — it must match the Angular build output path defined in `apps/demo-app/project.json`.
 
+The real file also sends security headers, including a strict
+`Content-Security-Policy` with no `'unsafe-inline'` in `script-src`. Because of
+that, the production build sets `inlineCritical: false` in
+`apps/demo-app/project.json` — Angular's critical-CSS inlining (Beasties) defers
+the stylesheet with an inline `onload` handler, which the CSP blocks, leaving
+the stylesheet stuck at `media="print"`. Do not re-enable `inlineCritical`
+without either dropping the CSP or adding `'unsafe-hashes'` plus the hash of
+`this.media='all'` to `script-src`.
+
 ---
 
 ## 5. Adding a new app to the same Firebase project

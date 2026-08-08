@@ -46,6 +46,17 @@ config file. Ordinary app-level additions are minor.
 
 ### Changed
 
+- **Migrated unit testing from Jest to Vitest**, through Angular's official
+  `@angular/build:unit-test` builder. Per-project `jest.config.*` and
+  `src/test-setup.ts` are gone; each `test` target now carries its coverage
+  options in `project.json`, with the shared pieces (`buildTarget`,
+  `watch: false`, caching, the `generate-config` dependency) in `nx.json`
+  `targetDefaults`. Specs import Spectator from `@ngneat/spectator/vitest` and use
+  `vi.*` in place of `jest.*`. Two behavioural notes: workspace aliases
+  (`@libs/*`) cannot be module-mocked because the Angular build resolves them
+  before Vitest sees them, and coverage is measured from the test bundle, so files
+  no spec imports are invisible to the report — the `@libs/ui` and
+  `@libs/translation` floors were re-based against the new measurement.
 - Moved `docs/skills/*.md` to `.claude/skills/<name>/SKILL.md` with `name` and
   `description` frontmatter. They were plain markdown that nothing pointed an agent
   at; as skills they load on demand when the task matches. All inbound links
@@ -62,6 +73,13 @@ config file. Ordinary app-level additions are minor.
 - `GlobalErrorHandler` depends on the `ANALYTICS` token instead of a concrete
   Firebase service.
 - `libs/shared/ui/src/lib/header/` moved to `organisms/header/`.
+
+### Fixed
+
+- Disabled critical-CSS inlining (`inlineCritical: false`) in the production
+  build. Beasties defers the stylesheet with an inline `onload` handler, which
+  the CSP in `hosting/firebase.json` blocks — leaving the deployed stylesheet
+  stuck at `media="print"` and non-critical styles unapplied.
 
 ### Removed
 

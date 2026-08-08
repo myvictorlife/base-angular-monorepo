@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 import { AlertComponent, AlertTone } from './alert';
 
 @Component({

@@ -6,26 +6,22 @@
   "projectType": "library",
   "tags": ["scope:translate"],
   "targets": {
-    "lint": {
-      "inputs": [
-        "default",
-        "^default",
-        "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs",
-        "{workspaceRoot}/tools/eslint-rules/**/*",
-        {
-          "externalDependencies": ["eslint"]
-        }
-      ]
-    },
     "test": {
-      "dependsOn": [
-        {
-          "projects": ["environment"],
-          "target": "generate-config"
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "coverageInclude": ["libs/shared/translation/src/**/*.ts"],
+        "coverageExclude": [
+          "libs/shared/translation/src/**/index.ts",
+          "libs/shared/translation/src/**/*.routes.ts",
+          "libs/shared/translation/src/**/*.spec.ts"
+        ],
+        "coverageThresholds": {
+          "statements": 55,
+          "branches": 70,
+          "functions": 45,
+          "lines": 50
         }
-      ]
+      }
     }
   }
 }

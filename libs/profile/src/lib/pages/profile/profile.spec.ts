@@ -1,14 +1,22 @@
 import { Router } from '@angular/router';
 import { IGenericError, User } from '@libs/entity';
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
-import { TranslateLoader, TranslationObject, provideTranslateService } from '@ngx-translate/core';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
+import {
+  TranslateLoader,
+  TranslationObject,
+  provideTranslateService,
+} from '@ngx-translate/core';
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { ProfileStore } from '../../+state/profile.store';
 import { ProfileService } from '../../services/profile/profile.service';
 import { Profile } from './profile';
 
 const user: User = { id: '123', name: 'John Doe' };
-const error: IGenericError = { message: 'network down', code: 'E_NET', status: 503 };
+const error: IGenericError = {
+  message: 'network down',
+  code: 'E_NET',
+  status: 503,
+};
 
 /** Serves the strings the template needs without touching HTTP. */
 class StubTranslateLoader implements TranslateLoader {
@@ -31,12 +39,12 @@ describe('Profile', () => {
   let router: Router;
   // Shared so a test can decide what the service answers before the component
   // is created — the component fetches in its constructor.
-  const profileService = { fetchProfile: jest.fn() };
+  const profileService = { fetchProfile: vi.fn() };
 
   const createComponent = createComponentFactory({
     component: Profile,
     providers: [
-      { provide: Router, useValue: { navigate: jest.fn() } },
+      { provide: Router, useValue: { navigate: vi.fn() } },
       { provide: ProfileService, useValue: profileService },
       // The store is normally provided by the profile route, so a component-level
       // test has to register it explicitly. No root store, no effects runner.
@@ -74,7 +82,7 @@ describe('Profile', () => {
 
   it('should call goHome when Back to Home button is clicked', () => {
     render();
-    const spy = jest.spyOn(spectator.component, 'goHome');
+    const spy = vi.spyOn(spectator.component, 'goHome');
     spectator.click('button');
     expect(spy).toHaveBeenCalled();
   });
@@ -97,7 +105,9 @@ describe('Profile', () => {
     profileService.fetchProfile.mockReturnValue(new Subject<User>());
     render();
 
-    expect(spectator.query('[role="status"]')?.textContent).toContain('Loading profile...');
+    expect(spectator.query('[role="status"]')?.textContent).toContain(
+      'Loading profile...',
+    );
     expect(spectator.query('lib-user-info')).toBeFalsy();
   });
 

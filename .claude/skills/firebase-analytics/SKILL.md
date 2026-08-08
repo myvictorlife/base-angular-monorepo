@@ -140,9 +140,9 @@ Override the token — that is what it is for:
 
 ```typescript
 const analytics = {
-  logEvent: jest.fn(),
-  logPageView: jest.fn(),
-  initialize: jest.fn(),
+  logEvent: vi.fn(),
+  logPageView: vi.fn(),
+  initialize: vi.fn(),
 };
 
 TestBed.configureTestingModule({

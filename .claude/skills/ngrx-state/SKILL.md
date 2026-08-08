@@ -228,7 +228,7 @@ A store test is plain `TestBed` — no `provideStore`, no effects runner, no mar
 
 ```typescript
 const setup = () => {
-  service = { fetchProfile: jest.fn().mockReturnValue(of(user)) };
+  service = { fetchProfile: vi.fn().mockReturnValue(of(user)) };
   TestBed.configureTestingModule({
     providers: [FeatureStore, { provide: FeatureService, useValue: service }],
   });

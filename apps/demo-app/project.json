@@ -50,7 +50,15 @@
               "maximumError": "8kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "optimization": {
+            "scripts": true,
+            "fonts": true,
+            "styles": {
+              "minify": true,
+              "inlineCritical": false
+            }
+          }
         },
         "development": {
           "optimization": false,
@@ -92,26 +100,22 @@
         }
       }
     },
-    "lint": {
-      "inputs": [
-        "default",
-        "^default",
-        "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs",
-        "{workspaceRoot}/tools/eslint-rules/**/*",
-        {
-          "externalDependencies": ["eslint"]
-        }
-      ]
-    },
     "test": {
-      "dependsOn": [
-        {
-          "projects": ["environment"],
-          "target": "generate-config"
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "coverageInclude": ["apps/demo-app/src/**/*.ts"],
+        "coverageExclude": [
+          "apps/demo-app/src/**/index.ts",
+          "apps/demo-app/src/**/*.routes.ts",
+          "apps/demo-app/src/**/*.spec.ts"
+        ],
+        "coverageThresholds": {
+          "statements": 5,
+          "branches": 0,
+          "functions": 0,
+          "lines": 5
         }
-      ]
+      }
     },
     "serve-static": {
       "continuous": true,

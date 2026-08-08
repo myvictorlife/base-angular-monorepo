@@ -4,20 +4,5 @@
   "sourceRoot": "libs/shared/entity/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["scope:entity-lib"],
-  "targets": {
-    "lint": {
-      "inputs": [
-        "default",
-        "^default",
-        "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs",
-        "{workspaceRoot}/tools/eslint-rules/**/*",
-        {
-          "externalDependencies": ["eslint"]
-        }
-      ]
-    }
-  }
+  "tags": ["scope:entity-lib"]
 }

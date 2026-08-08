@@ -41,7 +41,8 @@ jobs:
       # No secrets here on purpose. Without them the generator produces an empty
       # config and `firebaseEnabled` is false — so this job also proves that a fresh
       # clone, with no Firebase project, still lints, tests and builds.
-      # One invocation per target on purpose: `--coverage` is a Jest flag and
+      # One invocation per target on purpose: `--coverage` only exists on the
+      # unit-test builder and
       # `--configuration=production` only exists on build. Nx forwards extra args to
       # every target in a `run-many`, so a single combined command makes eslint fail
       # with "Invalid option '--coverage'" and build with "'coverage' is not found in

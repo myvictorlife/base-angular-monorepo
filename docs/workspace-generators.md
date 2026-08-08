@@ -57,10 +57,13 @@ The generator does **not** finish the job. Three steps remain:
    library may depend on. A tag with no entry is unconstrained.
 2. **Add the path alias** to `tsconfig.base.json` under `compilerOptions.paths`
    (e.g. `"@libs/profile": ["libs/profile/src/index.ts"]`).
-3. **Add a `test` target** to the new `project.json` plus `jest.config.ts`,
-   `tsconfig.spec.json` and `src/test-setup.ts` if the library will have tests —
-   and reference `./tsconfig.spec.json` from its `tsconfig.json`, otherwise the specs
-   are never type-checked.
+3. **Add a `test` target** to the new `project.json` (executor
+   `@angular/build:unit-test`, with the coverage options — copy the shape from
+   `libs/settings/project.json`) plus a `tsconfig.spec.json` if the library will
+   have tests — and reference `./tsconfig.spec.json` from its `tsconfig.json`,
+   otherwise the specs are never type-checked. The shared pieces (`buildTarget`,
+   `watch`, caching, the `generate-config` dependency) come from `targetDefaults`
+   in `nx.json`.
 
 See [`skills/module-boundaries.md`](./skills/module-boundaries.md) for the full checklist.
 

@@ -41,15 +41,15 @@ expensive to change once a team has built on top of it.
 | **Theming**                | Nothing                                 | Design tokens in one lib, light/dark following the OS, and a `/design` page rendering every token through `var(--token)` — so the documentation cannot go stale without the page visibly breaking.                       |
 | **Third-party config**     | `environment.ts` files you edit by hand | One JSON file per integration, git-ignored, compiled into typed modules. A fork never inherits your project id.                                                                                                          |
 | **Analytics**              | Nothing                                 | Behind an `ANALYTICS` token with a no-op default. Delete one lib and one line to remove Firebase entirely.                                                                                                               |
-| **Coverage**               | Collected, never enforced               | Measured across the whole `src` tree — not just files a test imported — with a per-project floor that fails the build.                                                                                                   |
+| **Coverage**               | Collected, never enforced               | A per-project floor in each `test` target, set just under what the project measures today and enforced in CI — the build fails when a floor is broken.                                                                   |
 | **Commits, deps, secrets** | Nothing                                 | commitlint, lint-staged, Renovate, and a pre-commit hook that rejects a committed API key.                                                                                                                               |
 | **Deploy**                 | Nothing                                 | Push to `main` deploys; every pull request gets its own preview URL, and the e2e suite runs against that real deployed bundle.                                                                                           |
 
 **Two things this template is honest about.** `@ngrx/*` sits on `22.0.0-beta.0`
 because no stable NgRx 22 exists yet — the Renovate rule below moves off it the day
 one ships. And unit coverage in `@libs/ui` and `apps/demo-app` is low; the floors
-in each `jest.config` record where things actually stand rather than a number that
-flatters.
+in each project's `test` target record where things actually stand rather than a
+number that flatters.
 
 **Where it is the wrong choice:** if you want one small app rather than a
 workspace, if your team does not want NgRx, or if you would rather choose each
@@ -58,17 +58,17 @@ removing five things is more work than adding them.
 
 ## Tech Stack
 
-| Layer         | Technology                             | Version     |
-| ------------- | -------------------------------------- | ----------- |
-| Framework     | Angular (standalone, **zoneless**)     | 22.0.x      |
-| Feature state | NgRx **SignalStore** (`@ngrx/signals`) | 22.x        |
-| Global state  | NgRx Store — router state only         | 22.x        |
-| i18n          | ngx-translate (signal-based)           | 18.x        |
-| Monorepo      | Nx                                     | 23.x        |
-| Testing       | Jest + Spectator                       | 30.x / 22.x |
-| Styling       | Tailwind CSS + SCSS                    | 4.x         |
-| Language      | TypeScript                             | 6.0.x       |
-| Linting       | ESLint + Prettier                      | 9.x / 3.x   |
+| Layer         | Technology                             | Version    |
+| ------------- | -------------------------------------- | ---------- |
+| Framework     | Angular (standalone, **zoneless**)     | 22.0.x     |
+| Feature state | NgRx **SignalStore** (`@ngrx/signals`) | 22.x       |
+| Global state  | NgRx Store — router state only         | 22.x       |
+| i18n          | ngx-translate (signal-based)           | 18.x       |
+| Monorepo      | Nx                                     | 23.x       |
+| Testing       | Vitest + Spectator                     | 4.x / 22.x |
+| Styling       | Tailwind CSS + SCSS                    | 4.x        |
+| Language      | TypeScript                             | 6.0.x      |
+| Linting       | ESLint + Prettier                      | 9.x / 3.x  |
 
 > **No NgModules and no zone.js.** Every library exposes a provider function
 > (`provideTranslation()`) or, for feature state, a `signalStore` class listed in the
@@ -111,9 +111,8 @@ base-angular-monorepo/
 │       │   └── styles.scss                 # Global styles
 │       ├── e2e/                            # Playwright specs (navigation, settings, a11y)
 │       ├── public/                         # Copied verbatim (favicon, fonts/)
-│       ├── project.json                    # Nx project configuration
+│       ├── project.json                    # Nx targets, incl. this project's coverage floor
 │       ├── playwright.config.mts           # BASE_URL switches local ↔ deployed
-│       ├── jest.config.ts                  # Carries this project's coverage floor
 │       └── eslint.config.mjs
 │
 ├── libs/                                   # Shared libraries
@@ -211,7 +210,6 @@ base-angular-monorepo/
 ├── nx.json                                 # Nx workspace configuration
 ├── tsconfig.base.json                      # Shared TypeScript paths and config
 ├── eslint.base.config.mjs                  # Shared ESLint rules + depConstraints
-├── jest.preset.js                          # Shared Jest preset + whole-tree coverage
 ├── CONTRIBUTING.md · CODE_OF_CONDUCT.md · CHANGELOG.md · LICENSE
 ├── package.json
 └── README.md
@@ -455,15 +453,16 @@ deleting one lib, one line and one dependency.
 
 ### Testing
 
-| Layer      | Tool             | Covers                                                             |
-| ---------- | ---------------- | ------------------------------------------------------------------ |
-| Unit       | Jest + Spectator | Stores, services, components                                       |
-| End-to-end | Playwright       | Routing, lazy chunks, persistence, `<html lang>`, accessible names |
+| Layer      | Tool               | Covers                                                             |
+| ---------- | ------------------ | ------------------------------------------------------------------ |
+| Unit       | Vitest + Spectator | Stores, services, components                                       |
+| End-to-end | Playwright         | Routing, lazy chunks, persistence, `<html lang>`, accessible names |
 
-Coverage is measured across the whole `src` tree — not only files a test imported —
-so an untested component lowers the number instead of being invisible. Each project
-sets its own floor in its `jest.config`; see the comments there for why a given
-number is what it is.
+Unit tests run through Angular's official `@angular/build:unit-test` builder with
+Vitest as the runner. Each project sets its own coverage floor in the `test` target
+of its `project.json`, just under what it measures today. One caveat to keep in
+mind: coverage is measured from the compiled test bundle, so a file no spec (or
+route) imports is invisible to the report rather than dragging the number down.
 
 The e2e suite runs twice: against `nx serve` in CI, and against the deployed
 preview channel on every pull request via `BASE_URL`. The second run is the only one
@@ -558,7 +557,7 @@ They are ordinary markdown and read fine on their own.
 | [`.claude/skills/lazy-loading/SKILL.md`](.claude/skills/lazy-loading/SKILL.md)             | Lazy loading rules — what to export, how to wire routes, common mistakes                                          |
 | [`.claude/skills/ngrx-state/SKILL.md`](.claude/skills/ngrx-state/SKILL.md)                 | SignalStore pattern — state, computed, methods, and migrating off the classic store                               |
 | [`.claude/skills/angular-component/SKILL.md`](.claude/skills/angular-component/SKILL.md)   | Modern Angular component patterns — signals, input/output, control flow                                           |
-| [`.claude/skills/unit-testing/SKILL.md`](.claude/skills/unit-testing/SKILL.md)             | Unit testing with Jest and Spectator                                                                              |
+| [`.claude/skills/unit-testing/SKILL.md`](.claude/skills/unit-testing/SKILL.md)             | Unit testing with Vitest and Spectator                                                                            |
 | [`.claude/skills/module-boundaries/SKILL.md`](.claude/skills/module-boundaries/SKILL.md)   | Nx tags, ESLint boundary rules, registration steps                                                                |
 | [`.claude/skills/firebase-analytics/SKILL.md`](.claude/skills/firebase-analytics/SKILL.md) | Analytics setup and event logging                                                                                 |
 | [`.claude/skills/firebase-deploy/SKILL.md`](.claude/skills/firebase-deploy/SKILL.md)       | Build and deploy to Firebase Hosting                                                                              |

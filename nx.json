@@ -31,15 +31,7 @@
         }
       ]
     },
-    "@nx/jest:jest": {
-      "dependsOn": [
-        {
-          "projects": ["environment"],
-          "target": "generate-config"
-        }
-      ]
-    },
-    "@nx/eslint:lint": {
+    "lint": {
       "cache": true,
       "inputs": [
         "default",
@@ -47,12 +39,25 @@
         "{workspaceRoot}/.eslintrc.json",
         "{workspaceRoot}/.eslintignore",
         "{workspaceRoot}/eslint.config.mjs",
-        "{workspaceRoot}/tools/eslint-rules/**/*"
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        {
+          "externalDependencies": ["eslint"]
+        }
       ]
     },
     "@angular/build:unit-test": {
       "cache": true,
-      "inputs": ["default", "^production"]
+      "inputs": ["default", "^production"],
+      "dependsOn": [
+        {
+          "projects": ["environment"],
+          "target": "generate-config"
+        }
+      ],
+      "options": {
+        "buildTarget": "demo-app:build:development",
+        "watch": false
+      }
     }
   },
   "generators": {
@@ -60,11 +65,11 @@
       "e2eTestRunner": "none",
       "linter": "eslint",
       "style": "scss",
-      "unitTestRunner": "jest"
+      "unitTestRunner": "none"
     },
     "@nx/angular:library": {
       "linter": "eslint",
-      "unitTestRunner": "jest"
+      "unitTestRunner": "none"
     },
     "@nx/angular:component": {
       "style": "css"
@@ -83,12 +88,6 @@
       "plugin": "@nx/eslint/plugin",
       "options": {
         "targetName": "lint"
-      }
-    },
-    {
-      "plugin": "@nx/jest/plugin",
-      "options": {
-        "targetName": "test"
       }
     }
   ]

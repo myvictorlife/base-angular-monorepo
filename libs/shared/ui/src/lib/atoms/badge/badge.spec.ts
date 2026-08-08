@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 import { BadgeComponent, BadgeTone, BadgeVariant } from './badge';
 
 const TONES: BadgeTone[] = [

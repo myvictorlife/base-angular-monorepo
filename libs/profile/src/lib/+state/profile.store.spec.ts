@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { IGenericError, User } from '@libs/entity';
 import { Subject, of, throwError } from 'rxjs';
+import type { Mock } from 'vitest';
 import { ProfileService } from '../services/profile/profile.service';
 import { ProfileStore, initialProfileState } from './profile.store';
 
@@ -8,10 +9,10 @@ const user: User = { id: '1', name: 'Ada Lovelace' };
 const error: IGenericError = { message: 'boom', code: 'E_BOOM', status: 500 };
 
 describe('ProfileStore', () => {
-  let profileService: { fetchProfile: jest.Mock };
+  let profileService: { fetchProfile: Mock };
 
   const setup = () => {
-    profileService = { fetchProfile: jest.fn().mockReturnValue(of(user)) };
+    profileService = { fetchProfile: vi.fn().mockReturnValue(of(user)) };
     TestBed.configureTestingModule({
       providers: [
         ProfileStore,
@@ -94,7 +95,9 @@ describe('ProfileStore', () => {
     const first = new Subject<User>();
     const second = new Subject<User>();
 
-    profileService.fetchProfile.mockReturnValueOnce(first).mockReturnValueOnce(second);
+    profileService.fetchProfile
+      .mockReturnValueOnce(first)
+      .mockReturnValueOnce(second);
     store.fetchProfile();
     store.fetchProfile();
 

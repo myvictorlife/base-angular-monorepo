@@ -1,4 +1,4 @@
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 import { ThemeService } from '@libs/theme';
 import {
   TranslateLoader,
@@ -11,7 +11,10 @@ import { ThemeToggleComponent } from './theme-toggle';
 class StubTranslateLoader implements TranslateLoader {
   getTranslation(): Observable<TranslationObject> {
     return of({
-      THEME: { SWITCH_TO_DARK: 'Switch to dark theme', SWITCH_TO_LIGHT: 'Switch to light theme' },
+      THEME: {
+        SWITCH_TO_DARK: 'Switch to dark theme',
+        SWITCH_TO_LIGHT: 'Switch to light theme',
+      },
     });
   }
 }
@@ -59,12 +62,18 @@ describe('ThemeToggleComponent', () => {
   });
 
   it('announces the action it will perform, not the current state', () => {
-    expect(spectator.query('button')).toHaveAttribute('aria-label', 'Switch to dark theme');
+    expect(spectator.query('button')).toHaveAttribute(
+      'aria-label',
+      'Switch to dark theme',
+    );
 
     spectator.click('button');
     spectator.detectChanges();
 
-    expect(spectator.query('button')).toHaveAttribute('aria-label', 'Switch to light theme');
+    expect(spectator.query('button')).toHaveAttribute(
+      'aria-label',
+      'Switch to light theme',
+    );
   });
 
   it('follows the service when the theme changes elsewhere', () => {

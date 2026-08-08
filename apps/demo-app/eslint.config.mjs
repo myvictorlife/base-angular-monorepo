@@ -5,7 +5,7 @@ import baseConfig from '../../eslint.base.config.mjs';
 export default [
   {
     // Scoped to e2e/: the Playwright rules assume Playwright's `test()`, so
-    // applied workspace-wide they flag every `expect` inside a Jest `it()` as a
+    // applied workspace-wide they flag every `expect` inside a Vitest `it()` as a
     // standalone expect.
     ...playwright.configs['flat/recommended'],
     files: ['e2e/**/*.ts'],

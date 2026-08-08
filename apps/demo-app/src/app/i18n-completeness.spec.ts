@@ -2,7 +2,9 @@ import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { Language } from '@libs/entity';
 
-const I18N_DIR = join(__dirname, '../assets/i18n');
+// Resolved from the workspace root (where Vitest runs): the unit-test builder
+// executes specs from a bundled location, so `__dirname` no longer points at src.
+const I18N_DIR = join(process.cwd(), 'apps/demo-app/src/assets/i18n');
 
 type Json = { [key: string]: string | Json };
 

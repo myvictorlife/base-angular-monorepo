@@ -2,13 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { Language } from '@libs/entity';
 import { ThemeService } from '@libs/theme';
 import { UpdateLanguageService } from '@libs/translation';
+import type { Mocked } from 'vitest';
 import { REDUCE_MOTION_STORAGE_KEY, SettingsStore } from './settings.store';
 
 describe('SettingsStore', () => {
-  let themeService: jest.Mocked<Pick<ThemeService, 'setPreference'>>;
-  let languageService: jest.Mocked<
-    Pick<UpdateLanguageService, 'changeLanguage'>
-  >;
+  let themeService: Mocked<Pick<ThemeService, 'setPreference'>>;
+  let languageService: Mocked<Pick<UpdateLanguageService, 'changeLanguage'>>;
 
   const createStore = () => {
     TestBed.configureTestingModule({
@@ -37,8 +36,8 @@ describe('SettingsStore', () => {
   beforeEach(() => {
     localStorage.clear();
     document.documentElement.classList.remove('reduce-motion');
-    themeService = { setPreference: jest.fn() };
-    languageService = { changeLanguage: jest.fn() };
+    themeService = { setPreference: vi.fn() };
+    languageService = { changeLanguage: vi.fn() };
   });
 
   it('reads theme and language through the owning services rather than copying them', () => {

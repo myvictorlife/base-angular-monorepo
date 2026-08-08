@@ -1,6 +1,6 @@
 import { provideRouter } from '@angular/router';
 import { Language } from '@libs/entity';
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 import {
   TranslateLoader,
   TranslateService,
@@ -153,7 +153,9 @@ describe('HeaderComponent', () => {
       spectator.click('.header__menu-btn');
       spectator.detectChanges();
 
-      spectator.dispatchKeyboardEvent(document, 'keydown', 'Escape');
+      // Dispatched natively: Spectator's dispatchKeyboardEvent goes through the
+      // legacy initKeyboardEvent API, which jsdom rejects under Vitest.
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
       spectator.detectChanges();
 
       expect(spectator.component.mobileMenuOpen()).toBe(false);
@@ -164,7 +166,7 @@ describe('HeaderComponent', () => {
       spectator.detectChanges();
       expect(spectator.component.languageDropdownOpen()).toBe(true);
 
-      spectator.dispatchKeyboardEvent(document, 'keydown', 'Escape');
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
       spectator.detectChanges();
 
       expect(spectator.component.languageDropdownOpen()).toBe(false);

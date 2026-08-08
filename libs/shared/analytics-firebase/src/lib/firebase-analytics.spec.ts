@@ -1,41 +1,50 @@
 import { TestBed } from '@angular/core/testing';
 import { ANALYTICS } from '@libs/analytics';
+import { environment } from '@libs/environment';
 import { FirebaseAnalytics } from './firebase-analytics';
 import { provideFirebaseAnalytics } from './firebase-analytics.providers';
 
 // The SDK is mocked rather than reached: these tests must pass on a fresh clone
 // with no Firebase project, and a real `getAnalytics()` needs a browser + network.
-const mockLogEvent = jest.fn();
-const mockGetAnalytics = jest.fn(() => ({ app: 'stub' }));
-const mockIsSupported = jest.fn(async () => true);
-const mockInitializeApp = jest.fn();
-const mockGetApps = jest.fn(() => [] as unknown[]);
+// `vi.mock` factories are hoisted above the import graph, so everything they close
+// over has to be lifted with them via `vi.hoisted`.
+const {
+  mockLogEvent,
+  mockGetAnalytics,
+  mockIsSupported,
+  mockInitializeApp,
+  mockGetApps,
+} = vi.hoisted(() => ({
+  mockLogEvent: vi.fn(),
+  mockGetAnalytics: vi.fn(() => ({ app: 'stub' })),
+  mockIsSupported: vi.fn(async () => true),
+  mockInitializeApp: vi.fn(),
+  mockGetApps: vi.fn(() => [] as unknown[]),
+}));
 
-jest.mock('firebase/analytics', () => ({
+vi.mock('firebase/analytics', () => ({
   getAnalytics: () => mockGetAnalytics(),
   isSupported: () => mockIsSupported(),
   logEvent: (...args: unknown[]) => mockLogEvent(...args),
 }));
 
-jest.mock('firebase/app', () => ({
+vi.mock('firebase/app', () => ({
   getApps: () => mockGetApps(),
   initializeApp: (config: unknown) => mockInitializeApp(config),
 }));
 
-// Mutable so each test can pick the enabled/disabled path.
-const environment = {
-  firebaseEnabled: false,
-  firebaseConfig: { apiKey: 'stub' },
-};
-jest.mock('@libs/environment', () => ({
-  get environment() {
-    return environment;
-  },
-}));
+// `@libs/environment` cannot be module-mocked: the Angular build resolves the
+// workspace alias before Vitest ever sees an import to intercept. The enabled and
+// disabled paths are driven by flipping the real (mutable) instance instead, which
+// works with or without a generated Firebase config.
+const originalFirebaseEnabled = environment.firebaseEnabled;
+afterAll(() => {
+  environment.firebaseEnabled = originalFirebaseEnabled;
+});
 
 describe('provideFirebaseAnalytics', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     environment.firebaseEnabled = false;
     mockIsSupported.mockResolvedValue(true);
     mockGetApps.mockReturnValue([]);

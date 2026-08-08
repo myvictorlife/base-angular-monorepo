@@ -20,7 +20,7 @@ describe('ANALYTICS', () => {
   });
 
   it('is overridable — this is the seam vendor libraries plug into', () => {
-    const stub = { ...new NoopAnalytics(), logEvent: jest.fn() };
+    const stub = { ...new NoopAnalytics(), logEvent: vi.fn() };
     TestBed.configureTestingModule({
       providers: [{ provide: ANALYTICS, useValue: stub }],
     });

@@ -1,18 +1,24 @@
 ---
 name: unit-testing
-description: Write unit tests with Jest and Spectator. Use when adding or fixing tests for a component, store, service or interceptor, and when a coverage threshold fails the build.
+description: Write unit tests with Vitest and Spectator. Use when adding or fixing tests for a component, store, service or interceptor, and when a coverage threshold fails the build.
 ---
 
-# Skill: Unit Testing with Jest and Spectator
+# Skill: Unit Testing with Vitest and Spectator
 
-This project uses **Jest** as the test runner and **Spectator** as the Angular testing utility.
-Spectator removes boilerplate from `TestBed` setup and provides a clean, expressive API.
+This project uses **Vitest** as the test runner — through Angular's official
+`@angular/build:unit-test` builder — and **Spectator** as the Angular testing
+utility. Spectator removes boilerplate from `TestBed` setup and provides a clean,
+expressive API.
 
 ---
 
 ## Setup per project
 
-Each library has its own `jest.config.ts` and `test-setup.ts`. Run tests for a specific project:
+There is no per-project runner config file. Each project's `test` target in
+`project.json` uses the `@angular/build:unit-test` executor and carries only the
+coverage options; everything shared (the `buildTarget` the specs compile against,
+`watch: false`, caching, the `generate-config` dependency) lives in `nx.json`
+under `targetDefaults`.
 
 ```sh
 npx nx test <project-name>
@@ -20,22 +26,65 @@ npx nx test <project-name>
 # Examples
 npx nx test profile
 npx nx test demo-app
-npx nx test shared-ui
+npx nx test ui
 
-# Run all
-npx nx run-many --target=test --all
+# Watch mode while developing
+npx nx test profile --watch
+
+# Run all, with coverage thresholds enforced
+npx nx run-many -t test --all --coverage
 ```
+
+`describe` / `it` / `expect` / `vi` are globals (typed via `vitest/globals` in each
+`tsconfig.spec.json`) — do not import them. Import only types:
+
+```typescript
+import type { Mock, Mocked } from 'vitest';
+```
+
+### Runner specifics worth knowing
+
+- **The builder compiles specs with the app's build pipeline.** The libraries here
+  are non-buildable, so `buildTarget` points at `demo-app:build:development`
+  (set once in `nx.json`).
+- **`vi.mock` works for npm packages, not for `@libs/*` aliases.** Workspace
+  aliases are resolved by the Angular build before Vitest sees an import to
+  intercept. To vary a workspace module's behaviour, inject a stub through DI or
+  mutate the real instance (see `firebase-analytics.spec.ts`).
+- **Everything a `vi.mock` factory closes over must come from `vi.hoisted`** —
+  factories are hoisted above the import graph.
+- **`spectator.dispatchKeyboardEvent` does not work** — it goes through the legacy
+  `initKeyboardEvent` API, which jsdom rejects under Vitest. Dispatch natively:
+  `document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))`.
+- **Specs run from the workspace root**, and `__dirname` points into the bundled
+  output. A test that reads files from disk must resolve from `process.cwd()`.
+
+---
+
+## Coverage
+
+Thresholds live in each project's `test` target (`coverageThresholds` in
+`project.json`), set just under what that project measures today. Per-project
+floors ratchet independently — raise a floor whenever its real number moves.
+
+One honest caveat: coverage is measured from the compiled test bundle, so **a file
+no spec imports is invisible to the report** — it does not drag the number down
+the way the old whole-tree measurement did. An untested-but-routed page still
+shows up (lazy chunks are part of the bundle); a component nothing references does
+not. Treat a suspiciously high number in a thinly-tested project accordingly.
 
 ---
 
 ## Testing a Component with Spectator
 
-Use `createComponentFactory` from `@ngrx/spectator` (or `@ngrx/spectator/jest`).
+Use `createComponentFactory` from `@ngneat/spectator/vitest` — always the
+`/vitest` entry: it wires `createSpyObject`/`mockProvider` to `vi.fn` and types
+the custom matchers against Vitest's `expect`.
 
 ### Basic component test
 
 ```typescript
-import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 import { UserInfoComponent } from './user-info';
 import { User } from '@libs/entity';
 
@@ -98,7 +147,7 @@ would test the mock; stubbing the service exercises the real state transitions a
 still keeps the test off the network.
 
 ```typescript
-import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 import { Subject, of } from 'rxjs';
 import { ProfileStore } from '../../+state/profile.store';
 import { ProfileService } from '../../services/profile/profile.service';
@@ -110,7 +159,7 @@ describe('ProfilePage', () => {
   const mockUser = { id: '1', name: 'John Doe' };
   // Shared so a test can decide what the service answers *before* the component is
   // created — the page fetches in its constructor.
-  const profileService = { fetchProfile: jest.fn() };
+  const profileService = { fetchProfile: vi.fn() };
 
   const createComponent = createComponentFactory({
     component: ProfilePage,
@@ -159,7 +208,10 @@ different service response — by then the constructor has already fetched.
 Use `createServiceFactory` from Spectator.
 
 ```typescript
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import {
+  createServiceFactory,
+  SpectatorService,
+} from '@ngneat/spectator/vitest';
 import {
   HttpClientTestingModule,
   HttpTestingController,
@@ -184,17 +236,18 @@ describe('ProfileService', () => {
     httpMock.verify();
   });
 
-  it('should return a user profile', (done) => {
-    const mockUser = { id: '1', name: 'John' };
+  it('should return a user profile', () =>
+    new Promise<void>((done) => {
+      const mockUser = { id: '1', name: 'John' };
 
-    spectator.service.fetchProfile().subscribe((user) => {
-      expect(user).toEqual(mockUser);
-      done();
-    });
+      spectator.service.fetchProfile().subscribe((user) => {
+        expect(user).toEqual(mockUser);
+        done();
+      });
 
-    const req = httpMock.expectOne('/api/profile');
-    req.flush(mockUser);
-  });
+      const req = httpMock.expectOne('/api/profile');
+      req.flush(mockUser);
+    }));
 });
 ```
 
@@ -209,6 +262,7 @@ The reference is `libs/profile/src/lib/+state/profile.store.spec.ts`.
 ```typescript
 import { TestBed } from '@angular/core/testing';
 import { Subject, of, throwError } from 'rxjs';
+import type { Mock } from 'vitest';
 import { ProfileService } from '../services/profile/profile.service';
 import { ProfileStore } from './profile.store';
 
@@ -216,10 +270,10 @@ const user = { id: '1', name: 'John' };
 const error = { message: 'Not found', code: 'E_404', status: 404 };
 
 describe('ProfileStore', () => {
-  let profileService: { fetchProfile: jest.Mock };
+  let profileService: { fetchProfile: Mock };
 
   const setup = () => {
-    profileService = { fetchProfile: jest.fn().mockReturnValue(of(user)) };
+    profileService = { fetchProfile: vi.fn().mockReturnValue(of(user)) };
     TestBed.configureTestingModule({
       providers: [
         ProfileStore,
@@ -295,7 +349,7 @@ spectator.typeInElement('some text', 'input');
 spectator.click('button');
 spectator.click(spectator.query('button[type="submit"]')!);
 
-// Assertions (jest-dom matchers)
+// Assertions (Spectator's DOM matchers, registered via expect.extend)
 expect(el).toHaveText('Expected text');
 expect(el).toBeVisible();
 expect(el).toHaveClass('active');
@@ -325,10 +379,11 @@ spectator.click('[data-testid="back-button"]');
 
 ## Checklist
 
-- [ ] Use `createComponentFactory` or `createServiceFactory` from Spectator for components and services
+- [ ] Use `createComponentFactory` or `createServiceFactory` from `@ngneat/spectator/vitest` for components and services
 - [ ] Use plain `TestBed` for SignalStore tests — the store is not a component
 - [ ] Provide the real store and stub the **service** it injects, never mock the store
 - [ ] Cover loading and error paths, not just the happy path
 - [ ] Assert that a retry works after a failure — that is what catches a missing `tapResponse`
 - [ ] Use `data-testid` for DOM queries in component tests
 - [ ] Verify `httpMock.verify()` after each HTTP service test
+- [ ] Never `vi.mock` a `@libs/*` alias — stub through DI instead
