@@ -20,9 +20,11 @@ jobs:
   deploy:
     name: Build and deploy to Firebase Hosting
     runs-on: ubuntu-latest
+    # No `url` on purpose: it would hardcode one deployment's domain into a
+    # template. The deploy step's log prints the Hosting URL of whichever
+    # project is actually deploying.
     environment:
       name: production
-      url: https://base-angular-monorepo.web.app
     steps:
       # First, so a missing secret costs seconds instead of a full install and
       # build. Without this the run dies inside the deploy action with a Node stack

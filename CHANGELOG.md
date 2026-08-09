@@ -44,6 +44,10 @@ config file. Ordinary app-level additions are minor.
 
 ### Changed
 
+- `deploy.yml` no longer hardcodes the demo's Hosting URL as the GitHub
+  environment `url` — the last piece of project identity in CI; a fork's
+  Actions UI no longer links to this template's site.
+
 - The home page now consumes the design system — `libButton`, `lib-badge`,
   `lib-card`, `lib-icon` — and design tokens instead of hardcoded Tailwind
   neutral colours, so the landing finally follows the theme toggle. Its
