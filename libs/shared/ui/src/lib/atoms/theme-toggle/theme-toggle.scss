@@ -1,6 +1,5 @@
-/* First component written entirely against design tokens — no literals.
-   Every value here resolves through @libs/theme, so it retheme itself when
-   [data-theme] flips. */
+/* Every value here resolves through @libs/theme — no literals — so the toggle
+   rethemes itself when [data-theme] flips. */
 
 .theme-toggle {
   display: inline-flex;

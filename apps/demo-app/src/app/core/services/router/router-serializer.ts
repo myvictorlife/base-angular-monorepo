@@ -16,8 +16,8 @@ export class CustomSerializer implements RouterStateSerializer<RouterStateUrl> {
     } = routerState;
     const { params } = route;
 
-    // Only return an object including the URL, params and query params
-    // instead of the entire snapshot
+    // The snapshot itself cannot go into the store: it holds component instances
+    // and a circular route tree, which breaks serializability and the devtools.
     return { url, params, queryParams };
   }
 }
