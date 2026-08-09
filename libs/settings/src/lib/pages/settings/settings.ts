@@ -1,12 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { LANGUAGE_METADATA, Language } from '@libs/entity';
 import { ThemePreference } from '@libs/theme';
+import {
+  PageHeaderComponent,
+  SegmentedControlComponent,
+  SegmentedControlOption,
+  SwitchComponent,
+} from '@libs/ui';
 import { TranslatePipe } from '@ngx-translate/core';
 import { SettingsStore } from '../../+state/settings.store';
 import { SettingRowComponent } from '../../molecules/setting-row/setting-row';
 
 /** Rendered as a segmented control; order is the order shown. */
-const THEME_OPTIONS: readonly { value: ThemePreference; labelKey: string }[] = [
+const THEME_OPTIONS: readonly SegmentedControlOption<ThemePreference>[] = [
   { value: 'light', labelKey: 'SETTINGS.THEME_LIGHT' },
   { value: 'dark', labelKey: 'SETTINGS.THEME_DARK' },
   { value: 'system', labelKey: 'SETTINGS.THEME_SYSTEM' },
@@ -14,15 +20,26 @@ const THEME_OPTIONS: readonly { value: ThemePreference; labelKey: string }[] = [
 
 /**
  * Derived from the enum + LANGUAGE_METADATA, so a new language shows up here
- * with no edit. Labels are endonyms on purpose — see `LanguageMetadata.label`.
+ * with no edit. Labels are endonyms on purpose — see `LanguageMetadata.label` —
+ * hence `label` + `lang` rather than a translation key.
  */
-const LANGUAGE_OPTIONS: readonly { value: Language; label: string }[] = (
+const LANGUAGE_OPTIONS: readonly SegmentedControlOption<Language>[] = (
   Object.values(Language) as Language[]
-).map((value) => ({ value, label: LANGUAGE_METADATA[value].label }));
+).map((value) => ({
+  value,
+  label: LANGUAGE_METADATA[value].label,
+  lang: value,
+}));
 
 @Component({
   selector: 'lib-settings',
-  imports: [SettingRowComponent, TranslatePipe],
+  imports: [
+    PageHeaderComponent,
+    SegmentedControlComponent,
+    SettingRowComponent,
+    SwitchComponent,
+    TranslatePipe,
+  ],
   templateUrl: './settings.html',
   styleUrls: ['./settings.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,7 +64,7 @@ export class Settings {
     this.store.setLanguage(language);
   }
 
-  toggleReduceMotion(): void {
-    this.store.setReduceMotion(!this.reduceMotion());
+  setReduceMotion(enabled: boolean): void {
+    this.store.setReduceMotion(enabled);
   }
 }

@@ -1,8 +1,9 @@
 <main class="design">
-  <header class="design__intro">
-    <h1 class="design__title">{{ 'DESIGN.TITLE' | translate }}</h1>
-    <p class="design__lead">{{ 'DESIGN.LEAD' | translate }}</p>
-  </header>
+  <lib-page-header
+    class="design__intro"
+    titleKey="DESIGN.TITLE"
+    leadKey="DESIGN.LEAD"
+  />
 
   <!-- ═══ Components ═══ -->
   <h2 class="design__group">{{ 'DESIGN.COMPONENTS' | translate }}</h2>
@@ -96,6 +97,36 @@
       @for (size of spinnerSizes; track size) {
       <lib-spinner [size]="size" />
       }
+    </div>
+  </section>
+
+  <!-- Switches -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.SWITCHES' | translate }}</h3>
+    <div class="design__demo">
+      <lib-switch
+        [checked]="switchOn()"
+        [label]="'DESIGN.SWITCHES' | translate"
+        (checkedChange)="switchOn.set($event)"
+      />
+      <lib-switch
+        [checked]="false"
+        [label]="'DESIGN.SWITCHES' | translate"
+        [disabled]="true"
+      />
+    </div>
+  </section>
+
+  <!-- Segmented control -->
+  <section class="design__section">
+    <h3 class="design__heading">{{ 'DESIGN.SEGMENTED' | translate }}</h3>
+    <div class="design__demo">
+      <lib-segmented-control
+        [options]="segmentedOptions"
+        [value]="segmentedValue()"
+        [label]="'DESIGN.SEGMENTED' | translate"
+        (valueChange)="segmentedValue.set($event)"
+      />
     </div>
   </section>
 

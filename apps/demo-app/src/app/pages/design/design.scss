@@ -11,23 +11,8 @@
 }
 
 .design__intro {
+  display: block;
   margin-bottom: var(--space-12);
-}
-
-.design__title {
-  margin: 0;
-  font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--leading-tight);
-  color: var(--color-text-primary);
-}
-
-.design__lead {
-  margin: var(--space-3) 0 0;
-  max-width: 42rem;
-  font-size: var(--font-size-lg);
-  line-height: var(--leading-normal);
-  color: var(--color-text-secondary);
 }
 
 .design__section {

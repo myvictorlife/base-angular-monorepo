@@ -163,12 +163,6 @@
   }
 }
 
-.header__github-icon {
-  width: 1.125rem;
-  height: 1.125rem;
-  flex-shrink: 0;
-}
-
 .header__cta {
   @extend %header-cta;
   // Below the breakpoint this lives inside the mobile menu instead, so the bar
@@ -210,11 +204,6 @@
   @media #{bp.$sm} {
     display: none;
   }
-}
-
-.header__menu-icon {
-  width: 1.5rem;
-  height: 1.5rem;
 }
 
 .header__mobile-backdrop {

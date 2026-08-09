@@ -20,8 +20,26 @@ config file. Ordinary app-level additions are minor.
 - `lib-language-select` (`@libs/ui`, `molecules/`) — the language picker
   extracted from the header into the design system. Options are labelled with
   endonyms (each language named in itself), never translated.
+- `lib-switch` (`@libs/ui`, `atoms/`) and `lib-segmented-control` (`@libs/ui`,
+  `molecules/`) — the toggle switch and the `role="radiogroup"` segmented
+  control extracted from the settings page, which had implemented both inline
+  (the segmented control twice). Both are controlled components: the host owns
+  the value, the control only asks for a change. The switch also drops the
+  literal-`#fff` knob for surface tokens, which was invisible on the dark
+  theme's white brand track.
+- `lib-page-header` (`@libs/ui`, `molecules/`) — the shared h1-plus-lead page
+  intro, previously restyled separately by the settings and design pages.
+- `github` in the shared icon set. The header and the home CTA now render it
+  through `lib-icon` instead of carrying two copies of the same inline SVG;
+  the header's menu/close burger also uses the set's existing icons.
 
 ### Changed
+
+- The home page now consumes the design system — `libButton`, `lib-badge`,
+  `lib-card`, `lib-icon` — and design tokens instead of hardcoded Tailwind
+  neutral colours, so the landing finally follows the theme toggle. Its
+  closing CTA section remaps the surface tokens locally to stay inverted in
+  both themes.
 
 - Language pickers no longer translate language names. The `LANGUAGE.*` key
   matrix (one name per language per bundle) is gone; `LANGUAGE_SELECT.*` holds

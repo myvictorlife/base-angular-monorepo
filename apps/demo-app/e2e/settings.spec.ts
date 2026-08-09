@@ -28,7 +28,7 @@ test.describe('settings', () => {
   test('switching language re-renders the page in that language', async ({
     page,
   }) => {
-    const heading = page.locator('.settings__title');
+    const heading = page.locator('lib-settings .page-header__title');
     const before = await heading.textContent();
 
     await page.getByRole('radio', { name: /portuguese|português/i }).click();

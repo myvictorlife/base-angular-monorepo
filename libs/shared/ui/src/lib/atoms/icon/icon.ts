@@ -16,6 +16,7 @@ export const ICON_NAMES = [
   'chevron-right',
   'close',
   'external-link',
+  'github',
   'globe',
   'info',
   'menu',

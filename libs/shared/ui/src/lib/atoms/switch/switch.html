@@ -1,0 +1,12 @@
+<button
+  type="button"
+  role="switch"
+  class="switch"
+  [class.switch--on]="checked()"
+  [attr.aria-checked]="checked()"
+  [attr.aria-label]="label()"
+  [disabled]="disabled()"
+  (click)="toggle()"
+>
+  <span class="switch__knob"></span>
+</button>

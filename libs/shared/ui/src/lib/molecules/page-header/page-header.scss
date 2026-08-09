@@ -1,0 +1,15 @@
+.page-header__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-tight);
+}
+
+.page-header__lead {
+  margin: var(--space-3) 0 0;
+  max-width: 42rem;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+  line-height: var(--leading-normal);
+}

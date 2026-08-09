@@ -1,0 +1,21 @@
+/* The closing CTA sits on an inverted surface in both themes. Instead of
+   restyling the design-system buttons for it, remap the tokens they read:
+   `primary` stays the high-contrast fill and `secondary` reads as the outline
+   variant — in light and dark alike. */
+.home-inverted {
+  background: var(--color-bg-inverted);
+  color: var(--color-text-inverted);
+
+  --color-brand: var(--color-bg-base);
+  --color-brand-hover: var(--color-bg-surface);
+  --color-text-on-brand: var(--color-bg-inverted);
+
+  --color-bg-elevated: transparent;
+  --color-border-strong: var(--color-border-inverted);
+  --color-text-primary: var(--color-text-inverted);
+  --color-bg-hover: color-mix(
+    in srgb,
+    var(--color-text-inverted) 12%,
+    transparent
+  );
+}

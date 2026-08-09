@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { IconComponent } from '../../atoms/icon/icon';
 import { ThemeToggleComponent } from '../../atoms/theme-toggle/theme-toggle';
 import { LanguageSelectComponent } from '../../molecules/language-select/language-select';
 
@@ -15,6 +16,7 @@ import { LanguageSelectComponent } from '../../molecules/language-select/languag
   imports: [
     RouterLink,
     TranslatePipe,
+    IconComponent,
     ThemeToggleComponent,
     LanguageSelectComponent,
   ],

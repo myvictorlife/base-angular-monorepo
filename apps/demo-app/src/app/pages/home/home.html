@@ -1,18 +1,18 @@
 <main>
   <!-- Hero -->
   <section
-    class="relative overflow-hidden bg-gradient-to-b from-neutral-50 to-white border-b border-neutral-200/80"
+    class="relative overflow-hidden border-b border-[var(--color-border)] bg-gradient-to-b from-[var(--color-bg-surface)] to-[var(--color-bg-base)]"
   >
     <div
       class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24 lg:py-28 text-center"
     >
       <h1
-        class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-900 max-w-3xl mx-auto leading-[1.1]"
+        class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--color-text-primary)] max-w-3xl mx-auto leading-[1.1]"
       >
         {{ 'HOME.HERO_TITLE' | translate }}
       </h1>
       <p
-        class="mt-5 text-lg sm:text-xl text-neutral-600 max-w-2xl mx-auto leading-relaxed"
+        class="mt-5 text-lg sm:text-xl text-[var(--color-text-secondary)] max-w-2xl mx-auto leading-relaxed"
       >
         {{ 'HOME.HERO_SUBTITLE' | translate }}
       </p>
@@ -21,20 +21,24 @@
       >
         <a
           routerLink="/profile"
-          class="inline-flex items-center justify-center w-full sm:w-auto bg-neutral-900 text-white font-semibold py-3 px-6 rounded-xl hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-900 transition-colors"
+          libButton
+          variant="primary"
+          class="w-full sm:w-auto"
         >
           {{ 'HOME.CTA_START' | translate }}
         </a>
         <a
           href="#como-funciona"
-          class="inline-flex items-center justify-center w-full sm:w-auto bg-white text-neutral-900 font-semibold py-3 px-6 rounded-xl border border-neutral-300 hover:border-neutral-400 hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-400 transition-colors"
+          libButton
+          variant="secondary"
+          class="w-full sm:w-auto"
         >
           {{ 'HOME.CTA_HOW' | translate }}
         </a>
       </div>
-      <p class="mt-6 text-sm text-neutral-500">
+      <p class="mt-6 text-sm text-[var(--color-text-muted)]">
         {{ 'HOME.ENV_LABEL' | translate }}:
-        <span class="font-medium text-neutral-700"
+        <span class="font-medium text-[var(--color-text-secondary)]"
           >{{ environmentName() }}</span
         >
       </p>
@@ -42,125 +46,73 @@
   </section>
 
   <!-- Value proposition -->
-  <section class="py-16 sm:py-20 bg-white">
+  <section class="py-16 sm:py-20 bg-[var(--color-bg-base)]">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 text-center">
+      <h2
+        class="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)] text-center"
+      >
         {{ 'HOME.VALUE_TITLE' | translate }}
       </h2>
-      <p class="mt-3 text-neutral-600 text-center max-w-2xl mx-auto">
+      <p
+        class="mt-3 text-[var(--color-text-secondary)] text-center max-w-2xl mx-auto"
+      >
         {{ 'HOME.VALUE_SUBTITLE' | translate }}
       </p>
       <ul
         class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
         role="list"
       >
-        <li
-          class="rounded-2xl border border-neutral-200 bg-neutral-50/50 p-6 sm:p-8"
-        >
-          <div class="flex items-center gap-3">
-            <span
-              class="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-900 text-white font-bold text-sm"
-              aria-hidden="true"
-              >1</span
+        @for (item of valueProps; track item.step; let last = $last) {
+        <li [class]="last ? 'sm:col-span-2 lg:col-span-1' : ''">
+          <lib-card padding="lg" class="h-full">
+            <div class="flex items-center gap-3">
+              <span
+                class="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-brand)] text-[var(--color-text-on-brand)] font-bold text-sm"
+                aria-hidden="true"
+                >{{ item.step }}</span
+              >
+              <h3
+                class="text-lg font-semibold text-[var(--color-text-primary)]"
+              >
+                {{ item.titleKey | translate }}
+              </h3>
+            </div>
+            <p
+              class="mt-3 text-[var(--color-text-secondary)] text-sm leading-relaxed"
             >
-            <h3 class="text-lg font-semibold text-neutral-900">
-              {{ 'HOME.VALUE_1_TITLE' | translate }}
-            </h3>
-          </div>
-          <p class="mt-3 text-neutral-600 text-sm leading-relaxed">
-            {{ 'HOME.VALUE_1_DESC' | translate }}
-          </p>
+              {{ item.descKey | translate }}
+            </p>
+          </lib-card>
         </li>
-        <li
-          class="rounded-2xl border border-neutral-200 bg-neutral-50/50 p-6 sm:p-8"
-        >
-          <div class="flex items-center gap-3">
-            <span
-              class="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-900 text-white font-bold text-sm"
-              aria-hidden="true"
-              >2</span
-            >
-            <h3 class="text-lg font-semibold text-neutral-900">
-              {{ 'HOME.VALUE_2_TITLE' | translate }}
-            </h3>
-          </div>
-          <p class="mt-3 text-neutral-600 text-sm leading-relaxed">
-            {{ 'HOME.VALUE_2_DESC' | translate }}
-          </p>
-        </li>
-        <li
-          class="rounded-2xl border border-neutral-200 bg-neutral-50/50 p-6 sm:p-8 sm:col-span-2 lg:col-span-1"
-        >
-          <div class="flex items-center gap-3">
-            <span
-              class="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-900 text-white font-bold text-sm"
-              aria-hidden="true"
-              >3</span
-            >
-            <h3 class="text-lg font-semibold text-neutral-900">
-              {{ 'HOME.VALUE_3_TITLE' | translate }}
-            </h3>
-          </div>
-          <p class="mt-3 text-neutral-600 text-sm leading-relaxed">
-            {{ 'HOME.VALUE_3_DESC' | translate }}
-          </p>
-        </li>
+        }
       </ul>
     </div>
   </section>
 
   <!-- Built with -->
-  <section class="py-12 sm:py-16 bg-neutral-50 border-t border-neutral-200/80">
+  <section
+    class="py-12 sm:py-16 bg-[var(--color-bg-surface)] border-t border-[var(--color-border)]"
+  >
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <h2 class="text-xl sm:text-2xl font-bold text-neutral-900 text-center">
+      <h2
+        class="text-xl sm:text-2xl font-bold text-[var(--color-text-primary)] text-center"
+      >
         {{ 'HOME.STACK_TITLE' | translate }}
       </h2>
       <ul
         class="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3"
         role="list"
       >
+        @for (item of stack; track item.labelKey) {
         <li>
-          <span
-            class="inline-flex items-center rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white"
-            >{{ 'HOME.STACK_ATOMIC' | translate }}</span
+          <lib-badge
+            tone="neutral"
+            [variant]="item.highlight ? 'solid' : 'soft'"
+            [pill]="true"
+            >{{ item.labelKey | translate }}</lib-badge
           >
         </li>
-        <li>
-          <span
-            class="inline-flex items-center rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white"
-            >{{ 'HOME.STACK_ANGULAR' | translate }}</span
-          >
-        </li>
-        <li>
-          <span
-            class="inline-flex items-center rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white"
-            >{{ 'HOME.STACK_FIREBASE' | translate }}</span
-          >
-        </li>
-        <li>
-          <span
-            class="inline-flex items-center rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white"
-            >{{ 'HOME.STACK_ANALYTICS' | translate }}</span
-          >
-        </li>
-        <li>
-          <span
-            class="inline-flex items-center rounded-full bg-neutral-700 px-4 py-2 text-sm font-medium text-white"
-            >{{ 'HOME.STACK_NGRX' | translate }}</span
-          >
-        </li>
-        <li>
-          <span
-            class="inline-flex items-center rounded-full bg-neutral-700 px-4 py-2 text-sm font-medium text-white"
-            >{{ 'HOME.STACK_NX' | translate }}</span
-          >
-        </li>
-        <li>
-          <span
-            class="inline-flex items-center rounded-full bg-neutral-700 px-4 py-2 text-sm font-medium text-white"
-            >{{ 'HOME.STACK_TAILWIND' | translate }}</span
-          >
-        </li>
+        }
       </ul>
     </div>
   </section>
@@ -168,125 +120,97 @@
   <!-- How it works -->
   <section
     id="como-funciona"
-    class="py-16 sm:py-20 bg-neutral-50 border-t border-neutral-200/80"
+    class="py-16 sm:py-20 bg-[var(--color-bg-surface)] border-t border-[var(--color-border)]"
   >
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 text-center">
+      <h2
+        class="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)] text-center"
+      >
         {{ 'HOME.HOW_TITLE' | translate }}
       </h2>
-      <p class="mt-3 text-neutral-600 text-center max-w-2xl mx-auto">
+      <p
+        class="mt-3 text-[var(--color-text-secondary)] text-center max-w-2xl mx-auto"
+      >
         {{ 'HOME.HOW_SUBTITLE' | translate }}
       </p>
       <ol class="mt-12 space-y-8 sm:space-y-10" role="list">
+        @for (item of howSteps; track item.step) {
         <li class="flex gap-4 sm:gap-6">
           <span
-            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-white text-sm font-semibold"
+            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--color-brand)] text-[var(--color-text-on-brand)] text-sm font-semibold"
             aria-hidden="true"
-            >1</span
+            >{{ item.step }}</span
           >
           <div>
-            <h3 class="text-lg font-semibold text-neutral-900">
-              {{ 'HOME.HOW_1_TITLE' | translate }}
+            <h3 class="text-lg font-semibold text-[var(--color-text-primary)]">
+              {{ item.titleKey | translate }}
             </h3>
-            <p class="mt-1 text-neutral-600 text-sm leading-relaxed">
-              {{ 'HOME.HOW_1_DESC' | translate }}
+            <p
+              class="mt-1 text-[var(--color-text-secondary)] text-sm leading-relaxed"
+            >
+              {{ item.descKey | translate }}
             </p>
           </div>
         </li>
-        <li class="flex gap-4 sm:gap-6">
-          <span
-            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-white text-sm font-semibold"
-            aria-hidden="true"
-            >2</span
-          >
-          <div>
-            <h3 class="text-lg font-semibold text-neutral-900">
-              {{ 'HOME.HOW_2_TITLE' | translate }}
-            </h3>
-            <p class="mt-1 text-neutral-600 text-sm leading-relaxed">
-              {{ 'HOME.HOW_2_DESC' | translate }}
-            </p>
-          </div>
-        </li>
-        <li class="flex gap-4 sm:gap-6">
-          <span
-            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-white text-sm font-semibold"
-            aria-hidden="true"
-            >3</span
-          >
-          <div>
-            <h3 class="text-lg font-semibold text-neutral-900">
-              {{ 'HOME.HOW_3_TITLE' | translate }}
-            </h3>
-            <p class="mt-1 text-neutral-600 text-sm leading-relaxed">
-              {{ 'HOME.HOW_3_DESC' | translate }}
-            </p>
-          </div>
-        </li>
+        }
       </ol>
     </div>
   </section>
 
   <!-- Documentation -->
-  <section class="py-16 sm:py-20 bg-white border-t border-neutral-200/80">
+  <section
+    class="py-16 sm:py-20 bg-[var(--color-bg-base)] border-t border-[var(--color-border)]"
+  >
     <div class="max-w-3xl mx-auto px-4 sm:px-6">
-      <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 text-center">
+      <h2
+        class="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)] text-center"
+      >
         {{ 'HOME.DOCS_TITLE' | translate }}
       </h2>
-      <p class="mt-3 text-neutral-600 text-center">
+      <p class="mt-3 text-[var(--color-text-secondary)] text-center">
         {{ 'HOME.DOCS_INTRO' | translate }}
       </p>
       <ul
-        class="mt-8 space-y-3 text-sm sm:text-base text-neutral-700"
+        class="mt-8 space-y-3 text-sm sm:text-base text-[var(--color-text-secondary)]"
         role="list"
       >
+        @for (docKey of docs; track docKey) {
         <li class="flex items-start gap-2">
           <span
-            class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400"
+            class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-border-strong)]"
             aria-hidden="true"
           ></span>
-          <span>{{ 'HOME.DOCS_BEST_PRACTICES' | translate }}</span>
+          <span>{{ docKey | translate }}</span>
         </li>
-        <li class="flex items-start gap-2">
-          <span
-            class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400"
-            aria-hidden="true"
-          ></span>
-          <span>{{ 'HOME.DOCS_GENERATORS' | translate }}</span>
-        </li>
-        <li class="flex items-start gap-2">
-          <span
-            class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400"
-            aria-hidden="true"
-          ></span>
-          <span>{{ 'HOME.DOCS_SKILLS' | translate }}</span>
-        </li>
+        }
       </ul>
     </div>
   </section>
 
   <!-- CTA -->
-  <section class="py-16 sm:py-20 bg-neutral-900 text-white">
+  <section class="home-inverted py-16 sm:py-20">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
       <h2 class="text-2xl sm:text-3xl font-bold">
         {{ 'HOME.CTA_FINAL_TITLE' | translate }}
       </h2>
-      <p class="mt-3 text-neutral-300">
-        {{ 'HOME.CTA_FINAL_SUBTITLE' | translate }}
-      </p>
+      <p class="mt-3 opacity-80">{{ 'HOME.CTA_FINAL_SUBTITLE' | translate }}</p>
       <div
         class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
       >
         <button
           type="button"
-          class="inline-flex items-center justify-center w-full sm:w-auto bg-white text-neutral-900 font-semibold py-3 px-6 rounded-xl hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 focus-visible:ring-white transition-colors"
+          libButton
+          variant="primary"
+          class="w-full sm:w-auto"
           (click)="viewProfile()"
         >
           {{ 'HOME.CTA_VIEW_PROFILE' | translate }}
         </button>
         <a
           routerLink="/design"
-          class="inline-flex items-center justify-center w-full sm:w-auto bg-neutral-800 text-white font-semibold py-3 px-6 rounded-xl border border-neutral-600 hover:bg-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 focus-visible:ring-neutral-500 transition-colors"
+          libButton
+          variant="secondary"
+          class="w-full sm:w-auto"
         >
           {{ 'HOME.CTA_DESIGN' | translate }}
         </a>
@@ -295,18 +219,11 @@
           [href]="repoUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-neutral-800 text-white font-semibold py-3 px-6 rounded-xl border border-neutral-600 hover:bg-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 focus-visible:ring-neutral-500 transition-colors"
+          libButton
+          variant="secondary"
+          class="w-full sm:w-auto"
         >
-          <svg
-            class="h-5 w-5"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
-            />
-          </svg>
+          <lib-icon name="github" size="md" />
           {{ 'HOME.CTA_GITHUB' | translate }}
         </a>
         }

@@ -5,10 +5,13 @@ export * from './lib/atoms/button/button';
 export * from './lib/atoms/card/card';
 export * from './lib/atoms/icon/icon';
 export * from './lib/atoms/spinner/spinner';
+export * from './lib/atoms/switch/switch';
 export * from './lib/atoms/theme-toggle/theme-toggle';
 
 // Molecules
 export * from './lib/molecules/language-select/language-select';
+export * from './lib/molecules/page-header/page-header';
+export * from './lib/molecules/segmented-control/segmented-control';
 
 // Organisms
 export * from './lib/organisms/header/header';

@@ -75,21 +75,21 @@ describe('Settings', () => {
   });
 
   it('renders the translated labels rather than raw keys', () => {
-    expect(spectator.query('.settings__title')?.textContent).toContain(
+    expect(spectator.query('.page-header__title')?.textContent).toContain(
       'Settings',
     );
     expect(spectator.element.textContent).toContain('Reduce motion');
   });
 
   it('marks the active theme segment, reading it from ThemeService', () => {
-    const active = spectator.query('.settings__segment--active');
+    const active = spectator.query('.segmented__segment--active');
     expect(active?.textContent).toContain('System');
   });
 
   it('forwards a theme click to ThemeService', () => {
     spectator.click(
       spectator
-        .queryAll('.settings__segmented')[0]
+        .queryAll('[role="radiogroup"]')[0]
         .querySelectorAll('button')[1],
     );
 
@@ -99,7 +99,7 @@ describe('Settings', () => {
   it('forwards a language click to UpdateLanguageService', () => {
     spectator.click(
       spectator
-        .queryAll('.settings__segmented')[1]
+        .queryAll('[role="radiogroup"]')[1]
         .querySelectorAll('button')[3],
     );
 
@@ -110,14 +110,14 @@ describe('Settings', () => {
 
   it('toggles reduce motion and reflects it on the switch', () => {
     expect(
-      spectator.query('.settings__switch')?.getAttribute('aria-checked'),
+      spectator.query('[role="switch"]')?.getAttribute('aria-checked'),
     ).toBe('false');
 
-    spectator.click('.settings__switch');
+    spectator.click('[role="switch"]');
     spectator.detectChanges();
 
     expect(
-      spectator.query('.settings__switch')?.getAttribute('aria-checked'),
+      spectator.query('[role="switch"]')?.getAttribute('aria-checked'),
     ).toBe('true');
     expect(document.documentElement.classList.contains('reduce-motion')).toBe(
       true,

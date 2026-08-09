@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import {
   AlertComponent,
   AlertTone,
@@ -12,8 +12,12 @@ import {
   ICON_NAMES,
   IconComponent,
   IconName,
+  PageHeaderComponent,
+  SegmentedControlComponent,
+  SegmentedControlOption,
   SpinnerComponent,
   SpinnerSize,
+  SwitchComponent,
 } from '@libs/ui';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -40,7 +44,10 @@ interface Swatch {
     ButtonComponent,
     CardComponent,
     IconComponent,
+    PageHeaderComponent,
+    SegmentedControlComponent,
     SpinnerComponent,
+    SwitchComponent,
     TranslatePipe,
   ],
   templateUrl: './design.html',
@@ -141,6 +148,16 @@ export class DesignPage {
   readonly alertTones: AlertTone[] = ['info', 'success', 'warning', 'danger'];
 
   readonly spinnerSizes: SpinnerSize[] = ['sm', 'md', 'lg'];
+
+  readonly segmentedOptions: SegmentedControlOption[] = [
+    { value: 'a', labelKey: 'DESIGN.SEGMENT_A' },
+    { value: 'b', labelKey: 'DESIGN.SEGMENT_B' },
+    { value: 'c', labelKey: 'DESIGN.SEGMENT_C' },
+  ];
+  /* Live demos — the two controls are controlled components, so the page holds
+     their state the same way a real host would. */
+  readonly segmentedValue = signal('a');
+  readonly switchOn = signal(true);
 
   /** Straight from the icon set, so the catalogue can never fall behind it. */
   readonly iconNames: readonly IconName[] = ICON_NAMES;
