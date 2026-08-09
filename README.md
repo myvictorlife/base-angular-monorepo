@@ -2,17 +2,18 @@
 
 [![CI](https://github.com/myvictorlife/base-angular-monorepo/actions/workflows/ci.yml/badge.svg)](https://github.com/myvictorlife/base-angular-monorepo/actions/workflows/ci.yml)
 [![Deploy](https://github.com/myvictorlife/base-angular-monorepo/actions/workflows/deploy.yml/badge.svg)](https://github.com/myvictorlife/base-angular-monorepo/actions/workflows/deploy.yml)
+[![Release](https://img.shields.io/github/v/release/myvictorlife/base-angular-monorepo)](https://github.com/myvictorlife/base-angular-monorepo/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Angular](https://img.shields.io/badge/Angular-22-dd0031.svg)](https://angular.dev)
 [![Nx](https://img.shields.io/badge/Nx-23-143055.svg)](https://nx.dev)
 
 **Clone it, `npm install`, and you have a running product skeleton** — lazy-loaded
-features with SignalStore, four-language i18n, OS-synced dark mode, dependency
-boundaries that fail lint, per-project coverage floors, and a CI/CD pipeline that
-gives every pull request its own live preview URL. All of it before you create a
-single vendor account: the week of architecture decisions that follows
-`nx g @nx/angular:app`, already made, wired together and documented — including
-where each one is a trade-off.
+features with SignalStore, eight-language i18n with RTL, OS-synced dark mode, a
+published Storybook, dependency boundaries that fail lint, per-project coverage
+floors, and a CI/CD pipeline that gives every pull request its own live preview
+URL. All of it before you create a single vendor account: the week of
+architecture decisions that follows `nx g @nx/angular:app`, already made, wired
+together and documented — including where each one is a trade-off.
 
 <p align="center">
   <img src="docs/images/settings-light.png" width="49.5%" alt="Settings page — theme, language and reduced-motion preferences, light theme">
@@ -39,6 +40,7 @@ with controls, theme and RTL toolbars
 - 🛠️ **`nx g feature-lib`** — a complete feature (store, page, tests, i18n keys, boundary registration) in one command
 - 🔐 **No credentials in git, ever** — paste a vendor config once into a git-ignored file; a pre-commit hook rejects committed API keys
 - 📊 **Vendor-neutral analytics** — an `ANALYTICS` token with a no-op default; removing Firebase is deleting one lib and one line
+- 🤖 **AI-agent-ready** — [`AGENTS.md`](AGENTS.md) plus task-specific skills in [`.claude/skills/`](.claude/skills), so Claude Code, Copilot and friends follow the workspace conventions from the first prompt instead of guessing them
 
 ## Quick start
 

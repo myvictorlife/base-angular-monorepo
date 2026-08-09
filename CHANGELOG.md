@@ -11,6 +11,10 @@ config file. Ordinary app-level additions are minor.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-08-09
+
+First stable release: everything below is the baseline a fork starts from.
+
 ### Added
 
 - Storybook for the design system — `npx nx storybook ui` serves every `@libs/ui`
