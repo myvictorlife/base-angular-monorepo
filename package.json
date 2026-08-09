@@ -10,8 +10,10 @@
     "test": "nx test",
     "test:all": "npx nx run-many --target=test --all",
     "utils:copy:dist": "cp -r ./dist ./hosting/",
-    "deploy:firebase": "cd ./hosting && firebase deploy --only hosting --force",
+    "deploy:firebase": "cd ./hosting && firebase deploy --only hosting:app --force",
     "build:deploy:firebase": "npx nx build demo-app --configuration=production && npm run utils:copy:dist && npm run deploy:firebase",
+    "deploy:firebase:storybook": "cd ./hosting && firebase deploy --only hosting:storybook --force",
+    "build:deploy:storybook": "npx nx build-storybook ui && npm run utils:copy:dist && npm run deploy:firebase:storybook",
     "prepare": "husky"
   },
   "private": true,
@@ -35,6 +37,8 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
+    "@angular-devkit/architect": "^0.2201.3",
+    "@angular-devkit/build-angular": "^22.1.3",
     "@angular-devkit/core": "22.1.3",
     "@angular-devkit/schematics": "22.1.3",
     "@angular/animations": "22.1.1",
@@ -55,10 +59,12 @@
     "@nx/eslint-plugin": "23.1.1",
     "@nx/js": "23.1.1",
     "@nx/playwright": "^23.1.1",
+    "@nx/storybook": "^23.1.1",
     "@nx/web": "23.1.1",
     "@nx/workspace": "23.1.1",
     "@playwright/test": "^1.62.1",
     "@schematics/angular": "22.1.3",
+    "@storybook/angular": "^10.5.0",
     "@swc-node/register": "~1.12.1",
     "@swc/core": "~1.15.5",
     "@swc/helpers": "~0.5.18",
@@ -74,11 +80,13 @@
     "lint-staged": "^17.3.0",
     "nx": "23.1.1",
     "prettier": "~3.6.2",
+    "storybook": "^10.5.0",
     "ts-node": "10.9.2",
     "tslib": "^2.3.0",
     "typescript": "6.0.3",
     "typescript-eslint": "^8.40.0",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "zone.js": "^0.16.2"
   },
   "nx": {
     "includedScripts": []

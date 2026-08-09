@@ -80,7 +80,17 @@ jobs:
           # Not a secret: the repository that is building. Derived rather than
           # committed so a fork's deploy links to the fork, never to the template.
           SITE_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+          # Maps the `storybook` hosting target in the generated .firebaserc.
+          # A repository *variable*, not a secret — it is only a site id.
+          FIREBASE_STORYBOOK_SITE: ${{ vars.FIREBASE_STORYBOOK_SITE }}
         run: npx nx build demo-app --configuration=production
+
+      # The design-system Storybook ships as a second Hosting site. Both steps
+      # are skipped entirely until the FIREBASE_STORYBOOK_SITE repository
+      # variable exists — a fork without the site deploys the app alone.
+      - name: Build Storybook
+        if: vars.FIREBASE_STORYBOOK_SITE != ''
+        run: npx nx build-storybook ui
 
       # `firebase.json` lives in `hosting/` and resolves `public` relative to itself,
       # which is why the build output is copied in rather than deployed from `dist/`.
@@ -96,4 +106,15 @@ jobs:
           projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
           channelId: live
           target: app
+          entryPoint: ./hosting
+
+      - name: Deploy Storybook to its live channel
+        if: vars.FIREBASE_STORYBOOK_SITE != ''
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+          channelId: live
+          target: storybook
           entryPoint: ./hosting

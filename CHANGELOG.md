@@ -13,6 +13,15 @@ config file. Ordinary app-level additions are minor.
 
 ### Added
 
+- Storybook for the design system — `npx nx storybook ui` serves every `@libs/ui`
+  component with controls, a design-token **theme** toolbar (light/dark) and a
+  **direction** toolbar (LTR/RTL). Stories are colocated (`*.stories.ts`),
+  excluded from the lib build and coverage, and `ci.yml` builds the catalogue on
+  every PR. It deploys as a second Firebase Hosting site (target `storybook`),
+  gated on the `FIREBASE_STORYBOOK_SITE` variable — unset, a fork ships nothing
+  extra. New skill: `.claude/skills/storybook/`. `deploy:firebase` now targets
+  `--only hosting:app`.
+
 - `LANGUAGE_METADATA` in `@libs/entity` — the single source of truth for
   language display data: endonym label and text direction. The header select,
   the settings radio group and `<html dir>` all derive from it, so adding a

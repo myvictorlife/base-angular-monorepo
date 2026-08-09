@@ -256,6 +256,10 @@ function writeIfChanged(path, contents) {
 /**
  * Firebase-specific tail: the CLI needs its own file, and the project it deploys to is
  * the one already sitting in the config — so there is nothing extra to fill in.
+ *
+ * The `storybook` hosting target only exists when `FIREBASE_STORYBOOK_SITE` is set —
+ * the design-system site is opt-in, and deploys use `--only hosting:<target>` so an
+ * unmapped target is never resolved.
  */
 function writeFirebaseRc(config, env) {
   const dir = join(workspaceRoot, 'hosting');
@@ -264,13 +268,17 @@ function writeFirebaseRc(config, env) {
   const placeholder = 'YOUR_FIREBASE_PROJECT_ID';
   const project = config.projectId || placeholder;
   const site = env.FIREBASE_HOSTING_SITE || config.projectId || placeholder;
+  const storybookSite = env.FIREBASE_STORYBOOK_SITE;
+
+  const hosting = { app: [site] };
+  if (storybookSite) hosting.storybook = [storybookSite];
 
   writeIfChanged(
     join(dir, '.firebaserc'),
     `${JSON.stringify(
       {
         projects: { default: project },
-        targets: { [project]: { hosting: { app: [site] } } },
+        targets: { [project]: { hosting } },
       },
       null,
       2,

@@ -27,6 +27,7 @@ enforces, and getting them wrong means a failed lint or a rejected review.
 | Adding a route or a lazy chunk               | `.claude/skills/lazy-loading/SKILL.md`       |
 | Creating a library, or a boundary lint error | `.claude/skills/module-boundaries/SKILL.md`  |
 | Writing tests, or a coverage failure         | `.claude/skills/unit-testing/SKILL.md`       |
+| Writing or fixing a Storybook story          | `.claude/skills/storybook/SKILL.md`          |
 | Tracking events                              | `.claude/skills/firebase-analytics/SKILL.md` |
 | Deploying, or CI secrets                     | `.claude/skills/firebase-deploy/SKILL.md`    |
 

@@ -26,7 +26,8 @@
     "noUncheckedSideEffectImports": false,
     "types": ["*"],
     "esModuleInterop": false,
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "6.0",
+    "skipLibCheck": true
   },
   "exclude": ["node_modules", "tmp"]
 }

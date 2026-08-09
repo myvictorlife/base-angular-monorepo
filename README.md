@@ -22,15 +22,18 @@ where each one is a trade-off.
 **Live demo:** [base-angular-monorepo.web.app](https://base-angular-monorepo.web.app)
 · [`/design`](https://base-angular-monorepo.web.app/design) renders every design
 token · [`/settings`](https://base-angular-monorepo.web.app/settings) shows a
-feature library end to end
+feature library end to end ·
+[**Storybook**](https://base-monorepo-design-system.web.app) — every component
+with controls, theme and RTL toolbars
 
 ## What you get out of the box
 
 - ⚡ **Angular 22, standalone and zoneless** — no NgModules, no zone.js, OnPush everywhere, enforced by lint
 - 🧠 **NgRx SignalStore per feature, provided on its route** — state is created on entry and destroyed on exit
 - 🧱 **Module boundaries that bite** — features cannot import each other; an illegal import is a lint error, not a review comment
-- 🌍 **i18n in four languages** — with a completeness test that fails CI the moment a key is missing from any bundle
+- 🌍 **i18n in eight languages, RTL included** — with a completeness test that fails CI the moment a key is missing from any bundle
 - 🎨 **Design tokens + dark mode following the OS** — every token rendered live at [`/design`](https://base-angular-monorepo.web.app/design), so the docs cannot go stale invisibly
+- 📖 **Storybook for the design system** — `nx storybook ui`: every component with controls, plus theme (light/dark) and direction (LTR/RTL) toolbars, deployed as its [own site](https://base-monorepo-design-system.web.app)
 - 🧪 **Vitest through Angular's official builder + Playwright e2e** — with a coverage floor per project that fails the build
 - 🚀 **Deploy wired end to end** — push to `main` goes live; every PR gets a preview URL and the e2e suite runs against that real deployed bundle
 - 🛠️ **`nx g feature-lib`** — a complete feature (store, page, tests, i18n keys, boundary registration) in one command
@@ -68,7 +71,7 @@ pattern, the pipeline, the guardrails.
 - [Why this and not `nx g @nx/angular:app`?](#why-this-and-not-nx-g-nxangularapp)
 - [Tech stack](#tech-stack) · [Project structure](#project-structure) · [Getting started](#getting-started)
 - [Configuration](#configuration) — vendor config without committing credentials
-- [Architecture](#architecture) — boundaries graph, state, analytics, testing, i18n
+- [Architecture](#architecture) — boundaries graph, Storybook, state, analytics, testing, i18n
 - [Generating apps and libraries](#generating-new-apps-and-libraries) · [Code standards](#code-standards) · [npm scripts](#npm-scripts)
 - [Contributing and releases](#contributing-and-releases) · [Documentation](#documentation)
 
@@ -508,6 +511,31 @@ Atoms and organisms live in `@libs/ui` because they are shared. Molecules usuall
 not: a `user-info` card belongs to the profile feature, and hoisting it into shared
 UI before a second consumer exists is how a shared lib becomes a junk drawer.
 
+### Design-system Storybook
+
+**Live: [base-monorepo-design-system.web.app](https://base-monorepo-design-system.web.app)**
+
+Every `@libs/ui` component has a colocated story (`*.stories.ts`) — open a
+component, change its inputs in the Controls panel, and use the two toolbar
+switches to test it visually:
+
+- **Theme** — flips the design tokens between light and dark via `data-theme`,
+  the same attribute `ThemeService` drives in the app.
+- **Direction** — flips `dir` between LTR and RTL, which is what Arabic renders
+  under.
+
+```sh
+npx nx storybook ui        # local, http://localhost:4400
+npx nx build-storybook ui  # static build (runs in CI on every PR)
+```
+
+Stories use the app's real i18n bundles and self-hosted fonts (served via
+`staticDirs`, not imported — the module boundaries stay intact). The catalogue
+deploys as a **second Firebase Hosting site** on every push to `main`, gated on
+the `FIREBASE_STORYBOOK_SITE` repository variable: a fork without it simply
+skips the deploy. Conventions for writing stories live in
+[`.claude/skills/storybook/`](.claude/skills/storybook/SKILL.md).
+
 ### State Pattern
 
 No actions, no reducers, no selector files — a feature's state is a
@@ -629,6 +657,8 @@ Key rules:
 | `npm run lint:all`                   | Lint all projects                                                                                     |
 | `npm run config:generate`            | Regenerate typed config modules from `config/*.json` (runs automatically on install/build/serve/test) |
 | `npm run build:deploy:firebase`      | Production build + deploy to Firebase Hosting                                                         |
+| `npx nx storybook ui`                | Design-system Storybook on <http://localhost:4400>                                                    |
+| `npm run build:deploy:storybook`     | Build the Storybook + deploy it to its own Hosting site                                               |
 | `npx nx e2e demo-app`                | Playwright suite against a locally served build                                                       |
 | `BASE_URL=<url> npx nx e2e demo-app` | The same suite against a deployed URL                                                                 |
 

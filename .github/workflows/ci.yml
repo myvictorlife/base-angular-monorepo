@@ -58,6 +58,11 @@ jobs:
         if: always()
         run: npx nx run-many -t build --configuration=production
 
+      # A broken story should fail the PR, not the deploy after merge.
+      - name: Build Storybook
+        if: always()
+        run: npx nx build-storybook ui
+
       - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@v4

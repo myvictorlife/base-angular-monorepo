@@ -1,0 +1,15 @@
+// Storybook's global stylesheet — the minimal mirror of
+// `apps/demo-app/src/styles.scss`, so every story renders on the same design
+// tokens the app uses. `index` resolves through the `libs/theme/src/styles`
+// includePath configured on the storybook targets; the Inter @font-face rules
+// come from the app's `fonts.css`, listed as a second style entry point in
+// `project.json` (its `/fonts/*` URLs are served by the `staticDirs` mapping).
+@use 'tailwindcss';
+@use 'index';
+
+body {
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}

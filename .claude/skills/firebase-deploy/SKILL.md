@@ -248,6 +248,17 @@ which is what makes the app render its "view source on GitHub" links
 fork's deploy links to the fork automatically; local builds read
 `config/site.json` instead, and without either the links simply do not render.
 
+### The Storybook site
+
+The design-system Storybook deploys to a **second Hosting site** (target
+`storybook` in `hosting/firebase.json`), gated on the `FIREBASE_STORYBOOK_SITE`
+repository **variable** (Settings → Secrets and variables → Actions → Variables —
+it is a public site id, not a secret). Unset, the Build Storybook and deploy
+steps skip. Locally the same value lives in `.env`, and
+`npm run build:deploy:storybook` builds and deploys it. Note `deploy:firebase`
+now targets `--only hosting:app` — an untargeted `--only hosting` would fail
+whenever the `storybook` target is unmapped in the generated `.firebaserc`.
+
 To create the service account:
 
 ```sh

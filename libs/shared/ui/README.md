@@ -1,72 +1,68 @@
 # ui
 
-Reusable presentational components plus the app-wide cross-cutting concerns that need
-to reach Analytics.
+The design system — reusable presentational components in Atomic Design layers —
+plus the app-wide cross-cutting concerns.
 
-**Tag:** `scope:ui-lib` — may depend on `scope:entity-lib`, `scope:environment-lib`
-and `scope:translate`. It must **not** depend on a feature library; features depend on
-`ui`, never the reverse.
+**Tag:** `scope:ui-lib` — may depend on `scope:analytics-lib`, `scope:entity-lib`,
+`scope:environment-lib`, `scope:theme-lib` and `scope:translate`. It must **not**
+depend on a feature library; features depend on `ui`, never the reverse.
+
+## Storybook
+
+Every component has a colocated `*.stories.ts`. Run the catalogue locally:
+
+```sh
+npx nx storybook ui        # http://localhost:4400
+npx nx build-storybook ui  # static build in dist/storybook/ui
+```
+
+The toolbar switches the design-token **theme** (light/dark via `data-theme`, the
+same attribute `ThemeService` drives) and the text **direction** (LTR/RTL — what
+Arabic renders under). Stories use the app's real i18n bundles and fonts, served
+via `staticDirs`. Conventions for writing a story: `.claude/skills/storybook/`.
 
 ## Import
 
 ```ts
 import {
+  ButtonComponent,
   HeaderComponent,
-  AnalyticsService,
-  GlobalErrorHandler,
-  httpErrorInterceptor,
+  IconComponent /* … */,
 } from '@libs/ui';
 ```
 
 ## Contents
 
-### `HeaderComponent` (`lib-header`)
+| Layer    | Component                      | Selector                            | Notes                                                                             |
+| -------- | ------------------------------ | ----------------------------------- | --------------------------------------------------------------------------------- |
+| atom     | `AlertComponent`               | `lib-alert`                         | 4 tones; `danger` uses `role="alert"`, slot `[alert-actions]`                     |
+| atom     | `BadgeComponent`               | `lib-badge`                         | 6 tones × solid/soft/outline, `pill`                                              |
+| atom     | `ButtonComponent`              | `button[libButton]`, `a[libButton]` | attribute selector; primary/secondary/ghost/danger × sm/md/lg, `block`            |
+| atom     | `CardComponent`                | `lib-card`                          | padding scale, `elevated`, slots `[card-header]`/`[card-footer]`                  |
+| atom     | `IconComponent`                | `lib-icon`                          | inline SVG set, names in `ICON_NAMES`                                             |
+| atom     | `SpinnerComponent`             | `lib-spinner`                       | sm/md/lg                                                                          |
+| atom     | `SwitchComponent`              | `lib-switch`                        | controlled `role="switch"`; host owns the value                                   |
+| atom     | `ThemeToggleComponent`         | `lib-theme-toggle`                  | injects `ThemeService`                                                            |
+| molecule | `LanguageSelectComponent`      | `lib-language-select`               | endonym labels from `LANGUAGE_METADATA`; injects `UpdateLanguageService`          |
+| molecule | `PageHeaderComponent`          | `lib-page-header`                   | h1 + lead from i18n keys                                                          |
+| molecule | `SegmentedControlComponent<T>` | `lib-segmented-control`             | controlled `role="radiogroup"`; options label via `labelKey` or literal `label`   |
+| organism | `HeaderComponent`              | `lib-header`                        | composes language select, theme toggle, conditional GitHub link (`repoUrl` input) |
 
-Site header: brand, nav, language switcher and mobile menu.
+### Cross-cutting
 
-It reads the active language straight off ngx-translate's `currentLang` signal — it
-does **not** keep a local copy. Mirroring that state with an `effect` + subscription is
-what this component used to do; the signal made ~10 lines disappear.
-
-The language list is derived from `Object.values(Language)`, so adding a locale to the
-enum makes it appear here with no edit — only `LANGUAGE_LABEL_KEYS` needs the new i18n
-key, and it falls back to `LANGUAGE.<CODE>` if you forget.
-
-### `AnalyticsService`
-
-Firebase Analytics wrapper. Every method no-ops while `environment.firebaseEnabled` is
-`false`, so the app runs without Firebase configured and tests need no mock.
-
-```ts
-analytics.logEvent('some_event', { detail: 'value' });
-analytics.logPageView('/profile', 'Profile · Base App');
-```
-
-### `GlobalErrorHandler`
-
-`ErrorHandler` that reports uncaught errors to Analytics as `app_exception`, then
-delegates to Angular's default handler so local debugging is unchanged. Registered in
-`app.config.ts`:
-
-```ts
-{ provide: ErrorHandler, useClass: GlobalErrorHandler }
-```
-
-### `httpErrorInterceptor`
-
-Logs failed requests as `http_error` and **re-throws**. It is a reporting point, not a
-handler: callers keep control of user-facing behaviour (the profile store maps the
-failure into its own `error` state). `status: 0` means the request never reached the
-server — offline, CORS, or blocked.
-
-```ts
-provideHttpClient(withInterceptors([httpErrorInterceptor]));
-```
+- `GlobalErrorHandler` — reports uncaught errors through the `ANALYTICS` token as
+  `app_exception`, then delegates to Angular's default handler. Registered in
+  `app.config.ts` with `{ provide: ErrorHandler, useClass: GlobalErrorHandler }`.
+- `httpErrorInterceptor` — logs failed requests as `http_error` and **re-throws**;
+  a reporting point, not a handler. `status: 0` means the request never reached
+  the server. Wire with `provideHttpClient(withInterceptors([httpErrorInterceptor]))`.
 
 ## Rules
 
 - **Presentational only** for components: inputs in, outputs out, no HTTP, no feature
-  state. Anything that fetches belongs in the feature that owns it.
+  state. Anything that fetches belongs in the feature that owns it. (The two
+  service-injecting components — theme toggle, language select — drive app-wide
+  preferences, which is still presentation, not feature state.)
 - `ChangeDetectionStrategy.OnPush` is mandatory (enforced by lint since angular-eslint 22).
 - Import only the pipes/directives a template uses — `TranslatePipe`, `RouterLink`,
   `UpperCasePipe` — never `CommonModule`.
@@ -74,6 +70,7 @@ provideHttpClient(withInterceptors([httpErrorInterceptor]));
 
 ## Assets
 
-The header logo is an **inline SVG**, not a remote image. Nothing in this library may
-reference a third-party domain — the app ships with zero external origins, and the
-self-hosted fonts in `apps/demo-app/public/fonts` exist for the same reason.
+Icons and the header logo are **inline SVG**, not remote images. Nothing in this
+library may reference a third-party domain — the app ships with zero external
+origins, and the self-hosted fonts in `apps/demo-app/public/fonts` exist for the
+same reason.
