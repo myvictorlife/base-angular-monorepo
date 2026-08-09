@@ -71,8 +71,9 @@ These are enforced by lint or by a test — breaking one fails the build.
   defeats the boundary rules. For feature libraries,
   `npx nx g @app/workspace-plugin:feature-lib <name>` does both (and the alias,
   test target and i18n keys) in one step
-- Every i18n key exists in all four bundles — `en`, `nl`, `fr`, `pt`.
-  `i18n-completeness.spec.ts` fails otherwise
+- Every i18n key exists in every bundle — `en`, `nl`, `fr`, `pt`, `es`, `de`,
+  `ar`, `pl`. `i18n-completeness.spec.ts` fails otherwise; the list of bundles
+  derives from the `Language` enum, so adding a language means adding its bundle
 
 ## Architecture rules that are easy to get wrong
 

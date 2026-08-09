@@ -77,6 +77,9 @@ jobs:
           FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+          # Not a secret: the repository that is building. Derived rather than
+          # committed so a fork's deploy links to the fork, never to the template.
+          SITE_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
         run: npx nx build demo-app --configuration=production
 
       # `firebase.json` lives in `hosting/` and resolves `public` relative to itself,

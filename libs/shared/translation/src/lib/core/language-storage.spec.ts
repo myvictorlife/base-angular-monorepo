@@ -1,5 +1,9 @@
 import { Language } from '@libs/entity';
-import { LANGUAGE_STORAGE_KEY, isSupportedLanguage, readStoredLanguage } from './language-storage';
+import {
+  LANGUAGE_STORAGE_KEY,
+  isSupportedLanguage,
+  readStoredLanguage,
+} from './language-storage';
 
 describe('language-storage', () => {
   beforeEach(() => localStorage.clear());
@@ -10,7 +14,7 @@ describe('language-storage', () => {
     });
 
     it('rejects unknown codes, null and empty string', () => {
-      expect(isSupportedLanguage('de')).toBe(false);
+      expect(isSupportedLanguage('ja')).toBe(false);
       expect(isSupportedLanguage(null)).toBe(false);
       expect(isSupportedLanguage('')).toBe(false);
     });

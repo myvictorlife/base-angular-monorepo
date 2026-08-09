@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { environment } from '@libs/environment';
 import { HeaderComponent } from '@libs/ui';
 
 @Component({
@@ -11,4 +12,5 @@ import { HeaderComponent } from '@libs/ui';
 })
 export class App {
   protected title = 'demo-app';
+  protected readonly repoUrl = environment.repoUrl;
 }

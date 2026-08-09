@@ -45,9 +45,10 @@
           class="settings__segment"
           [class.settings__segment--active]="currentLanguage() === option.value"
           [attr.aria-checked]="currentLanguage() === option.value"
+          [attr.lang]="option.value"
           (click)="setLanguage(option.value)"
         >
-          {{ option.labelKey | translate }}
+          {{ option.label }}
         </button>
         }
       </div>

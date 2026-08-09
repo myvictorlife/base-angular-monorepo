@@ -81,17 +81,17 @@ What it gives you is an empty, correct workspace. What it does not give you is t
 week of decisions that follow, each of which is easy to get subtly wrong and
 expensive to change once a team has built on top of it.
 
-| Decision                   | The generator                           | Here                                                                                                                                                                                                                     |
-| -------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Library boundaries**     | Tags exist; no rules use them           | `depConstraints` for every tag, so an illegal import is a lint error rather than a code-review comment. A leaf lib genuinely cannot reach the app.                                                                       |
-| **State**                  | Nothing                                 | SignalStore per feature, provided **on the route** so it is created on entry and destroyed on exit. The global store carries router state and nothing else — a rule the boundaries actually enforce.                     |
-| **i18n**                   | Nothing                                 | ngx-translate wired through one provider, language persisted, `<html lang>` synced, route titles translated. `i18n-completeness.spec.ts` fails if any key is missing from any of the four bundles, so they cannot drift. |
-| **Theming**                | Nothing                                 | Design tokens in one lib, light/dark following the OS, and a `/design` page rendering every token through `var(--token)` — so the documentation cannot go stale without the page visibly breaking.                       |
-| **Third-party config**     | `environment.ts` files you edit by hand | One JSON file per integration, git-ignored, compiled into typed modules. A fork never inherits your project id.                                                                                                          |
-| **Analytics**              | Nothing                                 | Behind an `ANALYTICS` token with a no-op default. Delete one lib and one line to remove Firebase entirely.                                                                                                               |
-| **Coverage**               | Collected, never enforced               | A per-project floor in each `test` target, set just under what the project measures today and enforced in CI — the build fails when a floor is broken.                                                                   |
-| **Commits, deps, secrets** | Nothing                                 | commitlint, lint-staged, Renovate, and a pre-commit hook that rejects a committed API key.                                                                                                                               |
-| **Deploy**                 | Nothing                                 | Push to `main` deploys; every pull request gets its own preview URL, and the e2e suite runs against that real deployed bundle.                                                                                           |
+| Decision                   | The generator                           | Here                                                                                                                                                                                                        |
+| -------------------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Library boundaries**     | Tags exist; no rules use them           | `depConstraints` for every tag, so an illegal import is a lint error rather than a code-review comment. A leaf lib genuinely cannot reach the app.                                                          |
+| **State**                  | Nothing                                 | SignalStore per feature, provided **on the route** so it is created on entry and destroyed on exit. The global store carries router state and nothing else — a rule the boundaries actually enforce.        |
+| **i18n**                   | Nothing                                 | ngx-translate wired through one provider, language persisted, `<html lang>` synced, route titles translated. `i18n-completeness.spec.ts` fails if any key is missing from any bundle, so they cannot drift. |
+| **Theming**                | Nothing                                 | Design tokens in one lib, light/dark following the OS, and a `/design` page rendering every token through `var(--token)` — so the documentation cannot go stale without the page visibly breaking.          |
+| **Third-party config**     | `environment.ts` files you edit by hand | One JSON file per integration, git-ignored, compiled into typed modules. A fork never inherits your project id.                                                                                             |
+| **Analytics**              | Nothing                                 | Behind an `ANALYTICS` token with a no-op default. Delete one lib and one line to remove Firebase entirely.                                                                                                  |
+| **Coverage**               | Collected, never enforced               | A per-project floor in each `test` target, set just under what the project measures today and enforced in CI — the build fails when a floor is broken.                                                      |
+| **Commits, deps, secrets** | Nothing                                 | commitlint, lint-staged, Renovate, and a pre-commit hook that rejects a committed API key.                                                                                                                  |
+| **Deploy**                 | Nothing                                 | Push to `main` deploys; every pull request gets its own preview URL, and the e2e suite runs against that real deployed bundle.                                                                              |
 
 **Two things this template is honest about.** `@ngrx/*` sits on `22.0.0-rc.0`
 because no stable NgRx 22 exists yet — the Renovate rule below moves off it the day
@@ -230,7 +230,6 @@ base-angular-monorepo/
 │       │       │   ├── document-language.ts        # keeps <html lang> in sync
 │       │       │   ├── translated-title.strategy.ts # translated <title> per route
 │       │       │   └── update-language.service.ts
-│       │       └── pages/update-language/
 │       │
 │       ├── analytics/                      # ANALYTICS token + Analytics interface + NoopAnalytics
 │       │   └── src/lib/analytics.ts        # Vendor-neutral. Depends on nothing.
@@ -594,9 +593,10 @@ security headers.
 
 ### Internationalisation
 
-Four bundles live in `apps/demo-app/src/assets/i18n/` — `en`, `nl`, `fr`, `pt`.
-`provideTranslation()` wires the loader, restores the language from `localStorage`,
-keeps `<html lang>` in sync and translates each route's `<title>`.
+Eight bundles live in `apps/demo-app/src/assets/i18n/` — `en`, `nl`, `fr`, `pt`,
+`es`, `de`, `ar`, `pl`. `provideTranslation()` wires the loader, restores the
+language from `localStorage`, keeps `<html lang>` and `<html dir>` in sync (Arabic
+renders right-to-left) and translates each route's `<title>`.
 
 Adding a language means adding it to the `Language` enum and dropping in the JSON
 bundle — `i18n-completeness.spec.ts` fails until every key is present in every

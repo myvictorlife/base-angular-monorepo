@@ -1,5 +1,6 @@
 import { Environment } from './environment.model';
 import { firebaseConfig } from './generated/firebase.config';
+import { siteConfig, siteLinksEnabled } from './generated/site.config';
 
 export const environment: Environment = {
   production: false,
@@ -13,4 +14,7 @@ export const environment: Environment = {
    */
   firebaseEnabled: false,
   firebaseConfig,
+  // Unlike analytics there is no reason to force this off locally: the link is
+  // inert and seeing it is how you check it renders.
+  repoUrl: siteLinksEnabled ? siteConfig.repoUrl : null,
 };

@@ -71,8 +71,9 @@ this.translate.instant('PROFILE.TITLE');
 { path: 'profile', title: 'PROFILE.TITLE', loadChildren: ... }
 ```
 
-**Changing language** — `UpdateLanguageService.changeLanguage(code)` or the header
-dropdown. The choice is persisted under `LANGUAGE_STORAGE_KEY` and restored on reload.
+**Changing language** — `UpdateLanguageService.changeLanguage(code)`, the
+`lib-language-select` dropdown (`@libs/ui`) or the settings page. The choice is
+persisted under `LANGUAGE_STORAGE_KEY` and restored on reload.
 **No page reload is needed** — the swap is reactive.
 
 ## Testing components that translate
@@ -97,19 +98,21 @@ providers: [
 
 ## Adding a key
 
-Add it to **all four** bundles. `apps/demo-app/src/app/i18n-completeness.spec.ts`
+Add it to **every** bundle. `apps/demo-app/src/app/i18n-completeness.spec.ts`
 fails on a missing key, an extra key, an empty value, or a missing bundle — so drift
 is caught in CI rather than in production.
 
 ## Adding a language
 
 1. Add the code to the `Language` enum in `@libs/entity`.
-2. Create `apps/demo-app/src/assets/i18n/<code>.json` with the same keys as `en.json`.
-3. Add `LANGUAGE.<CODE>` to every bundle (the label each language uses for the new one).
-4. Add the option to the `languages` array in `update-language.component.ts`.
+2. Add its entry to `LANGUAGE_METADATA` next to the enum — the endonym label
+   (language pickers show each language in itself, never translated) and its
+   text direction (`ltr`/`rtl`; `<html dir>` follows it automatically).
+3. Create `apps/demo-app/src/assets/i18n/<code>.json` with the same keys as `en.json`.
 
-The header dropdown and `readStoredLanguage()` derive from the enum, so they need no edit.
-The completeness spec will fail until steps 2 and 3 are done.
+Everything else — the `lib-language-select` dropdown, the settings radio group,
+`readStoredLanguage()` — derives from the enum plus the metadata, so nothing else
+needs an edit. The completeness spec fails until all three steps are done.
 
 ## Where translation is used
 

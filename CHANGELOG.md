@@ -13,6 +13,36 @@ config file. Ordinary app-level additions are minor.
 
 ### Added
 
+- `LANGUAGE_METADATA` in `@libs/entity` — the single source of truth for
+  language display data: endonym label and text direction. The header select,
+  the settings radio group and `<html dir>` all derive from it, so adding a
+  language is one enum line, one metadata entry and one bundle.
+- `lib-language-select` (`@libs/ui`, `molecules/`) — the language picker
+  extracted from the header into the design system. Options are labelled with
+  endonyms (each language named in itself), never translated.
+
+### Changed
+
+- Language pickers no longer translate language names. The `LANGUAGE.*` key
+  matrix (one name per language per bundle) is gone; `LANGUAGE_SELECT.*` holds
+  the two remaining aria labels.
+
+### Removed
+
+- `UpdateLanguageComponent`, `updateLanguageRoutes` and the `/translate` route.
+  The settings page supersedes it, and its hardcoded language list had already
+  drifted from the enum. The `UPDATE_LANGUAGE.*` keys went with it.
+
+- Four more languages — Spanish (`es`), German (`de`), Arabic (`ar`) and Polish
+  (`pl`), for eight bundles total. `provideDocumentLanguage()` now also syncs
+  `<html dir>`, so Arabic renders right-to-left; styles written with physical
+  properties (`margin-left`) keep their LTR bias and are fixed case by case.
+  English remains the default and fallback.
+- "View source on GitHub" links (header icon + home CTA button), driven by
+  `config/site.json` / `SITE_REPO_URL` through the config generator as
+  `environment.repoUrl`. Absent config renders no links, so a fresh clone stays
+  unbranded; the deploy workflows derive the URL from `github.repository`, so a
+  fork's deploy links to the fork.
 - `LICENSE` (MIT), `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` and this changelog —
   the repository could not legally be used as a template without the first one.
 - `@libs/analytics` — a vendor-neutral `ANALYTICS` token with a `NoopAnalytics`

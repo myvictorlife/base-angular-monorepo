@@ -67,6 +67,7 @@ jobs:
           # Deliberately omitted: a preview must not pollute production analytics.
           # Without a measurementId, `isSupported()` still resolves but nothing is
           # reported against the live property.
+          SITE_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
         run: npx nx build demo-app --configuration=production
 
       - name: Stage the build for Hosting

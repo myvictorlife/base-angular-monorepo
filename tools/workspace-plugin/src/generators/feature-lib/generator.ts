@@ -16,14 +16,14 @@ const ESLINT_BASE = 'eslint.base.config.mjs';
 const FEATURE_MARKER = '// <feature-scopes>';
 const APP_MARKER = '// <demo-app-feature-scopes>';
 const I18N_DIR = 'apps/demo-app/src/assets/i18n';
-const LANGUAGES = ['en', 'nl', 'fr', 'pt'];
+const LANGUAGES = ['en', 'nl', 'fr', 'pt', 'es', 'de', 'ar', 'pl'];
 
 /**
  * Creates a complete feature library: the folder shape from
  * `.claude/skills/feature-lib`, the `scope:` tag registered in
  * `depConstraints`, the `@libs/*` path alias, a Vitest `test` target with the
- * coverage floor for new features, and the page's i18n keys seeded in all four
- * bundles so `i18n-completeness.spec.ts` stays green.
+ * coverage floor for new features, and the page's i18n keys seeded in every
+ * bundle so `i18n-completeness.spec.ts` stays green.
  *
  * The one step intentionally left manual is wiring the route into the app —
  * features compose through the app, and that composition decision is yours.
@@ -106,7 +106,7 @@ export default async function featureLibGenerator(
       .replace(`      ${APP_MARKER}`, `      '${scope}',\n      ${APP_MARKER}`),
   );
 
-  // ── 4. i18n keys, identical across the four bundles. ─────────────────────
+  // ── 4. i18n keys, identical across every bundle. ──────────────────────────
   const i18nKeys: Record<string, string> =
     shape === 'sync'
       ? { TITLE: feature.className, LEAD: `${feature.className} preferences.` }

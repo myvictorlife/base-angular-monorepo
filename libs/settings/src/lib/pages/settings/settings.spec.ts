@@ -28,7 +28,6 @@ class StubTranslateLoader implements TranslateLoader {
         REDUCE_MOTION: 'Reduce motion',
         REDUCE_MOTION_DESC: 'Minimises transitions.',
       },
-      LANGUAGE: { EN: 'English', NL: 'Dutch', FR: 'French', PT: 'Portuguese' },
     });
   }
 }

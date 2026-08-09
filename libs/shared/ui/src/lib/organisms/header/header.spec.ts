@@ -16,11 +16,14 @@ class StubTranslateLoader implements TranslateLoader {
       HEADER: {
         HOME: lang === Language.French ? 'Accueil' : 'Home',
         START: 'Get started',
-        LANGUAGE: 'Language',
-        LANGUAGE_ARIA: 'Change language',
         MENU_ARIA: 'Open menu',
+        GITHUB: 'GitHub',
+        GITHUB_ARIA: 'View the source on GitHub',
       },
-      LANGUAGE: { EN: 'English', NL: 'Dutch', FR: 'French' },
+      LANGUAGE_SELECT: {
+        TRIGGER_ARIA: 'Change language',
+        LIST_ARIA: 'Language',
+      },
     });
   }
 }
@@ -53,46 +56,8 @@ describe('HeaderComponent', () => {
     spectator.detectChanges();
   });
 
-  it('lists every language from the enum', () => {
-    expect(spectator.component.languages.map((l) => l.code)).toEqual(
-      Object.values(Language),
-    );
-  });
-
-  it('starts with the dropdown closed', () => {
-    expect(spectator.component.languageDropdownOpen()).toBe(false);
-    expect(spectator.query('.header__lang-list')).toBeNull();
-  });
-
-  it('opens and closes the dropdown', () => {
-    spectator.click('.header__lang-trigger');
-    expect(spectator.component.languageDropdownOpen()).toBe(true);
-    expect(spectator.query('.header__lang-list')).not.toBeNull();
-
-    spectator.component.closeLanguageDropdown();
-    spectator.detectChanges();
-    expect(spectator.query('.header__lang-list')).toBeNull();
-  });
-
-  it('reflects the active language without mirroring it in local state', () => {
-    expect(spectator.component.currentLang()).toBe(Language.English);
-
-    spectator.inject(TranslateService).use(Language.French);
-    spectator.detectChanges();
-
-    expect(spectator.component.currentLang()).toBe(Language.French);
-  });
-
-  it('changes language and closes the dropdown on selection', () => {
-    spectator.click('.header__lang-trigger');
-
-    spectator.component.onLanguageChange(Language.Dutch);
-    spectator.detectChanges();
-
-    expect(spectator.inject(TranslateService).getCurrentLang()).toBe(
-      Language.Dutch,
-    );
-    expect(spectator.component.languageDropdownOpen()).toBe(false);
+  it('renders the language select from the design system', () => {
+    expect(spectator.query('lib-language-select')).not.toBeNull();
   });
 
   it('re-renders translated labels when the language changes', () => {
@@ -102,6 +67,34 @@ describe('HeaderComponent', () => {
     spectator.detectChanges();
 
     expect(spectator.query('.header__link')?.textContent).toContain('Accueil');
+  });
+
+  describe('repository link', () => {
+    const repoUrl = 'https://github.com/acme/repo';
+
+    it('renders nothing by default — the state of a clone with no site config', () => {
+      expect(spectator.query('.header__github')).toBeNull();
+    });
+
+    it('renders an external link when a URL is provided', () => {
+      spectator.setInput('repoUrl', repoUrl);
+
+      const link = spectator.query('.header__github');
+      expect(link).toHaveAttribute('href', repoUrl);
+      expect(link).toHaveAttribute('target', '_blank');
+      expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+      expect(link).toHaveAttribute('aria-label', 'View the source on GitHub');
+    });
+
+    it('appears in the mobile menu too', () => {
+      spectator.setInput('repoUrl', repoUrl);
+
+      spectator.click('.header__menu-btn');
+      spectator.detectChanges();
+
+      const menu = spectator.query('#header-mobile-menu');
+      expect(menu?.textContent).toContain('GitHub');
+    });
   });
 
   describe('mobile menu', () => {
@@ -161,26 +154,21 @@ describe('HeaderComponent', () => {
       expect(spectator.component.mobileMenuOpen()).toBe(false);
     });
 
-    it('closes the language dropdown on Escape too', () => {
-      spectator.click('.header__lang-trigger');
-      spectator.detectChanges();
-      expect(spectator.component.languageDropdownOpen()).toBe(true);
-
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-      spectator.detectChanges();
-
-      expect(spectator.component.languageDropdownOpen()).toBe(false);
-    });
-
     it('never shows both overlays at once', () => {
       spectator.click('.header__menu-btn');
       spectator.detectChanges();
 
-      spectator.click('.header__lang-trigger');
+      // Opening the language dropdown must close the menu…
+      spectator.click('.language-select__trigger');
       spectator.detectChanges();
-
-      expect(spectator.component.languageDropdownOpen()).toBe(true);
       expect(spectator.component.mobileMenuOpen()).toBe(false);
+      expect(spectator.query('.language-select__list')).not.toBeNull();
+
+      // …and opening the menu must close the dropdown.
+      spectator.click('.header__menu-btn');
+      spectator.detectChanges();
+      expect(spectator.component.mobileMenuOpen()).toBe(true);
+      expect(spectator.query('.language-select__list')).toBeNull();
     });
   });
 });

@@ -4,21 +4,15 @@
   "HEADER": {
     "HOME": "Início",
     "START": "Começar",
-    "LANGUAGE": "Idioma",
-    "LANGUAGE_ARIA": "Alterar idioma",
     "MENU_ARIA": "Abrir menu",
     "DESIGN": "Design system",
-    "SETTINGS": "Definições"
+    "SETTINGS": "Definições",
+    "GITHUB": "GitHub",
+    "GITHUB_ARIA": "Ver o código-fonte no GitHub"
   },
-  "LANGUAGE": {
-    "EN": "Inglês",
-    "NL": "Holandês",
-    "FR": "Francês",
-    "PT": "Português"
-  },
-  "UPDATE_LANGUAGE": {
-    "TITLE": "Preferências de idioma",
-    "UPDATE": "Atualizar idioma"
+  "LANGUAGE_SELECT": {
+    "TRIGGER_ARIA": "Alterar idioma",
+    "LIST_ARIA": "Idioma"
   },
   "HOME": {
     "HERO_TITLE": "Seu produto, com padrão profissional.",
@@ -61,7 +55,8 @@
     "DOCS_GENERATORS": "Geradores do workspace — comandos Nx para apps e libs",
     "DOCS_SKILLS": "Skills de desenvolvimento — libs de feature, lazy loading, NgRx, testes",
     "TITLE": "Início",
-    "CTA_DESIGN": "Ver design system"
+    "CTA_DESIGN": "Ver design system",
+    "CTA_GITHUB": "Ver no GitHub"
   },
   "PROFILE": {
     "TITLE": "Perfil",

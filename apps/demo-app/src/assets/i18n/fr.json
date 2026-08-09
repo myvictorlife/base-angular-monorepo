@@ -4,21 +4,15 @@
   "HEADER": {
     "HOME": "Accueil",
     "START": "Commencer",
-    "LANGUAGE": "Langue",
-    "LANGUAGE_ARIA": "Changer de langue",
     "MENU_ARIA": "Ouvrir le menu",
     "DESIGN": "Design system",
-    "SETTINGS": "Paramètres"
+    "SETTINGS": "Paramètres",
+    "GITHUB": "GitHub",
+    "GITHUB_ARIA": "Voir le code source sur GitHub"
   },
-  "LANGUAGE": {
-    "EN": "Anglais",
-    "NL": "Néerlandais",
-    "FR": "Français",
-    "PT": "Portugais"
-  },
-  "UPDATE_LANGUAGE": {
-    "TITLE": "Préférences de langue",
-    "UPDATE": "Mettre à jour la langue"
+  "LANGUAGE_SELECT": {
+    "TRIGGER_ARIA": "Changer de langue",
+    "LIST_ARIA": "Langue"
   },
   "HOME": {
     "HERO_TITLE": "Votre produit, avec des standards professionnels.",
@@ -61,7 +55,8 @@
     "DOCS_GENERATORS": "Workspace generators — Commandes Nx pour apps et libs",
     "DOCS_SKILLS": "Development skills — Feature libs, lazy loading, NgRx, tests",
     "TITLE": "Accueil",
-    "CTA_DESIGN": "Voir le design system"
+    "CTA_DESIGN": "Voir le design system",
+    "CTA_GITHUB": "Voir sur GitHub"
   },
   "PROFILE": {
     "TITLE": "Profil",

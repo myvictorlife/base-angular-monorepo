@@ -19,6 +19,8 @@ export class HomePage {
   private readonly router = inject(Router);
 
   readonly environmentName = signal(environment.environmentName);
+  /** `null` (no `config/site.json`) removes the GitHub button from the CTA. */
+  readonly repoUrl = environment.repoUrl;
 
   viewProfile(): void {
     this.router.navigate(['/profile']);

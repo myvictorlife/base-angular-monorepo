@@ -241,6 +241,13 @@ never builds with this project's identity and starts reporting analytics into it
 they are shipped publicly in the bundle regardless. `tools/generate-config.mjs`
 reads each of them from the environment, which is why CI needs no `config/` file.
 
+One more variable needs no secret at all: both workflows export
+`SITE_REPO_URL: ${{ github.server_url }}/${{ github.repository }}` into the build,
+which is what makes the app render its "view source on GitHub" links
+(`environment.repoUrl`). It is derived from whichever repository is building, so a
+fork's deploy links to the fork automatically; local builds read
+`config/site.json` instead, and without either the links simply do not render.
+
 To create the service account:
 
 ```sh

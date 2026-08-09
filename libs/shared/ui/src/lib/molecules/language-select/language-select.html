@@ -1,0 +1,65 @@
+<div class="language-select">
+  <button
+    type="button"
+    class="language-select__trigger"
+    [class.language-select__trigger--open]="open()"
+    (click)="toggle()"
+    [attr.aria-expanded]="open()"
+    [attr.aria-haspopup]="'listbox'"
+    [attr.aria-label]="'LANGUAGE_SELECT.TRIGGER_ARIA' | translate"
+  >
+    <svg
+      class="language-select__icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m12.89 0A18.022 18.022 0 0118 21m-3-7v3m0 0v3m0-3h3m-3 0h-3"
+      />
+    </svg>
+    <span class="language-select__current"
+      >{{ currentLang() | uppercase }}</span
+    >
+    <svg
+      class="language-select__chevron"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+  @if (open()) {
+  <div
+    class="language-select__backdrop"
+    (click)="close()"
+    aria-hidden="true"
+  ></div>
+  <ul
+    class="language-select__list"
+    role="listbox"
+    [attr.aria-label]="'LANGUAGE_SELECT.LIST_ARIA' | translate"
+  >
+    @for (lang of languages; track lang.code) {
+    <li role="option" [attr.aria-selected]="currentLang() === lang.code">
+      <button
+        type="button"
+        class="language-select__option"
+        [class.language-select__option--active]="currentLang() === lang.code"
+        [attr.lang]="lang.code"
+        (click)="select(lang.code)"
+      >
+        {{ lang.label }}
+      </button>
+    </li>
+    }
+  </ul>
+  }
+</div>

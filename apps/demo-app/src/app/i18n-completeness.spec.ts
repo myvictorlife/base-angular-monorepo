@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { Language } from '@libs/entity';
+import { LANGUAGE_METADATA, Language } from '@libs/entity';
 
 // Resolved from the workspace root (where Vitest runs): the unit-test builder
 // executes specs from a bundled location, so `__dirname` no longer points at src.
@@ -59,12 +59,14 @@ describe('i18n completeness', () => {
     expect(blank).toEqual([]);
   });
 
-  it('exposes a label key for every language, in every language', () => {
+  it('has metadata (endonym + direction) for every language in the enum', () => {
+    // Language names are endonyms from LANGUAGE_METADATA, not i18n keys — a
+    // picker must stay readable to someone who cannot read the active language.
     for (const lang of SUPPORTED) {
-      const keys = keysByLang.get(lang) as string[];
-      for (const other of SUPPORTED) {
-        expect(keys).toContain(`LANGUAGE.${other.toUpperCase()}`);
-      }
+      const metadata = LANGUAGE_METADATA[lang];
+      expect(metadata).toBeDefined();
+      expect(metadata.label.trim()).not.toBe('');
+      expect(['ltr', 'rtl']).toContain(metadata.dir);
     }
   });
 });

@@ -23,7 +23,7 @@ npx nx g @app/workspace-plugin:feature-lib <feature-name> --shape=async  # HTTP 
 Besides the files below, it registers the `scope:<feature-name>` tag in
 `depConstraints` (including the app's allow-list), adds the `@libs/<feature-name>`
 path alias, creates the Vitest `test` target with the 95/90/90/95 coverage floor,
-and seeds the page's i18n keys in all four bundles. The one step left for you is
+and seeds the page's i18n keys in every bundle. The one step left for you is
 wiring the route into the app — it prints the exact line. Everything it generates
 is placeholder content shaped like the reference libs; replace the state, page and
 translations with the real feature.

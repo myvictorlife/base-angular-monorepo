@@ -4,21 +4,15 @@
   "HEADER": {
     "HOME": "Home",
     "START": "Aan de slag",
-    "LANGUAGE": "Taal",
-    "LANGUAGE_ARIA": "Taal wijzigen",
     "MENU_ARIA": "Menu openen",
     "DESIGN": "Designsysteem",
-    "SETTINGS": "Instellingen"
+    "SETTINGS": "Instellingen",
+    "GITHUB": "GitHub",
+    "GITHUB_ARIA": "Bekijk de broncode op GitHub"
   },
-  "LANGUAGE": {
-    "EN": "Engels",
-    "NL": "Nederlands",
-    "FR": "Frans",
-    "PT": "Portugees"
-  },
-  "UPDATE_LANGUAGE": {
-    "TITLE": "Taalvoorkeuren",
-    "UPDATE": "Taal bijwerken"
+  "LANGUAGE_SELECT": {
+    "TRIGGER_ARIA": "Taal wijzigen",
+    "LIST_ARIA": "Taal"
   },
   "HOME": {
     "HERO_TITLE": "Uw product, met professionele standaarden.",
@@ -61,7 +55,8 @@
     "DOCS_GENERATORS": "Workspace generators — Nx-opdrachten voor apps en libs",
     "DOCS_SKILLS": "Development skills — Feature libs, lazy loading, NgRx, testing",
     "TITLE": "Home",
-    "CTA_DESIGN": "Bekijk designsysteem"
+    "CTA_DESIGN": "Bekijk designsysteem",
+    "CTA_GITHUB": "Bekijk op GitHub"
   },
   "PROFILE": {
     "TITLE": "Profiel",

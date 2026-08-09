@@ -28,5 +28,9 @@
 }
 
 .setting-row__control {
-  flex-shrink: 0;
+  // Must be allowed to shrink (the flex default) — pinned to its content width,
+  // eight language segments overflow the row on a phone instead of wrapping.
+  min-width: 0;
+  display: flex;
+  justify-content: flex-end;
 }

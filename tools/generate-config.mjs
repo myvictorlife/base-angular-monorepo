@@ -82,6 +82,22 @@ const CONFIGS = [
       config.storageBucket ||= `${config.projectId}.firebasestorage.app`;
     },
   },
+  {
+    // Links back to this deployment's own repository ("view source on GitHub").
+    // Not a credential, but it is project identity, and identity follows the same
+    // rule as credentials here: never committed, so a fork's build never points at
+    // someone else's repo. CI supplies SITE_REPO_URL from `github.repository`,
+    // which makes the link self-correcting per fork.
+    name: 'site',
+    source: 'config/site.json',
+    output: `${GENERATED_DIR}/site.config.ts`,
+    typeName: 'SiteConfig',
+    exportName: 'siteConfig',
+    flagName: 'siteLinksEnabled',
+    envPrefix: 'SITE',
+    keys: ['repoUrl'],
+    required: ['repoUrl'],
+  },
 ];
 
 // --- reading -----------------------------------------------------------------

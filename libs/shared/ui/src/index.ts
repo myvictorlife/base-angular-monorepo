@@ -7,6 +7,9 @@ export * from './lib/atoms/icon/icon';
 export * from './lib/atoms/spinner/spinner';
 export * from './lib/atoms/theme-toggle/theme-toggle';
 
+// Molecules
+export * from './lib/molecules/language-select/language-select';
+
 // Organisms
 export * from './lib/organisms/header/header';
 

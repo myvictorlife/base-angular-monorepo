@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Language } from '@libs/entity';
+import { LANGUAGE_METADATA, Language } from '@libs/entity';
 import { ThemePreference } from '@libs/theme';
 import { TranslatePipe } from '@ngx-translate/core';
 import { SettingsStore } from '../../+state/settings.store';
@@ -12,12 +12,13 @@ const THEME_OPTIONS: readonly { value: ThemePreference; labelKey: string }[] = [
   { value: 'system', labelKey: 'SETTINGS.THEME_SYSTEM' },
 ];
 
-const LANGUAGE_OPTIONS: readonly { value: Language; labelKey: string }[] = [
-  { value: Language.English, labelKey: 'LANGUAGE.EN' },
-  { value: Language.Dutch, labelKey: 'LANGUAGE.NL' },
-  { value: Language.French, labelKey: 'LANGUAGE.FR' },
-  { value: Language.Portuguese, labelKey: 'LANGUAGE.PT' },
-];
+/**
+ * Derived from the enum + LANGUAGE_METADATA, so a new language shows up here
+ * with no edit. Labels are endonyms on purpose — see `LanguageMetadata.label`.
+ */
+const LANGUAGE_OPTIONS: readonly { value: Language; label: string }[] = (
+  Object.values(Language) as Language[]
+).map((value) => ({ value, label: LANGUAGE_METADATA[value].label }));
 
 @Component({
   selector: 'lib-settings',

@@ -40,6 +40,7 @@ and test. `npm run config:generate` forces it.
 | ---------------------- | ------------------------------------------------------- | ----------------------------------------------------------- |
 | `config/firebase.json` | `libs/environment/src/lib/generated/firebase.config.ts` | `environment.firebaseConfig`, `environment.firebaseEnabled` |
 | ↳ its `projectId`      | `hosting/.firebaserc`                                   | `npm run build:deploy:firebase`                             |
+| `config/site.json`     | `libs/environment/src/lib/generated/site.config.ts`     | `environment.repoUrl` — "view source" links in the app      |
 
 **`config/*.json` and everything generated from it are git-ignored.** Only the
 `*.example.json` files are committed. This repo is a public template: a credential in a
@@ -48,6 +49,12 @@ tracked file gets published with it.
 **A missing file is a supported state.** The config comes out empty, `firebaseEnabled`
 is `false`, and the app builds and runs with the integration off — a fresh clone works
 before any vendor account exists.
+
+`config/site.json` follows the same rule with identity instead of credentials: it holds
+the URL of _your_ repository (`{ "repoUrl": "https://github.com/you/your-repo" }`), and
+while it is absent the app renders no "view source on GitHub" links at all. In CI the
+deploy workflows derive `SITE_REPO_URL` from the repository that is building, so a
+fork's deploy links to the fork automatically.
 
 ## Are these secrets?
 

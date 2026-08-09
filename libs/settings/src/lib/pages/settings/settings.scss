@@ -26,6 +26,10 @@
 
 .settings__segmented {
   display: inline-flex;
+  // Eight language options no longer fit one row on a phone; without wrapping
+  // the overflowing segments render on top of each other and steal taps.
+  flex-wrap: wrap;
+  gap: 2px;
   padding: 2px;
   background: var(--color-bg-base);
   border: 1px solid var(--color-border);
